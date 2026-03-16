@@ -3,7 +3,7 @@
 
 <h1>LEPES – Localizador de Espaços para Práticas Esportivas</h1>
 
-<img src="https://github.com/user-attachments/assets/14f9bc75-7bcc-44ee-953a-d5ccc79c6f7c>">
+<img src="https://github.com/user-attachments/assets/902edd2f-c234-4974-ad90-cf21d1198485">
 
 <div class="section">
 <h2>📌 Sobre o projeto</h2>
