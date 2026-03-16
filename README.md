@@ -6,38 +6,6 @@ html
 <head>
 <meta charset="UTF-8">
 <title>README - LEPES</title>
-
-<style>
-body{
-    font-family: Arial, Helvetica, sans-serif;
-    margin: 40px;
-    line-height: 1.6;
-    background:#f6f8fa;
-    color:#24292f;
-}
-
-h1,h2{
-    border-bottom:1px solid #d0d7de;
-    padding-bottom:5px;
-}
-
-code{
-    background:#eaeef2;
-    padding:3px 6px;
-    border-radius:4px;
-}
-
-pre{
-    background:#eaeef2;
-    padding:15px;
-    border-radius:6px;
-    overflow-x:auto;
-}
-
-.section{
-    margin-bottom:35px;
-}
-</style>
 </head>
 
 <body>
