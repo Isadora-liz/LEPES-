@@ -57,51 +57,6 @@ utilização dos espaços públicos.
 </div>
 
 <div class="section">
-<h2>📂 Estrutura do projeto</h2>
-
-<pre>
-lepes/
-│
-├── frontend/
-│ ├── explorar.html
-│ ├── perfil.html
-│ ├── buscar.html
-│ └── eventos.html
-│
-├── backend/
-│ ├── explorar.php
-│ ├── favoritos.php
-│ ├── avaliar.php
-│ ├── favoritar.php
-│ └── perfil.php
-│
-├── database/
-│ └── estrutura.sql
-│
-└── README.md
-</pre>
-
-</div>
-
-<div class="section">
-<h2>⚙️ Como executar o projeto</h2>
-
-<ol>
-<li>Clone o repositório:</li>
-</ol>
-
-<pre>git clone https://github.com/seu-usuario/lepes.git</pre>
-
-<ol start="2">
-<li>Configure um servidor local (ex: XAMPP ou WAMP).</li>
-<li>Importe o banco de dados no MySQL.</li>
-<li>Coloque os arquivos do projeto na pasta do servidor (htdocs ou equivalente).</li>
-<li>Execute o projeto no navegador.</li>
-</ol>
-
-</div>
-
-<div class="section">
 <h2>🎯 Objetivo acadêmico</h2>
 
 <p>
