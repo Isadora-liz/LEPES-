@@ -122,9 +122,9 @@ Diante dessas colocações, ao disponibilizar uma plataforma digital com as info
 
 # **3 MÉTODO**
 
-	A plataforma digital será desenvolvida para centralizar e organizar todas as informações coletadas sobre os espaços públicos em Pinhais, visando facilitar o acesso da população a esses dados.  
-O cunho da pesquisa será de natureza aplicada, com caráter exploratório, buscando melhorar a compreensão sobre o tema e possibilitar o levantamento de informações relevantes.   
-Além disso, exerce uma abordagem qualitativa, voltada para a organização  e interpretação dos dados coletados, sem foco em análises quantitativas .   
+   A plataforma digital será desenvolvida para centralizar e organizar todas as informações coletadas sobre os espaços públicos em Pinhais, visando facilitar o acesso da população a esses dados.  
+   O cunho da pesquisa será de natureza aplicada, com caráter exploratório, buscando melhorar a compreensão sobre o tema e possibilitar o levantamento de informações relevantes.   
+   Além disso, exerce uma abordagem qualitativa, voltada para a organização  e interpretação dos dados coletados, sem foco em análises quantitativas .   
 O desenvolvimento será conduzido de forma estruturada e progressiva, sendo organizada em três etapas complementares: coleta de dados, modelagem de dados e desenvolvimento da plataforma, que se articulam para garantir a construção e aplicação da proposta.  
  	  
 **3.1 Coleta de Dados**  
