@@ -75,7 +75,7 @@ o acesso da população aos espaços públicos de esporte e lazer.
 <p>
 Este é o protótipo <strong> navegável </strong>  do projeto
 </p>
-<a href="[https://www.exemplo.com](https://www.figma.com/make/ZnnDsKYqVzmLGDJ48tM4DI/LEPES---prot%C3%B3tipo?t=g8Su6JSCxNoAmNBz-1)">PROTÓTIPO</a>
+<a href="https://www.figma.com/make/ZnnDsKYqVzmLGDJ48tM4DI/LEPES---prot%C3%B3tipo?t=g8Su6JSCxNoAmNBz-1">PROTÓTIPO</a>
 
 
 </div>
