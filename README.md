@@ -57,6 +57,18 @@ o acesso da população aos espaços públicos de esporte e lazer.
 </ul>
 </div>
 
+<div class="section">
+<h2>🛠️ Método</h2>
+<p> A plataforma será desenvolvida em três etapas: <strong> Coleta de Dados, Modelagem de dados e Desenvolvimento</strong></p>
+<ul>
+ <li>Para o levantamento dos dados, serão realizadas pesquisas no Google Maps (ferramenta de mapas disponibilizada pela Plataforma Google, na qual são apontados diferentes espaços públicos e/ou privados), assim como pesquisas em ferramentas de busca (especialmente Google) sobre esses espaços encontrados.</li><br>
+ <li>A modelagem de dados, gerenciada pelo Firebase, contempla informações relacionadas a espaços esportivos, eventos e suas respectivas modalidades no município de Pinhais. Além disso, o sistema incorpora funcionalidades que permitem aos usuários favoritar espaços, realizar avaliações e demonstrar interesse em eventos, promovendo maior interatividade e personalização da experiência na plataforma.</li><br>
+ <li>O sistema será composto por dois ambientes principais: um módulo administrativo e um aplicativo móvel para os usuários finais. O módulo administrativo será acessado via navegador web, sendo desenvolvido com HTML para a interface e PHP para o processamento das operações, estabelecendo conexão direta com o banco de dados para permitir o gerenciamento e a edição das informações cadastradas, como eventos, espaços e modalidades.
+
+Já os usuários finais interagirão por meio de um aplicativo móvel desenvolvido em React Native, que possibilitará funcionalidades como favoritar espaços, realizar avaliações e demonstrar interesse em eventos. Além disso, o aplicativo contará com um mapa interativo, implementado por meio de uma API de geolocalização, permitindo a visualização dos espaços e eventos de forma intuitiva e facilitando a navegação e a localização dos pontos de interesse.</li>
+</ul>
+</div>
+
 <div class="section" align="center">
 <h2>🎨 Identidade visual</h2>
 <img width="400" height="1000" alt="Identidade Visual" src="https://github.com/user-attachments/assets/956e7ba9-a286-41a0-817a-f7b3e8dc91d7" />
@@ -72,18 +84,6 @@ Este é o protótipo <strong> navegável </strong>  do projeto
 <a href="https://www.figma.com/make/ZnnDsKYqVzmLGDJ48tM4DI/LEPES---prot%C3%B3tipo?t=g8Su6JSCxNoAmNBz-1">PROTÓTIPO</a>
 </div>
 
-<div class="section">
-<h2>🛠️ Tecnologias utilizadas</h2>
-
-<ul>
-<li>HTML</li>
-<li>CSS</li>
-<li>JavaScript</li>
-<li>PHP</li>
-<li>React Native</li>
-<li>Firebase</li>
-</ul>
-</div>
 
 <div class="section">
 <h2>👨‍💻 Autores</h2>
