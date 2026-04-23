@@ -52,7 +52,8 @@ o acesso da população aos espaços públicos de esporte e lazer.
 <li><strong>Explorar:</strong> lista de espaços esportivos disponíveis</li>
 <li><strong>Buscar:</strong> pesquisa de locais</li>
 <li><strong>Eventos:</strong> eventos esportivos disponíveis</li>
-<li><strong>Perfil:</strong> informações do usuário, favoritos e avaliações</li>
+<li><strong>Favoritos:</strong> Espaços e Eventos favoritados</li>
+<li><strong>Perfil:</strong> informações do usuário</li>
 </ul>
 </div>
 
