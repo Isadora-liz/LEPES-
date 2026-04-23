@@ -2,11 +2,12 @@
 
 <div align="center">
 <h1>LEPES – Localizador de Espaços para Práticas Esportivas</h1>
-<img text-align="center" width="500" height="500" alt="Logo LEPES" src="https://github.com/user-attachments/assets/f4b4d09c-6722-44c7-9062-a5f7ab1dcb56" />
+<img text-align="center"  width="1920" height="1080" alt="Capa LEPES" src="https://github.com/user-attachments/assets/41de20ac-f945-4a81-b118-b277d6f5595f" />
 </div>
 
 <div class="section">
 <h2>📌 Sobre o projeto</h2>
+
 <p>
 O <strong>LEPES</strong> é uma plataforma digital criada para facilitar o acesso da população a
 informações sobre <strong>espaços públicos de esporte e lazer</strong>.
