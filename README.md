@@ -81,7 +81,7 @@ Este é o protótipo <strong> navegável </strong>  do projeto
 <li>JavaScript</li>
 <li>PHP</li>
 <li>React Native</li>
-<li>MySQL</li>
+<li>Firebase</li>
 </ul>
 </div>
 
