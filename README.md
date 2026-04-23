@@ -21,6 +21,18 @@ utilização dos espaços públicos.
 </div>
 
 <div class="section">
+<h2>🎯 Objetivo acadêmico</h2>
+
+<p>
+Este projeto foi desenvolvido como parte de um
+<strong>Trabalho de Conclusão de Curso (TCC)</strong> do curso técnico em
+<strong>Informática</strong>, com foco na utilização da tecnologia para melhorar
+o acesso da população aos espaços públicos de esporte e lazer.
+</p>
+
+</div>
+
+<div class="section">
 <h2>🚀 Funcionalidades</h2>
 
 <ul>
@@ -58,24 +70,19 @@ utilização dos espaços públicos.
 </div>
 
 <div class="section">
+<h2>🎯 Identidade visual</h2>
+<img width="800" height="2000" alt="Identidade Visual" src="https://github.com/user-attachments/assets/956e7ba9-a286-41a0-817a-f7b3e8dc91d7" />
+
+</div>
+
+<div class="section">
 <h2>💡 Protótipo</h2>
+
 
 <p>
 Este é o protótipo <strong> navegável </strong>  do projeto
 </p>
 <a href="https://www.figma.com/make/ZnnDsKYqVzmLGDJ48tM4DI/LEPES---prot%C3%B3tipo?t=g8Su6JSCxNoAmNBz-1">PROTÓTIPO</a>
-</div>
-
-<div class="section">
-<h2>🎯 Objetivo acadêmico</h2>
-
-<p>
-Este projeto foi desenvolvido como parte de um
-<strong>Trabalho de Conclusão de Curso (TCC)</strong> do curso técnico em
-<strong>Informática</strong>, com foco na utilização da tecnologia para melhorar
-o acesso da população aos espaços públicos de esporte e lazer.
-</p>
-
 </div>
 
 
