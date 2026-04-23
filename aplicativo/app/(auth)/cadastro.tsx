@@ -1,10 +1,11 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TextInput as RNTextInput, TouchableOpacity, View } from 'react-native';
 import { auth, db } from '../../FirebaseConfig';
+import type { JSX } from 'react';
 
-export default function Cadastro() {
+export default function Cadastro(): JSX.Element {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -22,22 +23,21 @@ export default function Cadastro() {
         nome: nome,
         email: email,
         createdAt: new Date()
-  });
+      });
 
       console.log("Usuário cadastrado com sucesso!");
       const user = auth.currentUser;
-    if (user) {
-      //router.replace('/perfil'); 
-    } else {
-      setTimeout(() => {
-       // router.replace('/perfil');
-      }, 500);
+      if (user) {
+        //router.replace('/perfil'); 
+      } else {
+        setTimeout(() => {
+          // router.replace('/perfil');
+        }, 500);
+      }
+    } catch (e) {
+      console.error("Erro ao adicionar o documento: ", e);
+      alert("Erro ao cadastrar.");
     }
-
-  } catch (e) {
-    console.error("Erro ao adicionar o documento: ", e);
-    alert("Erro ao cadastrar.");
-  }
 };
 
   return (
@@ -53,14 +53,14 @@ export default function Cadastro() {
       <View style={styles.containerCadastro}>
         <Text style={styles.titulo}>Cadastrar-se</Text>
 
-        <TextInput
+        <RNTextInput
           style={styles.input}
           placeholder="Nome completo"
           value={nome}
           onChangeText={setNome}
         />
 
-        <TextInput
+        <RNTextInput
           style={styles.input}
           placeholder="E-mail"
           value={email}
@@ -68,7 +68,7 @@ export default function Cadastro() {
           keyboardType="email-address"
         />
 
-        <TextInput
+        <RNTextInput
           style={styles.input}
           placeholder="Senha"
           value={senha}

@@ -52,6 +52,9 @@ export default function Login() {
         secureTextEntry
       />
 
+
+
+
       <TouchableOpacity style={styles.botao} onPress={Logar}>
         <Text style={styles.textoBotao}>Entrar</Text>
       </TouchableOpacity>
