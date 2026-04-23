@@ -71,7 +71,7 @@ o acesso da população aos espaços públicos de esporte e lazer.
 
 <div class="section">
 <h2>🎯 Identidade visual</h2>
-<img width="800" height="2000" alt="Identidade Visual" src="https://github.com/user-attachments/assets/956e7ba9-a286-41a0-817a-f7b3e8dc91d7" />
+<img width="400" height="1000" alt="Identidade Visual" src="https://github.com/user-attachments/assets/956e7ba9-a286-41a0-817a-f7b3e8dc91d7" />
 
 </div>
 
