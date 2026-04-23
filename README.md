@@ -42,6 +42,7 @@ o acesso da população aos espaços públicos de esporte e lazer.
 <li>Avaliar locais</li>
 <li>Favoritar espaços</li>
 <li>Visualizar eventos</li>
+<li>Navegar pelos espaços e eventos curtidos</li>
 </ul>
 </div>
 
@@ -49,8 +50,7 @@ o acesso da população aos espaços públicos de esporte e lazer.
 <h2>📱 Estrutura do sistema</h2>
 
 <ul>
-<li><strong>Explorar:</strong> lista de espaços esportivos disponíveis</li>
-<li><strong>Buscar:</strong> pesquisa de locais</li>
+<li><strong>Explorar:</strong> lista de espaços esportivos disponíveis, mapa interativo e buscas</li>
 <li><strong>Eventos:</strong> eventos esportivos disponíveis</li>
 <li><strong>Favoritos:</strong> Espaços e Eventos favoritados</li>
 <li><strong>Perfil:</strong> informações do usuário</li>
