@@ -1,8 +1,9 @@
 <body>
 
+<div align="center">
 <h1>LEPES – Localizador de Espaços para Práticas Esportivas</h1>
-
-<img justify-content="center" width="600" height="500" alt="Logo LEPES" src="https://github.com/user-attachments/assets/f4b4d09c-6722-44c7-9062-a5f7ab1dcb56" />
+<img text-align="center" width="500" height="500" alt="Logo LEPES" src="https://github.com/user-attachments/assets/f4b4d09c-6722-44c7-9062-a5f7ab1dcb56" />
+</div>
 
 <div class="section">
 <h2>📌 Sobre o projeto</h2>
@@ -37,24 +38,10 @@ o acesso da população aos espaços públicos de esporte e lazer.
 
 <ul>
 <li>Explorar espaços esportivos</li>
+<li>Buscar locais específicos</li>
 <li>Avaliar locais</li>
 <li>Favoritar espaços</li>
-<li>Buscar locais específicos</li>
-<li>Perfil de usuário</li>
-<li>Visualização de eventos</li>
-</ul>
-</div>
-
-<div class="section">
-<h2>🛠️ Tecnologias utilizadas</h2>
-
-<ul>
-<li>HTML</li>
-<li>CSS</li>
-<li>JavaScript</li>
-<li>PHP</li>
-<li>React Native</li>
-<li>MySQL</li>
+<li>Visualizar eventos</li>
 </ul>
 </div>
 
@@ -69,10 +56,9 @@ o acesso da população aos espaços públicos de esporte e lazer.
 </ul>
 </div>
 
-<div class="section">
+<div class="section" align="center">
 <h2>🎨 Identidade visual</h2>
 <img width="400" height="1000" alt="Identidade Visual" src="https://github.com/user-attachments/assets/956e7ba9-a286-41a0-817a-f7b3e8dc91d7" />
-
 </div>
 
 <div class="section">
@@ -85,6 +71,18 @@ Este é o protótipo <strong> navegável </strong>  do projeto
 <a href="https://www.figma.com/make/ZnnDsKYqVzmLGDJ48tM4DI/LEPES---prot%C3%B3tipo?t=g8Su6JSCxNoAmNBz-1">PROTÓTIPO</a>
 </div>
 
+<div class="section">
+<h2>🛠️ Tecnologias utilizadas</h2>
+
+<ul>
+<li>HTML</li>
+<li>CSS</li>
+<li>JavaScript</li>
+<li>PHP</li>
+<li>React Native</li>
+<li>MySQL</li>
+</ul>
+</div>
 
 <div class="section">
 <h2>👨‍💻 Autores</h2>
