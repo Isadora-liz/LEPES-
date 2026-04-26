@@ -2,7 +2,7 @@
 
 <div align="center">
 <h1>LEPES – Localizador de Espaços para Práticas Esportivas</h1>
-<img text-align="center"  width="1920" height="1080" alt="Capa LEPES" src="https://github.com/user-attachments/assets/41de20ac-f945-4a81-b118-b277d6f5595f" />
+<img text-align="center"  width="1920" height="1080" alt="Capa LEPES" src="https://github.com/user-attachments/assets/d3050328-60c5-4a76-a285-bd763e4fdd59"/>
 </div>
 
 <div class="section">
@@ -72,7 +72,8 @@ Já os usuários finais interagirão por meio de um aplicativo móvel desenvolvi
 
 <div class="section" align="center">
 <h2>🎨 Identidade visual</h2>
-<img width="400" height="1000" alt="Identidade Visual" src="https://github.com/user-attachments/assets/956e7ba9-a286-41a0-817a-f7b3e8dc91d7" />
+<img width="1414" height="2000" alt="Marketing digital feminino moderno identidade visual " src="https://github.com/user-attachments/assets/612950ba-0c24-476d-904c-96b96fbaf846" />
+
 </div>
 
 <div class="section">
