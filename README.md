@@ -40,9 +40,9 @@ o acesso da população aos espaços públicos de esporte e lazer.
 <ul>
 <li>Explorar espaços esportivos;</li>
 <li>Buscar locais específicos;</li>
+ <li>Visualizar eventos;</li>
 <li>Avaliar locais;</li>
-<li>Favoritar espaços;</li>
-<li>Visualizar eventos;</li>
+<li>Favoritar espaços e eventos;</li>
 <li>Navegar pelos espaços e eventos curtidos.</li>
 </ul>
 </div>
