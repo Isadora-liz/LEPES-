@@ -83,7 +83,7 @@ Já os usuários finais interagirão por meio de um aplicativo móvel desenvolvi
 <p>
 Este é o protótipo <strong> navegável </strong>  do projeto
 </p>
-<a href="https://www.figma.com/make/ZnnDsKYqVzmLGDJ48tM4DI/LEPES---prot%C3%B3tipo?t=g8Su6JSCxNoAmNBz-1">PROTÓTIPO</a>
+<a href="[https://www.figma.com/make/ZnnDsKYqVzmLGDJ48tM4DI/LEPES---prot%C3%B3tipo?t=g8Su6JSCxNoAmNBz-1](http://figma.com/make/ZnnDsKYqVzmLGDJ48tM4DI/LEPES---prot%C3%B3tipo?p=f&t=jQegolDdjN8bMVVT-0&fullscreen=1)">PROTÓTIPO</a>
 </div>
 
 
