@@ -66,7 +66,18 @@ o acesso da população aos espaços públicos de esporte e lazer.
  <li>A <strong>modelagem de dados</strong>, gerenciada pelo Firebase, contempla informações relacionadas a espaços esportivos, eventos e suas respectivas modalidades no município de Pinhais. Além disso, o sistema incorpora funcionalidades que permitem aos usuários favoritar espaços, realizar avaliações e demonstrar interesse em eventos, promovendo maior interatividade e personalização da experiência na plataforma.</li><br>
  <li>O <strong>sistema</strong> será composto por dois ambientes principais: um módulo administrativo e um aplicativo móvel para os usuários finais. O módulo administrativo será acessado via navegador web, sendo desenvolvido com HTML para a interface e PHP para o processamento das operações, estabelecendo conexão direta com o banco de dados para permitir o gerenciamento e a edição das informações cadastradas, como eventos, espaços e modalidades.
 
-Já os usuários finais interagirão por meio de um aplicativo móvel desenvolvido em React Native, com os dados gerencidos pelo FIrebase, que possibilitará funcionalidades como favoritar espaços, realizar avaliações e demonstrar interesse em eventos. Além disso, o aplicativo contará com um mapa interativo, implementado por meio de uma API de geolocalização, permitindo a visualização dos espaços e eventos de forma intuitiva e facilitando a navegação e a localização dos pontos de interesse.</li>
+Já os usuários finais interagirão por meio de um aplicativo móvel desenvolvido em React Native, com os dados gerencidos pelo FIrebase, que possibilitará funcionalidades como favoritar espaços, realizar avaliações e demonstrar interesse em eventos. Além disso, o aplicativo contará com um mapa interativo, implementado por meio de uma API de geolocalização, permitindo a visualização dos espaços e eventos de forma intuitiva e facilitando a navegação e a localização dos pontos de interesse.
+<br><br>
+<!-- INÍCIO DA ALTERAÇÃO: ADICIONANDO OS ÍCONES DE DESENVOLVIMENTO -->
+<div align="center">
+  <img src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React Native" height="25">
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" height="25">
+  <img src="https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white" alt="Firebase" height="25">
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" height="25">
+  <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP" height="25">
+</div>
+<!-- FIM DA ALTERAÇÃO -->
+</li>
 </ul>
 </div>
 
@@ -99,7 +110,3 @@ Este é o protótipo <strong> navegável </strong>  do projeto
 </div>
 
 </body>
-
-
-</html>
-
