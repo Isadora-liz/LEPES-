@@ -105,6 +105,8 @@ Este é o protótipo <strong> navegável </strong>  do projeto
 <li>Isadora Liz de Paula Dups</li>
 <li>Helena Maria da Silva</li>
 <li>Igor Figueiredo Correa</li>
+<li>Mariana Maranho - Orientadora</li>
+<li>Alexandre Peres - Coorientador</li>
 </ul>
 
 </div>
