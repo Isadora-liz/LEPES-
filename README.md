@@ -2,7 +2,7 @@
 
 <div align="center">
 <h1>LEPES – Localizador de Espaços para Práticas Esportivas</h1>
-<img text-align="center"  width="1920" height="1080" alt="Capa LEPES" src="https://github.com/user-attachments/assets/d3050328-60c5-4a76-a285-bd763e4fdd59"/>
+<img text-align="center"  width="1920" height="1080" alt="Capa LEPES" src="https://github.com/user-attachments/assets/30d1efee-c59d-44e9-b563-2ee9943c50f0"/>
 </div>
 
 <div class="section">
@@ -68,7 +68,7 @@ o acesso da população aos espaços públicos de esporte e lazer.
 
 Já os usuários finais interagirão por meio de um aplicativo móvel desenvolvido em React Native, com os dados gerencidos pelo FIrebase, que possibilitará funcionalidades como favoritar espaços, realizar avaliações e demonstrar interesse em eventos. Além disso, o aplicativo contará com um mapa interativo, implementado por meio de uma API de geolocalização, permitindo a visualização dos espaços e eventos de forma intuitiva e facilitando a navegação e a localização dos pontos de interesse.
 <br><br>
-<!-- INÍCIO DA ALTERAÇÃO: ADICIONANDO OS ÍCONES DE DESENVOLVIMENTO -->
+
 <div align="center">
   <img src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React Native" height="25">
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" height="25">
@@ -76,14 +76,14 @@ Já os usuários finais interagirão por meio de um aplicativo móvel desenvolvi
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" height="25">
   <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP" height="25">
 </div>
-<!-- FIM DA ALTERAÇÃO -->
+
 </li>
 </ul>
 </div>
 
 <div class="section" align="center">
 <h2>🎨 Identidade visual</h2>
-<img width="1414" height="2000" alt="Marketing digital feminino moderno identidade visual " src="https://github.com/user-attachments/assets/612950ba-0c24-476d-904c-96b96fbaf846" />
+<img width="1414" height="2000" alt="Marketing digital feminino moderno identidade visual " src="https://github.com/user-attachments/assets/3f5c5a54-993e-426a-859c-18f9e94d0eb3" />
 
 </div>
 
