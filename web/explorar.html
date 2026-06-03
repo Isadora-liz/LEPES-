@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Espaços</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #777;
+    color: white;
+}
+
+.titulo {
+    width: 70%;
+    margin: 25px auto 0;
+    font-size: 32px;
+    color: white;
+}
+
+.linha {
+    width: 70%;
+    margin: 3px auto 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+#campo-busca{
+    width:70%;
+    margin:10px auto;
+    display:block;
+    padding:10px;
+    border-radius:10px;
+}
+
+#filtros-modalidades {
+    gap: 8px;
+    flex-wrap: wrap;
+    width:70%;
+    margin:10px auto;
+    display:block;
+    padding:10px;
+}
+
+.bot-modalidade {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    background: #f4f4f4;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.bot-modalidade.ativo {
+    background: #0055ff;
+    color: white;
+    border-color: #0033aa;
+}
+
+.lugar-card {
+    background: white;
+    width: 70%;
+    margin: 15px auto;
+    padding: 15px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    color: black;
+    position: relative;
+}
+
+.lugar-img {
+    width: 130px;
+    height: 120px;
+    background: #e3a878;
+    border-radius: 10px;
+    margin-right: 15px;
+}
+
+.info {
+    flex: 1;
+}
+
+.titulo-local {
+    font-size: 22px;
+    margin: 0;
+}
+
+.endereco {
+    margin: 0;
+    font-size: 15px;
+    color: #333;
+}
+
+.estrelas {
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.estrela {
+    font-size: 22px;
+    color: #ff7b22;
+    transition: 0.2s;
+}
+
+.estrela:hover {
+    transform: scale(1.2);
+}
+
+.fav-bot {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    font-size: 26px;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #ff7b22;
+}
+
+.fav-bot:hover {
+    transform: scale(1.2);
+}
+
+.favoritado {
+    color: #ff7b22; 
+}
+
+.nao-favoritado {
+    color: #ccc;
+}
+
+.botao-menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #111;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px 0;
+    font-size: 18px;
+}
+
+.botao-menu a {
+    color: white;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.botao-menu a:hover {
+    color: #1877f2 !important; 
+}
+
+.botao-menu a.active {
+    color: #1877f2 !important;
+}
+
+#icone-mapa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+#icone-mapa::before {
+    content: 'map'; 
+    font-family: 'Material Icons';
+    font-size: 25px;
+    margin-bottom: 4px;
+}
+
+#icone-explorar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+#icone-explorar::before {
+  content: 'explore'; 
+  font-family: 'Material Icons';
+  font-size: 25px; 
+  margin-bottom: 4px;
+}
+
+#icone-usuario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+#icone-usuario::before {
+  content: 'person'; 
+  font-family: 'Material Icons';
+  font-size: 25px; 
+  margin-bottom: 4px;
+}
+
+
+</style>
+</head>
+<body>
+
+<div class="titulo">Espaços</div>
+<div class="linha"></div>
+
+<input id="campo-busca" type="text" placeholder="Buscar..." >
+<div id="filtros-modalidades">
+    <button class="bot-modalidade" data-id="1">Vôlei</button>
+    <button class="bot-modalidade" data-id="2">Futebol</button>
+    <button class="bot-modalidade" data-id="3">Tênis de Mesa</button>
+    <button class="bot-modalidade" data-id="4">Basquete</button>
+    <button class="bot-modalidade" data-id="5">Skate</button>
+    <button class="bot-modalidade" data-id="6">Bocha</button>
+    <button class="bot-modalidade" data-id="7">Tênis de Praia</button>
+    <button class="bot-modalidade" data-id="8">Futevôlei</button>
+    <button class="bot-modalidade" data-id="9">Tênis</button>
+    <button class="bot-modalidade" data-id="10">Vôlei de Praia</button>
+</div>
+
+<div id="lista-lugares"></div>
+
+<div class="botao-menu">
+    <a href="explorar.html" class="active" id="icone-explorar">Explorar</a>
+    <a href="mapa.html" class="" id="icone-mapa">Mapa</a>
+    <a id="icone-usuario" href="perfil.html">Perfil</a>
+</div>
+
+<script>
+let filtroSelecionado = null;
+
+function semAcento(texto) {
+    if (!texto) return "";
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
+function debounce(fn, wait = 150) {
+    let timeout;
+    return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn.apply(this, args), wait);
+    };
+}
+
+document.getElementById("campo-busca").addEventListener("input", debounce(aplicaFiltro));
+
+function aplicaFiltro() {
+    const termo = semAcento(document.getElementById("campo-busca").value);
+    const cards = document.querySelectorAll(".lugar-card");
+
+    cards.forEach(card => {
+        const textoCard = semAcento(card.textContent || "");
+        const modalidades = JSON.parse(card.dataset.modalidades || "[]");
+        const textoOk = termo === "" || textoCard.includes(termo);
+        const modalidadeOk = !filtroSelecionado || modalidades.includes(Number(filtroSelecionado));
+
+        card.style.display = textoOk && modalidadeOk ? "flex" : "none";
+    });
+}
+
+document.querySelectorAll(".bot-modalidade").forEach(bot => {
+    bot.addEventListener("click", () => {
+        const id =bot.dataset.id;
+        if (filtroSelecionado === id) {
+            filtroSelecionado = null;
+            bot.classList.remove("ativo");
+        } else {
+            filtroSelecionado = id;
+            document.querySelectorAll(".bot-modalidade").forEach(b => b.classList.remove("ativo"));
+            bot.classList.add("ativo");
+        }
+
+        aplicaFiltro();
+    });
+});
+
+function Favoritar(bot, idEspaco) {
+    const idUsuario = localStorage.getItem('id_usuario');
+    if (!idUsuario) { alert("Faça login para favoritar."); return; }
+
+    fetch("favoritar.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_usuario: idUsuario, id_espaco: idEspaco })
+    })
+    .then(res => res.json())
+    .then(res => {
+        if (res.ok) {
+            bot.classList.toggle("favoritado", res.favoritou);
+            bot.classList.toggle("nao-favoritado", !res.favoritou);
+        }
+    })
+    .catch(err => console.error(err));
+}
+
+function Avaliar(idEspaco, nota) {
+    const idUsuario = localStorage.getItem('id_usuario');
+    if (!idUsuario) { alert("Faça login para avaliar."); return; }
+
+    fetch("avaliar.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_usuario: idUsuario, id_espaco: idEspaco, nota })
+    })
+    .then(res => res.json())
+    .then(res => console.log(res.mensagem))
+    .catch(err => console.error(err));
+}
+
+function carregarExplorar() {
+    const idUsuario = localStorage.getItem('id_usuario');
+    const container = document.getElementById('lista-lugares');
+    container.innerHTML = '';
+
+    fetch(`explorar.php?id_usuario=${idUsuario}`)
+        .then(res => res.json())
+        .then(lugares => {
+            lugares.forEach(lugar => {
+                lugar.modalidades_ids = lugar.modalidades_ids 
+                    ? lugar.modalidades_ids.split(',').map(Number) 
+                    : [];
+
+                const div = document.createElement('div');
+                div.classList.add('lugar-card');
+                div.dataset.id = lugar.id_espaco;
+                div.dataset.modalidades = JSON.stringify(lugar.modalidades_ids);
+
+                const isFav = lugar.favoritado == 1;
+                const nota = parseInt(lugar.minha_nota) || 0;
+
+                div.innerHTML = `
+                    <img src="${lugar.imagem}" alt="${lugar.nome}" class="lugar-img">
+                    <div class="info">
+                        <h3 class="titulo-local">${lugar.nome}</h3>
+                        <p class="endereco">${lugar.endereco}</p>
+                        <p>${lugar.descricao}</p>
+                        <div class="estrelas" data-id="${lugar.id_espaco}" data-avaliacao="${nota}">
+                            ${[1,2,3,4,5].map(n => `<span class="estrela" data-value="${n}" style="color:${n <= nota ? "#ff7b22" : "#ccc"}">★</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="fav-bot ${isFav ? "favoritado" : "nao-favoritado"}" data-id="${lugar.id_espaco}">❤</div>
+                `;
+
+                container.appendChild(div);
+            });
+
+
+            document.querySelectorAll(".fav-bot").forEach(btn => {
+                btn.addEventListener("click", () => Favoritar(btn, btn.dataset.id));
+            });
+
+            document.querySelectorAll(".estrelas").forEach(estrelasBlock => {
+                const estrelas = estrelasBlock.querySelectorAll(".estrela");
+                const avaliacao = parseInt(estrelasBlock.dataset.avaliacao) || 0;
+
+                estrelas.forEach(s => s.style.color = parseInt(s.dataset.value) <= avaliacao ? "#ff7b22" : "#ccc");
+
+                estrelas.forEach(estrela => {
+                    estrela.addEventListener("click", () => {
+                        const novaNota = parseInt(estrela.dataset.value);
+                        estrelas.forEach(s => s.style.color = parseInt(s.dataset.value) <= novaNota ? "#ff7b22" : "#ccc");
+                        Avaliar(estrelasBlock.dataset.id, novaNota);
+                    });
+                });
+            });
+
+            aplicaFiltro();
+        })
+        .catch(err => console.error("Erro ao carregar lugares:", err));
+}
+
+carregarExplorar();
+
+</script>
+
+</body>
+</html>

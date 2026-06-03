@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lepes</title>
+    <style>
+body {
+    height: 100vh; 
+    width: 100vw; 
+    transition: background-image 0.5s ease-in-out;
+    display: flex;
+    background-color: rgb(51, 51, 51, 0.5); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative; 
+
+}
+
+body::before {
+    content: "";
+    position: fixed; 
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+.navbar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color:rgba(0, 0, 0, 1); 
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: 10px 40px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li {
+    margin-left: 25px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: 4px;
+}
+
+.nav-links a:hover {
+    background-color: #32a893;
+}
+
+.container {
+    display: flex; 
+    height: 100vh;
+    width: 100%;
+}
+
+.metade {
+    flex: 1; 
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+h1 {
+    color: #ffffff;
+    margin-top: 120px;
+    margin-left: 50px;
+    margin-bottom: 5px;
+    font-size: 150px;
+}
+
+p {
+    color: #ffffff;
+    margin-left: 50px;
+    margin-top: 0px;
+    font-size: 30px;
+}
+
+.direita {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.login-card {
+    padding: 40px;
+    width: 320px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.logo {
+    font-family: 'Segoe Script', cursive;
+    color: white;
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.input {
+    width: 320px; 
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #363636;
+    background-color: #ffffff;
+    color: black;
+    font-size: 14px;
+}
+
+.input::placeholder {
+    color: #000000;
+}
+
+.entrar {
+    background-color: #1877f2;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    width: 320px; 
+}
+
+.separator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff;
+    font-size: 12px;
+    margin: 10px 0;
+    width: 320px; 
+}
+
+.separator .line {
+    height: 1px;
+    flex: 1;
+    background-color: #1877f2;
+}
+
+.google-login {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+}
+
+.google-icon {
+    width: 20px;
+}
+
+.cadastro-box {
+    font-size: 18px;
+    border-radius: 10px;
+}
+
+.cadastro-box a {
+    color: #0095f6;
+    text-decoration: none;
+}
+
+#cadastrar-texto{
+    color: #ffffff;
+    font-size: 18px;
+
+}
+
+
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <!-- <ul class="nav-links">
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="contato.html">Contato</a></li>
+        </ul> -->
+    </nav>
+
+    <div class="container">
+        <div class="metade esquerda">
+            <h1>LEPES</h1>
+            <p>Localizador de Espaços para Práticas Esportivas</p>
+        </div>
+
+<div class="metade direita">
+    <div class="login-card">
+        <input id="user" class="input" type="text" autocomplete="username" placeholder="email"/>
+        <input id="senha" class="input" type="password" placeholder="Senha"/>
+
+        <a href="explorar.html" class="entrar">Entrar</a>
+
+        <div class="separator">
+            <div class="line"></div>
+            <span>OU</span>
+            <div class="line"></div>
+        </div>
+
+        
+        <!-- <a class="google-login" href="#">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="google-icon">
+            Entrar com o Google
+        </a> -->
+    </div>
+
+    <div class="cadastro-box">
+        <p id="cadastrar-texto">Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
+    </div>
+</div>
+    </div>
+
+<script>
+document.querySelector(".entrar").addEventListener("click", function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById("user").value;
+    const senha = document.getElementById("senha").value;
+
+    fetch("login.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.ok) {
+            window.location.href = "explorar.html";
+        } else {
+            alert("Email ou senha incorretos.");
+        }
+    })
+    .catch(error => {
+        console.error("Erro na requisição:", error);
+        alert("Ocorreu um erro ao tentar fazer login.");
+    });
+});
+  
+const imagens = [
+    './imagens/imagem1.jpg',
+    './imagens/imagem2.jpg',
+    './imagens/imagem3.jpg',
+    './imagens/imagem4.jpg'
+];
+
+function gerarIndiceAleatorio(max) {
+    return Math.floor(Math.random() * max);
+}
+
+const indiceAleatorio = gerarIndiceAleatorio(imagens.length);
+const imagemSelecionada = imagens[indiceAleatorio];
+
+document.body.style.backgroundImage = `url('${imagemSelecionada}')`;
+
+</script>
+
+</body>
+</html>

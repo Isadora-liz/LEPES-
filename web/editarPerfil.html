@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Editar Perfil</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #777;
+    color: white;
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    background: white;
+    color: black;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 15px;
+}
+.avatar-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #ccc;
+    display: block;
+    margin: 0 auto 15px;
+    object-fit: cover;
+}
+input[type="text"], input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #333;
+}
+button {
+    padding: 10px;
+    width: 100%;
+    background: #1877f2;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+button:hover {
+    background: #005bb5;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Editar Perfil</h2>
+    <img id="avatar-preview" class="avatar-preview" src="default-avatar.png" alt="Avatar">
+    <form id="editar-perfil-form">
+        <label>Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+        
+        <label>Avatar:</label>
+        <input type="file" id="avatar" name="avatar" accept="image/*">
+        
+        <button type="submit">Atualizar Perfil</button>
+    </form>
+</div>
+
+<script>
+
+fetch('perfil.php')
+.then(res => res.json())
+.then(usuario => {
+    if(!usuario.erro){
+        document.getElementById('nome').value = usuario.nome;
+        if(usuario.avatar){
+            document.getElementById('avatar-preview').src = usuario.avatar;
+        }
+    }
+})
+.catch(err => console.error(err));
+
+document.getElementById('avatar').addEventListener('change', function(){
+    const file = this.files[0];
+    if(file){
+        document.getElementById('avatar-preview').src = URL.createObjectURL(file);
+    }
+});
+
+document.getElementById('editar-perfil-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('nome', document.getElementById('nome').value);
+    const file = document.getElementById('avatar').files[0];
+    if(file) formData.append('avatar', file);
+
+    fetch('editarPerfil.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.ok){
+            alert("Perfil atualizado com sucesso!");
+            window.location.href = 'perfil.html'; 
+        } else {
+            alert("Erro: " + (data.erro || "Não foi possível atualizar."));
+        }
+    })
+    .catch(err => console.error(err));
+});
+</script>
+
+</body>
+</html>

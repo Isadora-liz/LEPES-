@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mapa Espaços Esportivos</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+#mapa {
+    height: 100%;
+    width: 100%;
+}
+
+.botao-menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #111;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px 0;
+    font-size: 18px;
+}
+
+.botao-menu a {
+    color: white;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.botao-menu a:hover {
+    color: #1877f2 !important; 
+}
+
+.botao-menu a.active {
+    color: #1877f2 !important;
+}
+
+#icone-mapa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+#icone-mapa::before {
+    content: 'map'; 
+    font-family: 'Material Icons';
+    font-size: 25px;
+    margin-bottom: 4px;
+}
+
+#icone-explorar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+#icone-explorar::before {
+  content: 'explore'; 
+  font-family: 'Material Icons';
+  font-size: 25px; 
+  margin-bottom: 4px;
+}
+
+#icone-usuario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+#icone-usuario::before {
+  content: 'person'; 
+  font-family: 'Material Icons';
+  font-size: 25px; 
+  margin-bottom: 4px;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="mapa"></div>
+
+    <div class="botao-menu">
+        <a href="explorar.html" class="" id="icone-explorar">Explorar</a>
+        <a href="mapa.html" class="active" id="icone-mapa">Mapa</a>
+        <a id="icone-usuario" href="perfil.html">Perfil</a>
+    </div>
+
+    <script>
+      async function Mapa() {
+        const mapa = new google.maps.Map(document.getElementById("mapa"), {
+            center: { lat: -25.4429, lng: -49.1927 },
+            zoom: 13
+        });
+
+        const response = await fetch('mapa.php');
+        const lugares = await response.json();
+
+        lugares.forEach(lugar => {
+            const marcador = new google.maps.Marker({
+                position: { lat: parseFloat(lugar.latitude), lng: parseFloat(lugar.longitude) },
+                map: mapa,
+                title: lugar.nome,
+                icon: 'https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png'
+            });
+
+            const informacoes = new google.maps.InfoWindow({
+                content: `<strong>${lugar.nome}</strong><br>${lugar.endereco}`
+            });
+
+            marcador.addListener('click', () => informacoes.open(mapa, marcador));
+        });
+      }
+
+      function carregarMapa() {
+        Mapa();
+      }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0J4RDyw4XImsPUJ4-ZD480z61_ingBno&callback=carregarMapa" async defer></script>
+  </body>
+</html>
