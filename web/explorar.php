@@ -9,12 +9,8 @@ $id_usuario = isset($_GET['id_usuario']) ? intval($_GET['id_usuario']) : 0;
 
 $sql = "
 SELECT e.id_espaco, e.nome, e.endereco, e.descricao, e.imagem,
-       CASE WHEN f.id_espaco IS NOT NULL THEN 1 ELSE 0 END AS favoritado,
-       n.nota AS minha_nota,
        GROUP_CONCAT(em.id_modalidade) AS modalidades_ids
 FROM espaco e
-LEFT JOIN favorita f ON e.id_espaco = f.id_espaco AND f.id_usuario = ?
-LEFT JOIN avalia n ON e.id_espaco = n.id_espaco AND n.id_usuario = ?
 LEFT JOIN espaco_modalidade em ON e.id_espaco = em.id_espaco
 GROUP BY e.id_espaco";
 
@@ -25,7 +21,7 @@ if (!$stmt) {
     exit;
 }
 
-$stmt->bind_param("ii", $id_usuario, $id_usuario);
+$stmt->bind_param("i", $id_usuario);
 $stmt->execute();
 $result = $stmt->get_result();
 

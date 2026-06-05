@@ -286,39 +286,6 @@ document.querySelectorAll(".bot-modalidade").forEach(bot => {
     });
 });
 
-function Favoritar(bot, idEspaco) {
-    const idUsuario = localStorage.getItem('id_usuario');
-    if (!idUsuario) { alert("Faça login para favoritar."); return; }
-
-    fetch("favoritar.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_usuario: idUsuario, id_espaco: idEspaco })
-    })
-    .then(res => res.json())
-    .then(res => {
-        if (res.ok) {
-            bot.classList.toggle("favoritado", res.favoritou);
-            bot.classList.toggle("nao-favoritado", !res.favoritou);
-        }
-    })
-    .catch(err => console.error(err));
-}
-
-function Avaliar(idEspaco, nota) {
-    const idUsuario = localStorage.getItem('id_usuario');
-    if (!idUsuario) { alert("Faça login para avaliar."); return; }
-
-    fetch("avaliar.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_usuario: idUsuario, id_espaco: idEspaco, nota })
-    })
-    .then(res => res.json())
-    .then(res => console.log(res.mensagem))
-    .catch(err => console.error(err));
-}
-
 function carregarExplorar() {
     const idUsuario = localStorage.getItem('id_usuario');
     const container = document.getElementById('lista-lugares');
@@ -346,34 +313,10 @@ function carregarExplorar() {
                         <h3 class="titulo-local">${lugar.nome}</h3>
                         <p class="endereco">${lugar.endereco}</p>
                         <p>${lugar.descricao}</p>
-                        <div class="estrelas" data-id="${lugar.id_espaco}" data-avaliacao="${nota}">
-                            ${[1,2,3,4,5].map(n => `<span class="estrela" data-value="${n}" style="color:${n <= nota ? "#ff7b22" : "#ccc"}">★</span>`).join('')}
-                        </div>
                     </div>
-                    <div class="fav-bot ${isFav ? "favoritado" : "nao-favoritado"}" data-id="${lugar.id_espaco}">❤</div>
                 `;
 
                 container.appendChild(div);
-            });
-
-
-            document.querySelectorAll(".fav-bot").forEach(btn => {
-                btn.addEventListener("click", () => Favoritar(btn, btn.dataset.id));
-            });
-
-            document.querySelectorAll(".estrelas").forEach(estrelasBlock => {
-                const estrelas = estrelasBlock.querySelectorAll(".estrela");
-                const avaliacao = parseInt(estrelasBlock.dataset.avaliacao) || 0;
-
-                estrelas.forEach(s => s.style.color = parseInt(s.dataset.value) <= avaliacao ? "#ff7b22" : "#ccc");
-
-                estrelas.forEach(estrela => {
-                    estrela.addEventListener("click", () => {
-                        const novaNota = parseInt(estrela.dataset.value);
-                        estrelas.forEach(s => s.style.color = parseInt(s.dataset.value) <= novaNota ? "#ff7b22" : "#ccc");
-                        Avaliar(estrelasBlock.dataset.id, novaNota);
-                    });
-                });
             });
 
             aplicaFiltro();

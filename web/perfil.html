@@ -244,15 +244,6 @@ body {
     </div>
 </div>
 
-<div class="info-titulo">Informações gerais</div>
-
-<div class="abas-container">
-    <a class="aba-botao active" data-tab="favoritos">Favoritos</a>
-    <a class="aba-botao" data-tab="avaliados">Avaliados</a>
-</div>
-
-<div id="conteudo-abas" style="width: 90%; margin: 20px auto; padding-bottom: 20px;"></div>
-
 <div class="botao-menu">
     <a href="explorar.html" class="" id="icone-explorar">Explorar</a>
     <a href="mapa.html" class="" id="icone-mapa">Mapa</a>
@@ -285,68 +276,9 @@ fetch('perfil.php')
 });
 
     const idUsuario = localStorage.getItem('id_usuario');
-
-    if(idUsuario){
-        carregarFavoritos();
-    } else {
-        console.error("ID do usuário não encontrado!");
-    }
-});
-
-document.querySelectorAll(".aba-botao").forEach(bot => {
-    bot.addEventListener("click", () => {
-
-        document.querySelectorAll(".aba-botao").forEach(a => a.classList.remove("active"));
-        bot.classList.add("active");
-
-        const aba = bot.dataset.tab;
-
-        if (aba === "favoritos") carregarFavoritos();
-        if (aba === "avaliados") carregarAvaliados();
-        if (aba === "eventos") carregarEventos();
-    });
-});
-
-function carregarFavoritos() {
-    const idUsuario = localStorage.getItem('id_usuario');
-
-    if(!idUsuario){
-        console.error("Usuário não logado!");
-        return;
-    }
-
-    fetch("favoritos.php?id_usuario=" + idUsuario)
-    .then(res => res.json())
-    .then(lista => {
-        const box = document.getElementById("conteudo-abas");
-        box.innerHTML = ""; 
-
-        if (lista.length === 0) {
-            box.innerHTML = "<p>Nenhum favorito encontrado.</p>";
-            return;
-        }
-
-        lista.forEach(lugar => {
-            const div = document.createElement('div');
-            div.classList.add('lugar-card');
-
-            div.innerHTML = `
-                <img src="${lugar.imagem}" class="lugar-img">
-                <div class="info">
-                    <h3 class="titulo-local">${lugar.nome}</h3>
-                    <p class="endereco">${lugar.endereco}</p>
-                    <p>${lugar.descricao}</p>
-                </div>
-
-                <div class="fav-bot favorited" data-id="${lugar.id_espaco}">❤</div>
-            `;
-
-            box.appendChild(div);
-        });
-
         ativarEventosFavorito();
     });
-}
+
 
 function ativarEventosFavorito() {
     document.querySelectorAll(".fav-bot").forEach(bot => {
