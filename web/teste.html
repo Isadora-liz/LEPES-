@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding-bottom: 80px;
+        }
+
+        /* Header com Search Bar */
+        .header {
+            background-color: #fff;
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background-color: #f0f0f0;
+            border-radius: 12px;
+            padding: 12px 16px;
+            gap: 10px;
+        }
+
+        .search-icon {
+            color: #666;
+            font-size: 18px;
+        }
+
+        .search-input {
+            border: none;
+            background: transparent;
+            flex: 1;
+            font-size: 16px;
+            outline: none;
+            color: #333;
+        }
+
+        .search-input::placeholder {
+            color: #999;
+        }
+
+        /* Botões de Modalidade */
+        .categories {
+            background-color: #fff;
+            padding: 16px 0;
+            border-bottom: 1px solid #e0e0e0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .categories-container {
+            display: flex;
+            gap: 12px;
+            padding: 0 20px;
+            white-space: nowrap;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .category-btn:hover {
+            background-color: #f5f5f5;
+        }
+
+        .category-btn.active {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        /* Grid de Cards */
+        .explore-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        /* Card Retangular */
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-content {
+            padding: 16px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .card-address {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .card-description {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Responsividade */
+        @media (max-width: 968px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-image {
+                height: 200px;
+            }
+        }
+
+        /* Loading state */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header com Barra de Pesquisa -->
+    <header class="header">
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input 
+                type="text" 
+                class="search-input" 
+                placeholder="Buscar lugares, endereços..."
+            >
+        </div>
+    </header>
+
+    <!-- Botões de Modalidade -->
+    <div class="categories">
+        <div class="categories-container">
+            <button class="category-btn active">Todos</button>
+            <button class="category-btn">Restaurantes</button>
+            <button class="category-btn">Bares</button>
+            <button class="category-btn">Cafés</button>
+            <button class="category-btn">Parques</button>
+            <button class="category-btn">Museus</button>
+            <button class="category-btn">Teatros</button>
+            <button class="category-btn">Academias</button>
+        </div>
+    </div>
+
+    <!-- Container dos Cards -->
+    <div class="explore-container">
+        <div class="cards-grid">
+            <!-- Card 1 -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop" 
+                     alt="Restaurante" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-title">Restaurante Bella Vista</h3>
+                    <p class="card-address">📍 Rua das Flores, 123 - Centro</p>
+                    <p class="card-description">Culinária italiana autêntica com ambiente aconchegante e vista panorâmica da cidade.</p>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=400&h=300&fit=crop" 
+                     alt="Café" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-title">Café do Livro</h3>
+                    <p class="card-address">📍 Av. Paulista, 1000 - Bela Vista</p>
+                    <p class="card-description">Cafeteria charmosa com acervo de livros para leitura e café especial de produtores locais.</p>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=400&h=300&fit=crop" 
+                     alt="Parque" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-title">Parque Ibirapuera</h3>
+                    <p class="card-address">📍 Av. Pedro Álvares Cabral - Vila Mariana</p>
+                    <p class="card-description">Maior parque urbano da cidade com áreas verdes, museus e espaços para atividades físicas.</p>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=400&h=300&fit=crop" 
+                     alt="Bar" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-title">Bar do Zé</h3>
+                    <p class="card-address">📍 Rua Augusta, 500 - Consolação</p>
+                    <p class="card-description">Bar tradicional com petiscos deliciosos, cerveja gelada e música ao vivo nos fins de semana.</p>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop" 
+                     alt="Restaurante" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-title">Sushi House</h3>
+                    <p class="card-address">📍 Rua Oscar Freire, 800 - Jardins</p>
+                    <p class="card-description">Restaurante japonês com sushi fresco, ambiente moderno e atendimento especializado.</p>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?w=400&h=300&fit=crop" 
+                     alt="Museu" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-title">Museu de Arte Moderna</h3>
+                    <p class="card-address">📍 Av. Europa, 100 - Jardim Europa</p>
+                    <p class="card-description">Acervo permanente de arte contemporânea e exposições temporárias de artistas nacionais.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Interatividade dos botões de categoria
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Busca simples
+        const searchInput = document.querySelector('.search-input');
+        const cards = document.querySelectorAll('.card');
+
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const address = card.querySelector('.card-address').textContent.toLowerCase();
+                const description = card.querySelector('.card-description').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || address.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

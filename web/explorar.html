@@ -6,10 +6,17 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <style>
-body {
+
+* {
     margin: 0;
-    font-family: Arial, sans-serif;
-    color: white;
+    padding: 0;
+    box-sizing: border-box;
+}  
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    padding-bottom: 80px;
 
     background:
         linear-gradient(
@@ -21,42 +28,87 @@ body {
     background-size: cover;
 }
 
+.header {
+    padding: 16px 100px;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.busca-container {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    gap: 10px;
+}
+
+.search-icon {
+    color: #666;
+    font-size: 18px;
+}
+
+.search-input {
+    border: none;
+    background: transparent;
+    flex: 1;
+    font-size: 16px;
+    outline: none;
+    color: #333;
+}
+
+.search-input::placeholder {
+    color: #999;
+}
+
 .titulo {
-    width: 70%;
+    width: 100%;
     margin: 25px auto 0;
     font-size: 32px;
     color: white;
 }
 
 .linha {
-    width: 70%;
+    width: 100%;
     margin: 3px auto 20px;
     border-bottom: 1px solid #ddd;
 }
 
-#campo-busca{
-    width:70%;
-    margin:10px auto;
-    display:block;
-    padding:10px;
-    border-radius:10px;
+
+.bot-modalidades-container {
+    display: flex;
+    gap: 12px;
+    padding: 0 20px;
+    white-space: nowrap;
 }
 
 #filtros-modalidades {
-    gap: 8px;
-    flex-wrap: wrap;
-    width:70%;
-    margin:10px auto;
-    display:block;
-    padding:10px;
+    padding: 16px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+
+.bot-modalidade::-webkit-scrollbar {
+    display: none;
 }
 
 .bot-modalidade {
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    background: #f4f4f4;
-    border-radius: 6px;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 20px;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.bot-modalidade:hover {
+    background-color: #f5f5f5;
 }
 
 .bot-modalidade.ativo {
@@ -65,54 +117,138 @@ body {
     border-color: #0033aa;
 }
 
-.lugar-card {
+#seta-esq,
+#seta-dir {
+    border: none;
     background: white;
-    width: 70%;
-    margin: 15px auto;
-    padding: 15px;
+    cursor: pointer;
+    font-size: 15px;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.explore-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.card {
+    background: #fff;
     border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
     display: flex;
-    align-items: center;
-    color: black;
+    flex-direction: column;
     position: relative;
 }
 
-.lugar-img {
-    width: 130px;
-    height: 120px;
-    background: #e3a878;
-    border-radius: 10px;
-    margin-right: 15px;
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.18);
 }
 
-.info {
-    flex: 1;
-}
+.botao-editar {
+    position: absolute;
+    top: 12px;
+    right: 12px;
 
-.titulo-local {
-    font-size: 22px;
-    margin: 0;
-}
+    width: 40px;
+    height: 40px;
 
-.endereco {
-    margin: 0;
-    font-size: 15px;
-    color: #333;
-}
+    border: none;
+    border-radius: 50%;
 
-.estrelas {
-    margin-top: 5px;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     cursor: pointer;
-}
-
-.estrela {
-    font-size: 22px;
-    color: #ff7b22;
     transition: 0.2s;
 }
 
-.estrela:hover {
-    transform: scale(1.2);
+.botao-editar:hover {
+    transform: scale(1.1);
+}
+
+.botao-editar .material-icons {
+    color: #333;
+    font-size: 22px;
+}
+
+.card-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+.card-content {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card-titulo {
+    font-size: 20px;
+    font-weight: 600;
+    color: #222;
+    line-height: 1.3;
+}
+
+.card-endereco {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.card-descricao {
+    font-size: 14px;
+    color: #777;
+    line-height: 1.6;
+}
+
+        /* Responsividade */
+@media (max-width: 968px) {
+.cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+.cards-grid {
+    grid-template-columns: 1fr;
+   }
+            
+.card-image {
+    height: 200px;
+    }
+}
+
+#botao-AdicionarLocal {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background: #1877f2;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 15px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .botao-menu {
@@ -199,24 +335,47 @@ body {
 </head>
 <body>
 
-<div class="titulo">Espaços</div>
-<div class="linha"></div>
+<header class="header">
+       <div class="titulo">Espaços</div>
+            <div class="linha"></div>
+        <div class="busca-container">
+        <input
+            id="busca-container"
+            type="text"
+            class="search-input"
+            placeholder="Buscar lugares, endereços..."
+        >
+        </div>
+    <div class="bot-modalidades-container">
+        <button id="seta-esq">◀</button>
+        <div id="filtros-modalidades">
+            <button class="bot-modalidade" data-id="1">Vôlei</button>
+            <button class="bot-modalidade" data-id="2">Futebol</button>
+            <button class="bot-modalidade" data-id="3">Tênis de Mesa</button>
+            <button class="bot-modalidade" data-id="4">Basquete</button>
+            <button class="bot-modalidade" data-id="5">Skate</button>
+            <button class="bot-modalidade" data-id="6">Bocha</button>
+            <button class="bot-modalidade" data-id="7">Tênis de Praia</button>
+            <button class="bot-modalidade" data-id="8">Futevôlei</button>
+            <button class="bot-modalidade" data-id="9">Tênis</button>
+            <button class="bot-modalidade" data-id="10">Vôlei de Praia</button>
+            <button class="bot-modalidade" data-id="11">Peteca</button>
+            <button class="bot-modalidade" data-id="12">Pádel</button>
+        </div>
+        <button id="seta-dir">▶</button>
+    </div>
 
-<input id="campo-busca" type="text" placeholder="Buscar..." >
-<div id="filtros-modalidades">
-    <button class="bot-modalidade" data-id="1">Vôlei</button>
-    <button class="bot-modalidade" data-id="2">Futebol</button>
-    <button class="bot-modalidade" data-id="3">Tênis de Mesa</button>
-    <button class="bot-modalidade" data-id="4">Basquete</button>
-    <button class="bot-modalidade" data-id="5">Skate</button>
-    <button class="bot-modalidade" data-id="6">Bocha</button>
-    <button class="bot-modalidade" data-id="7">Tênis de Praia</button>
-    <button class="bot-modalidade" data-id="8">Futevôlei</button>
-    <button class="bot-modalidade" data-id="9">Tênis</button>
-    <button class="bot-modalidade" data-id="10">Vôlei de Praia</button>
+</header>
+
+ 
+<div class="explore-container">
+    <div class="cards-grid" id="cards-container"></div>
 </div>
 
-<div id="lista-lugares"></div>
+<button id="botao-AdicionarLocal" onclick="window.location.href='adicionarLocal.html'">
+    Adicionar Local
+</button>
+
 
 <div class="botao-menu">
     <a href="explorar.html" class="active" id="icone-explorar">Explorar</a>

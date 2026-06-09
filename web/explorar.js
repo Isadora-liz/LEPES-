@@ -33,12 +33,23 @@ function debounce(fn, wait = 150) {
 
 function aplicaFiltro() {
 
+    const filtros = document.getElementById("filtros-modalidades");
+
+document.getElementById("seta-dir")
+    .addEventListener("click", () => {
+        filtros.scrollLeft += 200;
+    });
+
+document.getElementById("seta-esq")
+    .addEventListener("click", () => {
+        filtros.scrollLeft -= 200;
+    });
+
     const termo = semAcento(
-        document.getElementById("campo-busca").value
+        document.getElementById("busca-container").value
     );
 
-    const cards =
-        document.querySelectorAll(".lugar-card");
+    const cards = document.querySelectorAll(".card");
 
     cards.forEach(card => {
 
@@ -70,7 +81,7 @@ function aplicaFiltro() {
 function configurarBusca() {
 
     document
-        .getElementById("campo-busca")
+        .getElementById("busca-container")
         .addEventListener(
             "input",
             debounce(aplicaFiltro)
@@ -114,6 +125,8 @@ function configurarFiltros() {
                     );
                 }
 
+                
+
                 aplicaFiltro();
             });
         });
@@ -124,22 +137,13 @@ async function carregarExplorar() {
     console.log("Função iniciou");
 
 
-    const container =
-        document.getElementById(
-            "lista-lugares"
-        );
+    const container = document.getElementById("cards-container");
 
     container.innerHTML = "";
 
     try {
 
-        const snapshot =
-            await getDocs(
-                collection(
-                    db,
-                    "espaco"
-                )
-            );
+        const snapshot = await getDocs(collection(db,"espaco"));
 
          console.log("Quantidade de documentos:", snapshot.size);
 
@@ -153,9 +157,7 @@ async function carregarExplorar() {
             const div =
                 document.createElement("div");
 
-            div.classList.add(
-                "lugar-card"
-            );
+            div.classList.add("card");
 
             div.dataset.id = doc.id;
 
@@ -165,29 +167,32 @@ async function carregarExplorar() {
                 );
 
             div.innerHTML = `
-                <img
-                    src="${lugar.imagem}"
-                    alt="${lugar.nome}"
-                    class="lugar-img"
-                >
+                 <button class="botao-editar">
+        <span class="material-icons">edit</span>
+    </button>
 
-                <div class="info">
+    <img
+        src="${lugar.imagem}"
+        alt="${lugar.nome}"
+        class="card-image"
+    >
 
-                    <h3 class="titulo-local">
-                        ${lugar.nome}
-                    </h3>
+    <div class="card-content">
 
-                    <p class="endereco">
-                        ${lugar.endereco}
-                    </p>
+        <h3 class="card-titulo">
+            ${lugar.nome}
+        </h3>
 
-                    <p>
-                        ${lugar.descricao}
-                    </p>
+        <p class="card-endereco">
+            ${lugar.endereco}
+        </p>
 
-                </div>
-            `;
+        <p class="card-descricao">
+            ${lugar.descricao}
+        </p>
 
+    </div>
+`;
             container.appendChild(div);
         });
 
