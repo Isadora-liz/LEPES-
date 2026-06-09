@@ -78,9 +78,11 @@ body {
 
 .bot-modalidades-container {
     display: flex;
-    gap: 12px;
     padding: 0 20px;
     white-space: nowrap;
+    align-items: center; 
+    gap: 10px;
+    justify-content: transform;
 }
 
 #filtros-modalidades {
@@ -119,12 +121,15 @@ body {
 
 #seta-esq,
 #seta-dir {
-    border: none;
-    background: white;
-    cursor: pointer;
-    font-size: 15px;
-    padding: 8px;
     border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background-color: white;
+    cursor: pointer;
 }
 
 .explore-container {
@@ -239,7 +244,7 @@ body {
 
 #botao-AdicionarLocal {
     position: fixed;
-    bottom: 90px;
+    bottom: 20px;
     right: 20px;
     background: #1877f2;
     color: white;
@@ -252,17 +257,15 @@ body {
 }
 
 .botao-menu {
-    position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
     background: #111;
     color: white;
     display: flex;
-    justify-content: space-around;
-    align-items: center;
     padding: 15px 0;
     font-size: 18px;
+    height: 45px;
 }
 
 .botao-menu a {
@@ -287,10 +290,11 @@ body {
     color: #ffffff;
     font-family: Arial, sans-serif;
     font-size: 14px;
+    padding: 0 40px;
 }
 
 #icone-mapa::before {
-    content: 'map'; 
+    /*content: 'map'; */
     font-family: 'Material Icons';
     font-size: 25px;
     margin-bottom: 4px;
@@ -304,10 +308,13 @@ body {
   color: #ffffff;
   font-family: Arial, sans-serif;
   font-size: 14px;
+  padding: 0 10px;
+  margin-left: 73%;
+  position: transform;
 }
 
 #icone-explorar::before {
-  content: 'explore'; 
+  /*content: 'explore'; */
   font-family: 'Material Icons';
   font-size: 25px; 
   margin-bottom: 4px;
@@ -321,10 +328,11 @@ body {
     color: #ffffff;
     font-family: Arial, sans-serif;
     font-size: 14px;
+    padding: 0 10px;
 }
 
 #icone-usuario::before {
-  content: 'person'; 
+  /*content: 'person'; */
   font-family: 'Material Icons';
   font-size: 25px; 
   margin-bottom: 4px;
@@ -334,6 +342,13 @@ body {
 </style>
 </head>
 <body>
+
+<div class="botao-menu">
+    <p style="margin-left: 20px; margin-top: 0px; font-weight: 600; ">LEPES</p>
+    <a href="explorar.html" class="active" id="icone-explorar">Explorar</a>
+    <a href="mapa.html" class="" id="icone-mapa">Mapa</a>
+    <a id="icone-usuario" href="perfil.html">Perfil</a>
+</div>
 
 <header class="header">
        <div class="titulo">Espaços</div>
@@ -375,13 +390,6 @@ body {
 <button id="botao-AdicionarLocal" onclick="window.location.href='adicionarLocal.html'">
     Adicionar Local
 </button>
-
-
-<div class="botao-menu">
-    <a href="explorar.html" class="active" id="icone-explorar">Explorar</a>
-    <a href="mapa.html" class="" id="icone-mapa">Mapa</a>
-    <a id="icone-usuario" href="perfil.html">Perfil</a>
-</div>
 
 <script type="module" src="./explorar.js"></script>
 

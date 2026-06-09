@@ -16,10 +16,14 @@
     font-family:'Poppins', sans-serif;
 }
 
-body{
-    background:#0f172a;
+body{background: linear-gradient(
+            rgba(0, 0, 0, 0.9),
+            rgba(0, 0, 0, 0.9)
+        );
+    background-image: url('https://ardos.com.br/wp-content/uploads/2020/08/Depositphotos_83082692_xl-2015-2048x1422.jpg.webp');
+    background-size: 100% 100%;
+    background-position: center;
     min-height:100vh;
-    padding:40px 20px;
     color:white;
 }
 
@@ -29,21 +33,26 @@ body{
 }
 
 .topo{
-    text-align:center;
+    width: 100%;
+    margin: 25px auto 0;
     margin-top:20px;
     margin-bottom:35px;
 }
 
 .topo h1{
-    font-size:42px;
-    font-weight:700;
-    margin-bottom:10px;
+    width: 100%;
+    margin: 25px auto 0;
+    font-size: 32px;
+    color: white;
+
 }
 
-.topo p{
-    color:#94a3b8;
-    font-size:16px;
+.linha {
+    width: 100%;
+    margin: 3px auto 20px;
+    border-bottom: 1px solid #ddd;
 }
+
 
 .card{
     background:#111827;
@@ -271,14 +280,105 @@ textarea{
     box-shadow:0 10px 25px rgba(37,99,235,.3);
 }
 
+.botao-menu {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #111;
+    color: white;
+    display: flex;
+    padding: 15px 0;
+    font-size: 18px;
+    height: 45px;
+}
+
+.botao-menu a {
+    color: white;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.botao-menu a:hover {
+    color: #1877f2 !important; 
+}
+
+.botao-menu a.active {
+    color: #1877f2 !important;
+}
+
+#icone-mapa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    padding: 0 40px;
+}
+
+#icone-mapa::before {
+    /*content: 'map'; */
+    font-family: 'Material Icons';
+    font-size: 25px;
+    margin-bottom: 4px;
+}
+
+#icone-explorar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  padding: 0 10px;
+  margin-left: 73%;
+  position: transform;
+}
+
+#icone-explorar::before {
+  /*content: 'explore'; */
+  font-family: 'Material Icons';
+  font-size: 25px; 
+  margin-bottom: 4px;
+}
+
+#icone-usuario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    padding: 0 10px;
+}
+
+#icone-usuario::before {
+  /*content: 'person'; */
+  font-family: 'Material Icons';
+  font-size: 25px; 
+  margin-bottom: 4px;
+}
+
 </style>
 </head>
 <body>
 
+<div class="botao-menu">
+    <p style="margin-left: 20px; margin-top: 0px; font-weight: 600; ">LEPES</p>
+    <a href="explorar.html" class="" id="icone-explorar">Explorar</a>
+    <a href="mapa.html" class="" id="icone-mapa">Mapa</a>
+    <a id="icone-usuario" href="perfil.html">Perfil</a>
+</div>   
+
 <div class="container">
+ 
 
     <div class="topo">
         <h1>Adicionar espaço esportivo</h1>
+            <div class="linha"></div>
     </div>
 
     <div class="card">
