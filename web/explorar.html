@@ -9,8 +9,16 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #777;
     color: white;
+
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.5),
+            rgba(0, 0, 0, 0.5)
+        ),
+        url('https://img.olympics.com/images/image/private/t_s_16_9_g_auto/t_s_w2440/f_auto/primary/tihomsolxa4uqxwvermu');
+
+    background-size: cover;
 }
 
 .titulo {
@@ -105,28 +113,6 @@ body {
 
 .estrela:hover {
     transform: scale(1.2);
-}
-
-.fav-bot {
-    position: absolute;
-    right: 15px;
-    bottom: 15px;
-    font-size: 26px;
-    cursor: pointer;
-    transition: 0.2s;
-    color: #ff7b22;
-}
-
-.fav-bot:hover {
-    transform: scale(1.2);
-}
-
-.favoritado {
-    color: #ff7b22; 
-}
-
-.nao-favoritado {
-    color: #ccc;
 }
 
 .botao-menu {
@@ -238,99 +224,7 @@ body {
     <a id="icone-usuario" href="perfil.html">Perfil</a>
 </div>
 
-<script>
-let filtroSelecionado = null;
-
-function semAcento(texto) {
-    if (!texto) return "";
-    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-}
-
-function debounce(fn, wait = 150) {
-    let timeout;
-    return function (...args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => fn.apply(this, args), wait);
-    };
-}
-
-document.getElementById("campo-busca").addEventListener("input", debounce(aplicaFiltro));
-
-function aplicaFiltro() {
-    const termo = semAcento(document.getElementById("campo-busca").value);
-    const cards = document.querySelectorAll(".lugar-card");
-
-    cards.forEach(card => {
-        const textoCard = semAcento(card.textContent || "");
-        const modalidades = JSON.parse(card.dataset.modalidades || "[]");
-        const textoOk = termo === "" || textoCard.includes(termo);
-        const modalidadeOk = !filtroSelecionado || modalidades.includes(Number(filtroSelecionado));
-
-        card.style.display = textoOk && modalidadeOk ? "flex" : "none";
-    });
-}
-
-document.querySelectorAll(".bot-modalidade").forEach(bot => {
-    bot.addEventListener("click", () => {
-        const id =bot.dataset.id;
-        if (filtroSelecionado === id) {
-            filtroSelecionado = null;
-            bot.classList.remove("ativo");
-        } else {
-            filtroSelecionado = id;
-            document.querySelectorAll(".bot-modalidade").forEach(b => b.classList.remove("ativo"));
-            bot.classList.add("ativo");
-        }
-
-        aplicaFiltro();
-    });
-});
-
-function carregarExplorar() {
-    const idUsuario = localStorage.getItem('id_usuario');
-    const container = document.getElementById('lista-lugares');
-    container.innerHTML = '';
-
-    fetch(`explorar.php?id_usuario=${idUsuario}`)
-        .then(res => res.json())
-        .then(lugares => {
-            lugares.forEach(lugar => {
-                lugar.modalidades_ids = lugar.modalidades_ids 
-                    ? lugar.modalidades_ids.split(',').map(Number) 
-                    : [];
-
-                const div = document.createElement('div');
-                div.classList.add('lugar-card');
-                div.dataset.id = lugar.id_espaco;
-                div.dataset.modalidades = JSON.stringify(lugar.modalidades_ids);
-
-                const isFav = lugar.favoritado == 1;
-                const nota = parseInt(lugar.minha_nota) || 0;
-
-                div.innerHTML = `
-                    <img src="${lugar.imagem}" alt="${lugar.nome}" class="lugar-img">
-                    <div class="info">
-                        <h3 class="titulo-local">${lugar.nome}</h3>
-                        <p class="endereco">${lugar.endereco}</p>
-                        <p>${lugar.descricao}</p>
-                    </div>
-                `;
-
-                container.appendChild(div);
-            });
-
-            aplicaFiltro();
-        })
-        .catch(err => console.error("Erro ao carregar lugares:", err));
-}
-
-function editarLocal (){
-
-}
-
-carregarExplorar();
-
-</script>
+<script type="module" src="./explorar.js"></script>
 
 </body>
 </html>

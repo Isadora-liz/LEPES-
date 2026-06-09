@@ -8,13 +8,18 @@
 body {
     height: 100vh; 
     width: 100vw; 
-    transition: background-image 0.5s ease-in-out;
     display: flex;
     background-color: rgb(51, 51, 51, 0.5); 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative; 
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.5),
+            rgba(0, 0, 0, 0.5)
+        ),
+        url('https://nbcsports.brightspotcdn.com/dims4/default/cad9e2c/2147483647/strip/true/crop/2012x1132+2+0/resize/1440x810!/format/webp/quality/90/?url=https%3A%2F%2Fnbc-sports-production-nbc-sports.s3.us-east-1.amazonaws.com%2Fbrightspot%2F2023-02%2FKuminga1_USA.jpg');
 
 }
 
@@ -85,7 +90,15 @@ p {
     color: #ffffff;
     margin-left: 50px;
     margin-top: 0px;
+    margin-bottom: 3px;
     font-size: 30px;
+}
+
+p2 {
+    color: #ffffff;
+    margin-left: 50px;
+    margin-top: 0px;
+    font-size: 20px;
 }
 
 .direita {
@@ -199,6 +212,7 @@ p {
         <div class="metade esquerda">
             <h1>LEPES</h1>
             <p>Localizador de Espaços para Práticas Esportivas</p>
+            <p2>Bem-vindo ao módulo administrativo do LEPES</p2>
         </div>
 
 <div class="metade direita">
@@ -253,21 +267,6 @@ document.querySelector(".entrar").addEventListener("click", function(e) {
     });
 });
   
-const imagens = [
-    './imagens/imagem1.jpg',
-    './imagens/imagem2.jpg',
-    './imagens/imagem3.jpg',
-    './imagens/imagem4.jpg'
-];
-
-function gerarIndiceAleatorio(max) {
-    return Math.floor(Math.random() * max);
-}
-
-const indiceAleatorio = gerarIndiceAleatorio(imagens.length);
-const imagemSelecionada = imagens[indiceAleatorio];
-
-document.body.style.backgroundImage = `url('${imagemSelecionada}')`;
 
 </script>
 
