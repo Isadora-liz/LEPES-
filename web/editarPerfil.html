@@ -4,50 +4,146 @@
 <meta charset="UTF-8">
 <title>Editar Perfil</title>
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background: #777;
-    color: white;
-    margin: 0;
-    padding: 20px;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
 }
-.container {
-    background: white;
-    color: black;
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 20px;
-    border-radius: 15px;
+
+body{
+    background:#0f172a;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px 20px;
 }
-.avatar-preview {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: #ccc;
-    display: block;
-    margin: 0 auto 15px;
-    object-fit: cover;
+
+.container{
+    width:100%;
+    max-width:700px;
+    background:#111827;
+    border-radius:20px;
+    padding:35px;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
 }
-input[type="text"], input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 6px;
-    border: 1px solid #333;
+
+h2{
+    color:white;
+    text-align:center;
+    margin-bottom:30px;
+    font-size:32px;
 }
-button {
-    padding: 10px;
-    width: 100%;
-    background: #1877f2;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+
+.avatar-preview{
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    object-fit:cover;
+    display:block;
+    margin:0 auto 25px;
+    box-shadow:0 0 25px rgba(0, 0, 0, 0.74);
 }
-button:hover {
-    background: #005bb5;
+
+label{
+    display:block;
+    color:#e2e8f0;
+    margin-bottom:8px;
+    font-weight:600;
 }
+
+input[type="text"],
+input[type="file"]{
+    width:100%;
+    background:#1e293b;
+    border:1px solid #334155;
+    color:white;
+
+    padding:14px;
+    border-radius:12px;
+    margin-bottom:20px;
+
+    transition:.2s;
+}
+
+input[type="text"]:focus,
+input[type="file"]:focus{
+    outline:none;
+    border-color:#3b82f6;
+    box-shadow:0 0 0 3px rgba(59,130,246,.15);
+}
+
+input[type="file"]{
+    cursor:pointer;
+}
+
+button{
+    width:100%;
+    padding:15px;
+
+    border:none;
+    border-radius:12px;
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #3b82f6
+    );
+
+    color:white;
+    font-size:16px;
+    font-weight:600;
+
+    cursor:pointer;
+    transition:.2s;
+}
+
+.upload-avatar{
+    display:block;
+
+    background:#1e293b;
+    border:2px dashed #334155;
+    border-radius:16px;
+
+    padding:25px;
+    margin-bottom:15px;
+
+    text-align:center;
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.upload-avatar:hover{
+    border-color:#3b82f6;
+}
+
+.upload-avatar h3{
+    color:white;
+    margin-bottom:6px;
+}
+
+.upload-avatar p{
+    color:#94a3b8;
+    font-size:14px;
+}
+
+.msg-avatar{
+    display:none;
+
+    background:#14532d;
+    border:1px solid #22c55e;
+    color:#dcfce7;
+
+    padding:12px;
+    border-radius:12px;
+    margin-bottom:20px;
+
+    text-align:center;
+    font-weight:500;
+}
+
 </style>
 </head>
 <body>
