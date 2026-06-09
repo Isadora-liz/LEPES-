@@ -83,10 +83,22 @@ body {
     white-space: nowrap;
 }
 
-#filtros-modalidades {
-    padding: 16px 0;
-    overflow-x: auto;
-    scrollbar-width: none;
+#filtros-modalidades{
+    display:flex;
+    gap:12px;
+
+    overflow-x:auto;
+    scroll-behavior:smooth;
+
+    flex:1;
+
+    padding:5px 0;
+
+    scrollbar-width:none;
+}
+
+#filtros-modalidades::-webkit-scrollbar{
+    display:none;
 }
 
 
@@ -118,13 +130,25 @@ body {
 }
 
 #seta-esq,
-#seta-dir {
-    border: none;
-    background: white;
-    cursor: pointer;
-    font-size: 15px;
-    padding: 8px;
-    border-radius: 50%;
+#seta-dir{
+    width:45px;
+    height:45px;
+
+    border:none;
+    border-radius:50%;
+
+    background:rgba(255,255,255,.9);
+    color:#111827;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+#seta-esq:hover,
+#seta-dir:hover{
+    background:#2563eb;
+    color:white;
 }
 
 .explore-container {
@@ -384,6 +408,26 @@ body {
 </div>
 
 <script type="module" src="./explorar.js"></script>
+
+<script>
+const filtros = document.getElementById("filtros-modalidades");
+const setaEsq = document.getElementById("seta-esq");
+const setaDir = document.getElementById("seta-dir");
+
+setaDir.addEventListener("click", () => {
+    filtros.scrollBy({
+        left: 300,
+        behavior: "smooth"
+    });
+});
+
+setaEsq.addEventListener("click", () => {
+    filtros.scrollBy({
+        left: -300,
+        behavior: "smooth"
+    });
+});
+</script>
 
 </body>
 </html>
