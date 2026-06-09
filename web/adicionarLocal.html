@@ -46,6 +46,8 @@ body{
 }
 
 .card{
+    width: 1000px;
+    padding: 25px;
     background:#111827;
     border:1px solid #1e293b;
     border-radius:20px;
@@ -80,101 +82,57 @@ label{
     font-weight:600;
 }
 
-.obrigatorio{
-    color:#ef4444;
-}
-
-.modalidades-grid{
+.modalidades-grid,
+.acessibilidade-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
     gap:15px;
 }
 
-.modalidades-grid input{
+.modalidades-grid input,
+.acessibilidade-grid input{
     display:none;
 }
 
-.modalidade-card{
+.modalidade-card,
+.acessibilidade-card{
     background:#1e293b;
     border:2px solid #334155;
     border-radius:18px;
     height:70px;
 
     display:flex;
-    flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:10px;
 
-    cursor:pointer;
-    transition:0.10s;
-}
-
-.modalidade-card:hover{
-    transform:translateY(-3px);
-    border-color:#3b82f6;
-}
-
-.modalidade-card span{
-    font-size:10px;
-    font-weight:200;
-}
-
-.modalidade-card{
-    font-size:15px;
-}
-
-.modalidades-grid input:checked + .modalidade-card{
-    background:rgba(37,99,235,0.15);
-    border-color:#2563eb;
-    box-shadow:0 0 0 4px rgba(37,99,235,0.15);
-}
-
-.acessibilidade-container{
-    background:#0f172a;
-    border:1px solid #334155;
-    border-radius:16px;
-    padding:18px;
-    margin-top:8px;
-}
-
-.acessibilidade-grid{
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
-}
-
-.acessibilidade-grid input{
-    display:none;
-}
-
-.acessibilidade-card{
-    background:#1e293b;
-    border:2px solid #334155;
     color:#cbd5e1;
-    padding:14px 20px;
-    border-radius:12px;
+    font-size:15px;
+    font-weight:500;
+
     cursor:pointer;
-    transition:.25s;
     user-select:none;
+    transition:.15s;
 }
 
+.modalidade-card:hover,
 .acessibilidade-card:hover{
     border-color:#3b82f6;
+    transform:translateY(-2px);
 }
 
+/* CONTRASTE MAIOR AO SELECIONAR */
+
+.modalidades-grid input:checked + .modalidade-card,
 .acessibilidade-grid input:checked + .acessibilidade-card{
     background:#2563eb;
     border-color:#60a5fa;
     color:white;
-}
 
-.modalidades-container{
-    background:#0f172a;
-    border:1px solid #334155;
-    border-radius:16px;
-    padding:18px;
-    margin-top:8px;
+    box-shadow:
+        0 0 0 3px rgba(96,165,250,.4),
+        0 0 20px rgba(37,99,235,.6);
+
+    font-weight:600;
 }
 
 input[type="text"],
@@ -186,8 +144,7 @@ select{
     border-radius:14px;
     padding:15px;
     color:white;
-    font-size:15px;
-    transition:.3s;
+    transition:0.3s;
 }
 
 input[type="text"]::placeholder,
@@ -203,12 +160,7 @@ select:focus{
     box-shadow:0 0 0 4px rgba(59,130,246,.15);
 }
 
-textarea{
-    resize:vertical;
-    min-height:120px;
-}
-
-.modalidades{
+.acessibilidade{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
     gap:12px;
@@ -236,7 +188,7 @@ textarea{
     text-align:center;
     background:#1e293b;
     cursor:pointer;
-    transition:.3s;
+    transition:0.3s;
 }
 
 .upload:hover{
@@ -252,6 +204,18 @@ textarea{
     display:none;
 }
 
+.mensagem-upload{
+    margin-top:12px;
+    padding:12px;
+    border-radius:12px;
+    background:#14532d;
+    border:1px solid #22c55e;
+    color:#dcfce7;
+    display:none;
+    font-size:14px;
+    font-weight:500;
+}
+
 .btn{
     width:100%;
     margin-top:10px;
@@ -263,12 +227,29 @@ textarea{
     font-weight:600;
     border-radius:14px;
     cursor:pointer;
-    transition:.3s;
+    transition:0.3s;
 }
 
 .btn:hover{
     transform:translateY(-2px);
     box-shadow:0 10px 25px rgba(37,99,235,.3);
+}
+
+.mensagem-sucesso{
+    display:none;
+    position:sticky;
+    top:20px;
+
+    background:#14532d;
+    border:1px solid #22c55e;
+    color:#dcfce7;
+
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:20px;
+
+    text-align:center;
+    font-weight:600;
 }
 
 </style>
@@ -277,6 +258,9 @@ textarea{
 
 <div class="container">
 
+<div id="mensagem-sucesso" class="mensagem-sucesso">
+
+</div>
     <div class="topo">
         <h1>Adicionar espaço esportivo</h1>
     </div>
@@ -285,18 +269,18 @@ textarea{
 
         <div class="card-header">
             <h2>Informações do Local</h2>
-            <p>Preencha os dados abaixo. Campos marcados com asterisco (*) são obrigatórios.</p>
+            <p>Preencha os dados abaixo, todos os campos são obrigatórios.</p>
         </div>
 
-        <form class="form">
+        <form class="form-local">
 
             <div class="form-group">
-                <label>Nome do local <span class="obrigatorio">*</span></label>
+                <label>Nome do local</label>
                 <input type="text" placeholder="Ex: Ginásio Poliesportivo Municipal">
             </div>
 
             <div class="form-group">
-                <label>Endereço completo <span class="obrigatorio">*</span></label>
+                <label>Endereço completo</label>
                 <input type="text" placeholder="Ex: Rua das Flores, 123 - Centro">
             </div>
 
@@ -307,46 +291,86 @@ textarea{
 
             <div class="form-group">
 <div class="form-group">
-    <label>Modalidades disponíveis <span class="obrigatorio">*</span></label>
+    <label>Modalidades disponíveis</label>
     <div class="modalidades-grid">
 
-        <input type="checkbox" id="futebol" name="modalidades[]">
-        <label for="futebol" class="modalidade-card">
-            Futebol
-        </label>
-
-        <input type="checkbox" id="volei" name="modalidades[]">
-        <label for="volei" class="modalidade-card">
-            Vôlei
-        </label>
-
-        <input type="checkbox" id="basquete" name="modalidades[]">
-        <label for="basquete" class="modalidade-card">
-            Basquete
-        </label>
-
-        <input type="checkbox" id="handebol" name="modalidades[]">
-        <label for="handebol" class="modalidade-card">
-            Handebol
-        </label>
-
-        <input type="checkbox" id="futsal" name="modalidades[]">
-        <label for="futsal" class="modalidade-card">
+          <input type="checkbox" id="futebol" name="modalidades[]">
+          <label for="futebol" class="modalidade-card">
             Futsal
-        </label>
+          </label>
 
-        <input type="checkbox" id="tenis" name="modalidades[]">
-        <label for="tenis" class="modalidade-card">
-            Tênis
-        </label>
+          <input type="checkbox" id="volei" name="modalidades[]">
+          <label for="volei" class="modalidade-card">
+            Vôlei de praia
+          </label>
 
-    </div>
+          <input type="checkbox" id="basquete" name="modalidades[]">
+          <label for="basquete" class="modalidade-card">
+            Basquete
+          </label>
+
+          <input type="checkbox" id="handebol" name="modalidades[]">
+          <label for="handebol" class="modalidade-card">
+            Bocha
+          </label>
+
+          <input type="checkbox" id="futsal" name="modalidades[]">
+          <label for="futsal" class="modalidade-card">
+            Voleibol
+          </label>
+
+          <input type="checkbox" id="tenis" name="modalidades[]">
+          <label for="tenis" class="modalidade-card">
+            Tênis de mesa
+          </label>
+
+          <input type="checkbox" id="Tênis de mesa" name="modalidades[]">
+          <label for="Tênis de mesa" class="modalidade-card">
+            Tênis de mesa
+          </label>  
+
+          <input type="checkbox" id="natação" name="modalidades[]">
+          <label for="natação" class="modalidade-card">
+              Natação
+          </label>
+
+          <input type="checkbox" id="artes marciais" name="modalidades[]">
+          <label for="artes marciais" class="modalidade-card">
+               Artes Marciais
+          </label>
+
+          <input type="checkbox" id="futebol de campo" name="modalidades[]">
+          <label for="futebol de campo" class="modalidade-card">
+                Futebol de Campo
+          </label>
+
+          <input type="checkbox" id="atletismo infantil" name="modalidades[]">
+          <label for="atletismo infantil" class="modalidade-card">
+                  Atletismo Infantil
+          </label>
+
+          <input type="checkbox" id="skateboarding" name="modalidades[]">
+          <label for="skateboarding" class="modalidade-card">
+                   Skateboarding
+          </label>
+          <input type="checkbox" id="futebol de areia" name="modalidades[]">
+          <label for="futebol de areia" class="modalidade-card">
+                   Futebol de Areia
+          </label>
+          <input type="checkbox" id="beach tennis" name="modalidades[]">
+          <label for="beach tennis" class="modalidade-card">
+                   Beach Tennis
+          </label>
+          <input type="checkbox" id="futevôlei" name="modalidades[]">
+          <label for="futevôlei" class="modalidade-card">
+                   Futevôlei
+          </label>
+          <input type="checkbox" id="futemesa" name="modalidades[]">
+          <label for="futemesa" class="modalidade-card">
+                   Futebol de Mesa
+          </label>
 </div>
-
-          <div class="form-group">
-    <label>
-        Acessibilidade
-        <span class="obrigatorio">*</span>
+    <label>Acessibilidade
     </label>
 
         <div class="acessibilidade-grid">
@@ -361,49 +385,63 @@ textarea{
                 Banheiro Adaptado
             </label>
 
-            <input type="checkbox" id="piso" name="acessibilidade[]">
-            <label for="piso" class="acessibilidade-card">
-                Piso Tátil
-            </label>
-
-            <input type="checkbox" id="elevador" name="acessibilidade[]">
-            <label for="elevador" class="acessibilidade-card">
-                Elevador
+            <input type="checkbox" id="Suporte" name="acessibilidade[]">
+            <label for="Suporte" class="acessibilidade-card">
+                Suporte para Cadeirante
             </label>
 
             <input type="checkbox" id="vagas" name="acessibilidade[]">
             <label for="vagas" class="acessibilidade-card">
                 Vagas Reservadas
             </label>
-<div class="modalidades-container">
-    <div class="modalidades-grid">
-    </div>
-</div>
-        </div>
+            <input type="checkbox" id="piso" name="acessibilidade[]">
+            <label for="piso" class="acessibilidade-card">
+                Piso Tátil
+            </label>
+              </div>
 
-    </div>
-</div>
+           <label class="upload">
+         📷
+         <h3>Selecionar Imagens do espaço esportivo</h3>
+         <p>Arraste arquivos ou clique para enviar</p>
 
-            <div class="form-group">
-                <label>Imagens do local</label>
-
-                <label class="upload">
-                    📷
-                    <h3>Selecionar Imagens</h3>
-                    <p>Arraste arquivos ou clique para enviar</p>
-                    <input type="file" multiple accept="image/*">
-                </label>
-            </div>
-
-            <button class="btn">
-                Cadastrar Local
-            </button>
-
-        </form>
-
-    </div>
-
+     <input
+        type="file"
+        id="imagens"
+        multiple
+        accept="image/*"
+    >
+</label>
+<div id="mensagem-imagem" class="mensagem-sucesso">
 </div>
 
-</body>
+    </div>
+    <button
+    class="btn"
+    type="button"
+    onclick="
+        document.getElementById('mensagem-sucesso').innerHTML='✅ Local adicionado com sucesso!';
+        document.getElementById('mensagem-sucesso').style.display='block';
+        window.scrollTo({top:0,behavior:'smooth'});
+    ">
+    Cadastrar Espaço
+        </button>
+        <body>
+        <script>
+    document.getElementById("imagens").addEventListener("change", function() {
+
+    const quantidade = this.files.length;
+    const mensagem = document.getElementById("mensagem-imagem");
+
+    mensagem.style.display = "block";
+
+    if (quantidade === 1) {
+        mensagem.innerHTML = "✅ 1 imagem adicionada com sucesso!";
+    } else {
+        mensagem.innerHTML = `✅ ${quantidade} imagens adicionadas com sucesso!`;
+    }
+
+});
+</script>
 </html>
+</body>
