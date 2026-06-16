@@ -86,15 +86,13 @@ body {
 #filtros-modalidades{
     display:flex;
     gap:12px;
-
-    overflow-x:auto;
-    scroll-behavior:smooth;
-
     flex:1;
+
+    overflow:hidden;
 
     padding:5px 0;
 
-    scrollbar-width:none;
+    align-items:center;
 }
 
 #filtros-modalidades::-webkit-scrollbar{
@@ -379,12 +377,10 @@ body {
             <button class="bot-modalidade" data-id="4">Basquete</button>
             <button class="bot-modalidade" data-id="5">Skate</button>
             <button class="bot-modalidade" data-id="6">Bocha</button>
-            <button class="bot-modalidade" data-id="7">Tênis de Praia</button>
+            <button class="bot-modalidade" data-id="7">Beach Tennis</button>
             <button class="bot-modalidade" data-id="8">Futevôlei</button>
             <button class="bot-modalidade" data-id="9">Tênis</button>
             <button class="bot-modalidade" data-id="10">Vôlei de Praia</button>
-            <button class="bot-modalidade" data-id="11">Peteca</button>
-            <button class="bot-modalidade" data-id="12">Pádel</button>
         </div>
         <button id="seta-dir">▶</button>
     </div>
@@ -414,20 +410,76 @@ const filtros = document.getElementById("filtros-modalidades");
 const setaEsq = document.getElementById("seta-esq");
 const setaDir = document.getElementById("seta-dir");
 
+let animando = false;
+
 setaDir.addEventListener("click", () => {
-    filtros.scrollBy({
-        left: 300,
-        behavior: "smooth"
+
+    if(animando) return;
+    animando = true;
+
+    const primeiro = filtros.firstElementChild;
+    const largura = primeiro.offsetWidth + 12;
+
+    filtros.style.transition = "transform .3s ease";
+    filtros.style.transform = `translateX(-${largura}px)`;
+
+    filtros.addEventListener("transitionend", function mover() {
+
+        filtros.appendChild(primeiro);
+
+        filtros.style.transition = "none";
+        filtros.style.transform = "translateX(0)";
+
+        filtros.removeEventListener("transitionend", mover);
+
+        requestAnimationFrame(() => {
+            animando = false;
+        });
+
     });
+
 });
 
 setaEsq.addEventListener("click", () => {
-    filtros.scrollBy({
-        left: -300,
-        behavior: "smooth"
+
+    if(animando) return;
+    animando = true;
+
+    const ultimo = filtros.lastElementChild;
+    const largura = ultimo.offsetWidth + 12;
+
+    filtros.style.transition = "none";
+
+    filtros.insertBefore(
+        ultimo,
+        filtros.firstElementChild
+    );
+
+    filtros.style.transform =
+        `translateX(-${largura}px)`;
+
+    requestAnimationFrame(() => {
+
+        filtros.style.transition =
+            "transform .3s ease";
+
+        filtros.style.transform =
+            "translateX(0)";
+
     });
+
+    filtros.addEventListener("transitionend", function mover() {
+
+        filtros.removeEventListener(
+            "transitionend",
+            mover
+        );
+
+        animando = false;
+
+    });
+
 });
 </script>
-
 </body>
 </html>

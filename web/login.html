@@ -1,272 +1,422 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lepes</title>
-    <style>
-body {
-    height: 100vh; 
-    width: 100vw; 
-    display: flex;
-    background-color: rgb(51, 51, 51, 0.5); 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative; 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LEPES - Login</title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    width:100vw;
+    height:100vh;
+
     background:
         linear-gradient(
-            rgba(0, 0, 0, 0.5),
-            rgba(0, 0, 0, 0.5)
+            rgba(0,0,0,.55),
+            rgba(0,0,0,.55)
         ),
         url('https://nbcsports.brightspotcdn.com/dims4/default/cad9e2c/2147483647/strip/true/crop/2012x1132+2+0/resize/1440x810!/format/webp/quality/90/?url=https%3A%2F%2Fnbc-sports-production-nbc-sports.s3.us-east-1.amazonaws.com%2Fbrightspot%2F2023-02%2FKuminga1_USA.jpg');
 
+    background-size:cover;
+    background-position:center;
+
+    overflow:hidden;
 }
 
-body::before {
-    content: "";
-    position: fixed; 
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: -1;
+.navbar{
+    width:100%;
+    position:fixed;
+    top:0;
+    left:0;
+    padding:20px 40px;
 }
 
-.navbar {
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color:rgba(0, 0, 0, 1); 
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    padding: 10px 40px;
+.container{
+    width:100%;
+    height:100vh;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 80px;
 }
 
-.nav-links {
-    list-style: none;
-    display: flex;
+.esquerda{
+    color:white;
 }
 
-.nav-links li {
-    margin-left: 25px;
+.esquerda h1{
+    font-family: Georgia, serif;
+    font-size:115px;
+    line-height:1;
+    margin-bottom:5px;
 }
 
-.nav-links a {
-    color: white;
-    text-decoration: none;
-    padding: 8px 10px;
-    border-radius: 4px;
+.subtitulo{
+    font-size:25px;
+    margin-bottom:5px;
+    color:white;
 }
 
-.nav-links a:hover {
-    background-color: #32a893;
+.descricao{
+    font-size:20px;
+    color:white;
 }
 
-.container {
-    display: flex; 
-    height: 100vh;
-    width: 100%;
+.direita{
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
-.metade {
-    flex: 1; 
-    padding: 20px;
-    box-sizing: border-box;
+.login-card{
+    width:500px;
+
+    background:rgba(0,0,0,.65);
+    backdrop-filter:blur(10px);
+
+    border-radius:15px;
+
+    padding:30px;
+
+    display:flex;
+    flex-direction:column;
+    gap:15px;
 }
 
-h1 {
-    color: #ffffff;
-    margin-top: 120px;
-    margin-left: 50px;
-    margin-bottom: 5px;
-    font-size: 150px;
+.titulo-login{
+    color:white;
+    text-align:center;
+    font-size:28px;
+    margin-bottom:5px;
 }
 
-p {
-    color: #ffffff;
-    margin-left: 50px;
-    margin-top: 0px;
-    margin-bottom: 3px;
-    font-size: 30px;
+.input{
+    width:100%;
+
+    padding:12px;
+
+    border:none;
+    border-radius:8px;
+
+    background:white;
+
+    color:black;
+
+    font-size:15px;
 }
 
-p2 {
-    color: #ffffff;
-    margin-left: 50px;
-    margin-top: 0px;
-    font-size: 20px;
+.input::placeholder{
+    color:#666;
 }
 
-.direita {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+.input:focus{
+    outline:none;
 }
 
-.login-card {
-    padding: 40px;
-    width: 320px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+.senha-container{
+    position:relative;
 }
 
-.logo {
-    font-family: 'Segoe Script', cursive;
-    color: white;
-    font-size: 40px;
-    text-align: center;
-    margin-bottom: 10px;
+.senha-container .input{
+    padding-right:45px;
 }
 
-.input {
-    width: 320px; 
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #363636;
-    background-color: #ffffff;
-    color: black;
-    font-size: 14px;
+.olho{
+    position:absolute;
+    right:12px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#666;
+    cursor:pointer;
+    user-select:none;
 }
 
-.input::placeholder {
-    color: #000000;
+.esqueceu-senha{
+    text-align:right;
+    margin-top:-8px;
 }
 
-.entrar {
-    background-color: #1877f2;
-    padding: 10px;
-    border-radius: 6px;
-    text-align: center;
-    color: white;
-    font-weight: bold;
-    text-decoration: none;
-    width: 320px; 
+.esqueceu-senha a{
+    color:#60a5fa;
+    text-decoration:none;
+    font-size:14px;
 }
 
-.separator {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #ffffff;
-    font-size: 12px;
-    margin: 10px 0;
-    width: 320px; 
+.esqueceu-senha a:hover{
+    text-decoration:underline;
 }
 
-.separator .line {
-    height: 1px;
-    flex: 1;
-    background-color: #1877f2;
+.entrar{
+    width:100%;
+
+    padding:12px;
+
+    background:#1877f2;
+
+    color:white;
+
+    border-radius:8px;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+    transition:.2s;
 }
 
-.google-login {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    justify-content: center;
+.entrar:hover{
+    background:#1665cc;
 }
 
-.google-icon {
-    width: 20px;
+.separator{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:white;
 }
 
-.cadastro-box {
-    font-size: 18px;
-    border-radius: 10px;
+.separator .line{
+    flex:1;
+    height:1px;
+    background:#1877f2;
 }
 
-.cadastro-box a {
-    color: #0095f6;
-    text-decoration: none;
+.google-login{
+    width:100%;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    background:white;
+
+    color:black;
+
+    text-decoration:none;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+
+    transition:.2s;
 }
 
-#cadastrar-texto{
-    color: #ffffff;
-    font-size: 18px;
-
+.google-login:hover{
+    background:#f1f1f1;
 }
 
+.google-icon{
+    width:20px;
+}
 
+.cadastro-box{
+    text-align:center;
+    color:white;
+    margin-top:5px;
+}
 
-    </style>
+.cadastro-box a{
+    color:#0095f6;
+    text-decoration:none;
+}
+
+.cadastro-box a:hover{
+    text-decoration:underline;
+}
+
+@media(max-width:900px){
+
+    .container{
+        flex-direction:column;
+        justify-content:center;
+        gap:40px;
+        text-align:center;
+        padding:20px;
+    }
+
+    .esquerda h1{
+        font-size:80px;
+    }
+
+    .subtitulo{
+        font-size:22px;
+    }
+
+    .login-card{
+        width:100%;
+        max-width:350px;
+    }
+}
+
+</style>
 </head>
 <body>
-    <nav class="navbar">
-        <!-- <ul class="nav-links">
-            <li><a href="sobre.html">Sobre</a></li>
-            <li><a href="contato.html">Contato</a></li>
-        </ul> -->
-    </nav>
 
-    <div class="container">
-        <div class="metade esquerda">
-            <h1>LEPES</h1>
-            <p>Localizador de Espaços para Práticas Esportivas</p>
-            <p2>Bem-vindo ao módulo administrativo do LEPES</p2>
-        </div>
+<nav class="navbar"></nav>
 
-<div class="metade direita">
-    <div class="login-card">
-        <input id="user" class="input" type="text" autocomplete="username" placeholder="email"/>
-        <input id="senha" class="input" type="password" placeholder="Senha"/>
+<div class="container">
 
-        <a href="explorar.html" class="entrar">Entrar</a>
+    <div class="esquerda">
 
-        <div class="separator">
-            <div class="line"></div>
-            <span>OU</span>
-            <div class="line"></div>
-        </div>
+    <h1>LEPES</h1>
 
-        
-        <!-- <a class="google-login" href="#">
-            <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="google-icon">
-            Entrar com o Google
-        </a> -->
-    </div>
+    <p class="subtitulo">
+        Localizador de Espaços para Práticas Esportivas
+    </p>
 
-    <div class="cadastro-box">
-        <p id="cadastrar-texto">Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
-    </div>
+    <p class="descricao">
+        Bem-vindo ao módulo administrativo do LEPES
+    </p>
+
 </div>
+
+    <div class="direita">
+
+        <div class="login-card">
+
+            <h2 class="titulo-login">
+                Fazer Login
+            </h2>
+
+            <input
+                id="user"
+                class="input"
+                type="email"
+                autocomplete="username"
+                placeholder="Email"
+            >
+
+            <div class="senha-container">
+
+                <input
+                    id="senha"
+                    class="input"
+                    type="password"
+                    placeholder="Senha"
+                >
+
+                <span
+                    id="toggleSenha"
+                    class="material-icons olho"
+                >
+                    visibility_off
+                </span>
+
+            </div>
+
+            <div class="esqueceu-senha">
+                <a href="recuperarSenha.html">
+                    Esqueceu a senha?
+                </a>
+            </div>
+
+            <a href="#" class="entrar">
+                Entrar
+            </a>
+
+            <div class="separator">
+                <div class="line"></div>
+                <span>OU</span>
+                <div class="line"></div>
+            </div>
+
+            <a class="google-login" href="#">
+                <img
+                    src="https://www.svgrepo.com/show/475656/google-color.svg"
+                    class="google-icon"
+                    alt="Google"
+                >
+                Continuar com Google
+            </a>
+
+            <div class="cadastro-box">
+                Não tem uma conta?
+                <a href="cadastro.html">
+                    Cadastre-se
+                </a>
+            </div>
+
+        </div>
+
     </div>
+
+</div>
 
 <script>
-document.querySelector(".entrar").addEventListener("click", function(e) {
+
+const senhaInput = document.getElementById("senha");
+const toggleSenha = document.getElementById("toggleSenha");
+
+toggleSenha.addEventListener("click", () => {
+
+    if(senhaInput.type === "password"){
+
+        senhaInput.type = "text";
+        toggleSenha.textContent = "visibility";
+
+    }else{
+
+        senhaInput.type = "password";
+        toggleSenha.textContent = "visibility_off";
+
+    }
+
+});
+
+document.querySelector(".entrar").addEventListener("click", function(e){
+
     e.preventDefault();
 
     const email = document.getElementById("user").value;
     const senha = document.getElementById("senha").value;
 
     fetch("login.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, senha })
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            email,
+            senha
+        })
     })
     .then(res => res.json())
     .then(data => {
-        if (data.ok) {
+
+        if(data.ok){
             window.location.href = "explorar.html";
-        } else {
+        }else{
             alert("Email ou senha incorretos.");
         }
+
     })
     .catch(error => {
-        console.error("Erro na requisição:", error);
+
+        console.error(error);
+
         alert("Ocorreu um erro ao tentar fazer login.");
+
     });
+
 });
-  
 
 </script>
 

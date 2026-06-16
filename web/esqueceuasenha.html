@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Recuperar Senha - LEPES</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    width:100vw;
+    height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,.55),
+            rgba(0,0,0,.55)
+        ),
+        url('https://nbcsports.brightspotcdn.com/dims4/default/cad9e2c/2147483647/strip/true/crop/2012x1132+2+0/resize/1440x810!/format/webp/quality/90/?url=https%3A%2F%2Fnbc-sports-production-nbc-sports.s3.us-east-1.amazonaws.com%2Fbrightspot%2F2023-02%2FKuminga1_USA.jpg');
+
+    background-size:cover;
+    background-position:center;
+}
+
+.card{
+    width:400px;
+
+    background:rgba(0,0,0,.35);
+
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    border-radius:20px;
+
+    padding:35px;
+
+    color:white;
+}
+
+.logo{
+    text-align:center;
+    font-size:48px;
+    font-family:Georgia, serif;
+    margin-bottom:10px;
+}
+
+h2{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.descricao{
+    text-align:center;
+    color:#d1d5db;
+    margin-bottom:25px;
+    line-height:1.5;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+input{
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+    border-radius:10px;
+
+    margin-bottom:20px;
+
+    font-size:15px;
+}
+
+input:focus{
+    outline:none;
+}
+
+button{
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+    border-radius:10px;
+
+    background:#1877f2;
+
+    color:white;
+
+    font-size:16px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+button:hover{
+    background:#1665cc;
+}
+
+.voltar{
+    text-align:center;
+    margin-top:20px;
+}
+
+.voltar a{
+    color:#60a5fa;
+    text-decoration:none;
+}
+
+.voltar a:hover{
+    text-decoration:underline;
+}
+
+</style>
+</head>
+<body>
+
+<div class="card">
+
+    <div class="logo">LEPES</div>
+
+    <h2>Recuperar Senha</h2>
+
+    <p class="descricao">
+        Informe o e-mail cadastrado e enviaremos
+        instruções para redefinir sua senha.
+    </p>
+
+    <form>
+
+        <label>E-mail</label>
+
+        <input
+            type="email"
+            placeholder="Digite seu e-mail"
+            required
+        >
+
+        <button type="submit">
+            Enviar Link de Recuperação
+        </button>
+
+    </form>
+
+    <div class="voltar">
+        <a href="index.html">
+            ← Voltar para o login
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

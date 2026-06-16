@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Editar Perfil</title>
+<title>Cadastro</title>
+
 <style>
 *{
     margin:0;
@@ -36,16 +37,6 @@ h2{
     font-size:32px;
 }
 
-.avatar-preview{
-    width:140px;
-    height:140px;
-    border-radius:50%;
-    object-fit:cover;
-    display:block;
-    margin:0 auto 25px;
-    box-shadow:0 0 25px rgba(0, 0, 0, 0.74);
-}
-
 label{
     display:block;
     color:#e2e8f0;
@@ -54,156 +45,165 @@ label{
 }
 
 input[type="text"],
-input[type="file"]{
+input[type="email"],
+input[type="password"]{
     width:100%;
     background:#1e293b;
     border:1px solid #334155;
     color:white;
-
     padding:14px;
     border-radius:12px;
     margin-bottom:20px;
-
     transition:.2s;
 }
 
 input[type="text"]:focus,
-input[type="file"]:focus{
+input[type="email"]:focus,
+input[type="password"]:focus{
     outline:none;
     border-color:#3b82f6;
     box-shadow:0 0 0 3px rgba(59,130,246,.15);
 }
 
-input[type="file"]{
-    cursor:pointer;
-}
-
 button{
     width:100%;
     padding:15px;
-
     border:none;
     border-radius:12px;
-
     background:linear-gradient(
         135deg,
         #2563eb,
         #3b82f6
     );
-
     color:white;
     font-size:16px;
     font-weight:600;
-
     cursor:pointer;
     transition:.2s;
 }
 
-.upload-avatar{
-    display:block;
-
-    background:#1e293b;
-    border:2px dashed #334155;
-    border-radius:16px;
-
-    padding:25px;
-    margin-bottom:15px;
-
-    text-align:center;
-    cursor:pointer;
-
-    transition:.2s;
+button:hover{
+    opacity:.95;
 }
 
-.upload-avatar:hover{
-    border-color:#3b82f6;
+.senha-container{
+    position:relative;
 }
 
-.upload-avatar h3{
-    color:white;
-    margin-bottom:6px;
-}
-
-.upload-avatar p{
+.mostrar-senha{
+    position:absolute;
+    right:15px;
+    top:14px;
+    background:none;
+    border:none;
     color:#94a3b8;
+    cursor:pointer;
     font-size:14px;
+    width:auto;
+    padding:0;
 }
 
-.msg-avatar{
-    display:none;
+.mostrar-senha:hover{
+    color:#fff;
+}
 
-    background:#14532d;
-    border:1px solid #22c55e;
-    color:#dcfce7;
-
-    padding:12px;
-    border-radius:12px;
-    margin-bottom:20px;
-
+.login-link{
     text-align:center;
-    font-weight:500;
+    margin-top:20px;
+    color:#94a3b8;
 }
 
+.login-link a{
+    color:#3b82f6;
+    text-decoration:none;
+    font-weight:600;
+}
 </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Editar Perfil</h2>
-    <img id="avatar-preview" class="avatar-preview" src="default-avatar.png" alt="Avatar">
-    <form id="editar-perfil-form">
+
+    <h2>Criar Conta</h2>
+
+    <form id="cadastro-form">
+
         <label>Nome:</label>
         <input type="text" id="nome" name="nome" required>
-        
-        <label>Avatar:</label>
-        <input type="file" id="avatar" name="avatar" accept="image/*">
-        
-        <button type="submit">Atualizar Perfil</button>
+
+        <label>E-mail:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label>Senha:</label>
+
+        <div class="senha-container">
+            <input
+                type="password"
+                id="senha"
+                name="senha"
+                required
+            >
+
+            <button
+                type="button"
+                class="mostrar-senha"
+                id="toggleSenha"
+            >
+                Mostrar
+            </button>
+        </div>
+
+        <button type="submit">
+            Criar Conta
+        </button>
+
     </form>
+
+    <div class="login-link">
+        Já possui conta?
+        <a href="login.html">Entrar</a>
+    </div>
+
 </div>
 
 <script>
 
-fetch('perfil.php')
-.then(res => res.json())
-.then(usuario => {
-    if(!usuario.erro){
-        document.getElementById('nome').value = usuario.nome;
-        if(usuario.avatar){
-            document.getElementById('avatar-preview').src = usuario.avatar;
-        }
-    }
-})
-.catch(err => console.error(err));
+const senha = document.getElementById('senha');
+const toggleSenha = document.getElementById('toggleSenha');
 
-document.getElementById('avatar').addEventListener('change', function(){
-    const file = this.files[0];
-    if(file){
-        document.getElementById('avatar-preview').src = URL.createObjectURL(file);
+toggleSenha.addEventListener('click', () => {
+
+    if(senha.type === 'password'){
+        senha.type = 'text';
+        toggleSenha.textContent = 'Ocultar';
+    }else{
+        senha.type = 'password';
+        toggleSenha.textContent = 'Mostrar';
     }
+
 });
 
-document.getElementById('editar-perfil-form').addEventListener('submit', function(e){
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('nome', document.getElementById('nome').value);
-    const file = document.getElementById('avatar').files[0];
-    if(file) formData.append('avatar', file);
+document.getElementById('cadastro-form')
+.addEventListener('submit', function(e){
 
-    fetch('editarPerfil.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        if(data.ok){
-            alert("Perfil atualizado com sucesso!");
-            window.location.href = 'perfil.html'; 
-        } else {
-            alert("Erro: " + (data.erro || "Não foi possível atualizar."));
-        }
-    })
-    .catch(err => console.error(err));
+    e.preventDefault();
+
+    const dados = {
+        nome: document.getElementById('nome').value,
+        email: document.getElementById('email').value,
+        senha: document.getElementById('senha').value
+    };
+
+    console.log(dados);
+
+    // fetch('cadastro.php', {
+    //     method:'POST',
+    //     headers:{
+    //         'Content-Type':'application/json'
+    //     },
+    //     body: JSON.stringify(dados)
+    // });
+
 });
 </script>
 

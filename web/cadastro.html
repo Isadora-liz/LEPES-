@@ -1,123 +1,204 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cadastro - LEPES</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<title>Cadastro</title>
+
 <style>
-body {
-margin: 0;
-padding: 0;
-font-family: Arial, sans-serif;
-background: linear-gradient(135deg, #1c1c1c, #2a2a2a);
-height: 100vh;
-display: flex;
-justify-content: center;
-align-items: center;
-color: #fff;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
 }
 
-
-.card {
-background: rgba(0, 0, 0, 0.6);
-padding: 40px;
-border-radius: 20px;
-width: 350px;
-box-shadow: 0 0 20px rgba(0,0,0,0.4);
-backdrop-filter: blur(10px);
-text-align: center;
+body{
+    background:#0f172a;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px 20px;
 }
 
-
-h2 {
-margin-bottom: 20px;
-color: #32a893;
-font-size: 28px;
+.container{
+    width:100%;
+    max-width:700px;
+    background:#111827;
+    border-radius:20px;
+    padding:35px;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
 }
 
-
-.input {
-width: 100%;
-padding: 12px;
-margin: 10px 0;
-border: none;
-border-radius: 8px;
-font-size: 16px;
+h2{
+    color:white;
+    text-align:center;
+    margin-bottom:30px;
+    font-size:32px;
 }
 
-
-.btn {
-width: 100%;
-padding: 12px;
-margin-top: 15px;
-background-color: #32a893;
-border: none;
-color: #fff;
-border-radius: 8px;
-font-size: 18px;
-cursor: pointer;
-font-weight: bold;
-transition: 0.3s;
+label{
+    display:block;
+    color:#e2e8f0;
+    margin-bottom:8px;
+    font-weight:600;
 }
 
-
-.btn:hover {
-background-color: #288574;
+input[type="text"],
+input[type="email"],
+input[type="password"]{
+    width:100%;
+    background:#1e293b;
+    border:1px solid #334155;
+    color:white;
+    padding:14px;
+    border-radius:12px;
+    margin-bottom:20px;
+    transition:.2s;
 }
 
-
-a.voltar {
-display: inline-block;
-margin-top: 15px;
-color: #32a893;
-text-decoration: none;
-font-size: 14px;
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus{
+    outline:none;
+    border-color:#3b82f6;
+    box-shadow:0 0 0 3px rgba(59,130,246,.15);
 }
 
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #3b82f6
+    );
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
+}
 
-a.voltar:hover {
-text-decoration: underline;
+button:hover{
+    opacity:.95;
+}
+
+.senha-container{
+    position:relative;
+}
+
+.senha-container input{
+    padding-right:50px;
+}
+
+.olho{
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+
+    color:#94a3b8;
+    cursor:pointer;
+    user-select:none;
+
+    transition:.2s;
+}
+
+.olho:hover{
+    color:white;
+}
+
+.login-link{
+    text-align:center;
+    margin-top:20px;
+    color:#94a3b8;
+}
+
+.login-link a{
+    color:#3b82f6;
+    text-decoration:none;
+    font-weight:600;
 }
 </style>
 </head>
 <body>
-<div class="card">
-<h2>Criar Conta</h2>
 
-<form action="cadastro.php" method="POST">
-<input type="text" name="nome" class="input" placeholder="Nome" required>
-<input type="email" name="email" class="input" placeholder="Email" required>
-<input type="password" name="senha" class="input" placeholder="Senha" required>
-<button type="submit" class="btn">Cadastrar</button>
-</form>
-<a href="login.html" class="voltar">Voltar para o login</a>
+<div class="container">
+
+    <h2>Criar Conta</h2>
+
+    <form id="cadastro-form">
+
+        <label>Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label>E-mail:</label>
+        <input type="email" id="email" name="email" required>
+
+       <label>Senha:</label>
+
+<div class="senha-container">
+    <input
+        type="password"
+        id="senha"
+        name="senha"
+        required
+    >
+
+    <span
+        class="material-icons olho"
+        id="toggleSenha"
+    >
+        visibility_off
+    </span>
 </div>
-<script>
-document.querySelector(".btn").addEventListener("click", function(e) {
-   e.preventDefault();
-   const nome = document.querySelector('input[name="nome"]').value;
-    const email = document.querySelector('input[name="email"]').value;
-    const senha = document.querySelector('input[name="senha"]').value;
+      
 
-    fetch("cadastro.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome, email, senha }) 
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.ok) {
-           alert("Cadastro realizado com sucesso! Você será redirecionado para o login.");
-            window.location.href = "login.html"; 
-        } else {
-           alert("Falha no Cadastro: " + data.mensagem);
-      }
-    })
-    .catch(error => {
-     alert("Ocorreu um erro técnico na comunicação.");
-    });
+        <button type="submit">
+            Criar Conta
+        </button>
+
+    </form>
+
+    <div class="login-link">
+        Já possui conta?
+        <a href="login.html">Entrar</a>
+    </div>
+
+</div>
+
+<script>
+
+const senha = document.getElementById('senha');
+const toggleSenha = document.getElementById('toggleSenha');
+
+toggleSenha.addEventListener('click', () => {
+
+    if(senha.type === 'password'){
+        senha.type = 'text';
+        toggleSenha.textContent = 'visibility';
+    } else {
+        senha.type = 'password';
+        toggleSenha.textContent = 'visibility_off';
+    }
 });
 
+document.getElementById('cadastro-form')
+.addEventListener('submit', function(e){
+
+    e.preventDefault();
+
+    const dados = {
+        nome: document.getElementById('nome').value,
+        email: document.getElementById('email').value,
+        senha: document.getElementById('senha').value
+    };
+    console.log(dados);
+});
 </script>
 </body>
 </html>
