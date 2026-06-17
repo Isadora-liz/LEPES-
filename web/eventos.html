@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Eventos</title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#0f172a;
+}
+
+.header{
+    background:
+    linear-gradient(
+        rgba(0,0,0,.55),
+        rgba(0,0,0,.55)
+    ),
+    url('https://img.olympics.com/images/image/private/t_s_16_9_g_auto/f_auto/primary/tihomsolxa4uqxwvermu');
+
+    background-size:cover;
+    background-position:center;
+    color:white;
+    padding:40px 20px;
+}
+
+.header h1{
+    font-size:42px;
+    margin-bottom:8px;
+}
+
+.header p{
+    font-size:18px;
+}
+
+.container{
+    max-width:1100px;
+    margin:30px auto;
+    padding:0 20px;
+}
+
+.busca{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    margin-bottom:25px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.lista-eventos{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.evento{
+    background:#0f172a;
+    border:1px solid #334155;
+     border-radius:18px;
+    overflow:hidden;
+    display:flex;
+    box-shadow:0 4px 12px rgba(0,0,0,.1);
+    transition:.2s;
+}
+
+.evento:hover{
+    transform:translateY(-3px);
+}
+
+.evento img{
+    width:280px;
+    height:200px;
+    object-fit:cover;
+}
+
+.info{
+    padding:20px;
+    flex:1;
+}
+
+.modalidade{
+    display:inline-block;
+    background:#e0ecff;
+    color:#2563eb;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:13px;
+    margin-bottom:10px;
+}
+
+.info h2{
+    margin-bottom:10px;
+    color:white;
+}
+
+.detalhes{
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+    margin-bottom:12px;
+    color:white;
+}
+
+.detalhes span{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.descricao{
+    color:white;
+    line-height:1.5;
+}
+
+.botao-evento{
+    display:inline-block;
+    margin-top:15px;
+    padding:10px 18px;
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    border-radius:10px;
+}
+
+.botao-evento:hover{
+    background:#1d4ed8;
+}
+
+#botaoAdicionar{
+    position:fixed;
+
+    bottom:25px;
+    right:25px;
+
+    border:none;
+    border-radius:30px;
+
+    background:#2563eb;
+    color:white;
+
+    padding:15px 25px;
+
+    cursor:pointer;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+
+    font-size:15px;
+    font-weight:600;
+
+    transition:.2s;
+}
+
+#botaoAdicionar:hover{
+    background:#1d4ed8;
+    transform:translateY(-2px);
+}
+
+@media(max-width:800px){
+
+    .evento{
+        flex-direction:column;
+    }
+
+    .evento img{
+        width:100%;
+        height:220px;
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<header class="header">
+    <h1>Eventos Esportivos</h1>
+    <p>Fique por dentro dos próximos eventos da comunidade.</p>
+</header>
+
+<div class="container">
+
+    <input
+        class="busca"
+        type="text"
+        placeholder="Buscar eventos..."
+    >
+
+    <div class="lista-eventos">
+        <div class="evento">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQFZT4pykTHdX96OkkBkA086GDHb1uoFmLfA&s">
+            <div class="info">
+                <span class="modalidade">
+                    Vôlei
+                </span>
+                <h2>Grand Prix de Vôlei</h2>
+                <div class="detalhes">
+                    <span>
+                        <i class="material-icons">event</i>
+                        20/07/2026
+                    </span>
+                    <span>
+                        <i class="material-icons">schedule</i>
+                        08:00
+                    </span>
+                    <span>
+                        <i class="material-icons">location_on</i>
+                        Ginásio Central
+                    </span>
+                </div>
+                <p class="descricao">
+                    Evento esportivo reunindo equipes da região para um dia inteiro de competições e integração da comunidade.
+                </p>
+            </div>
+        </div>
+
+        <div class="evento">
+
+            <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018">
+
+            <div class="info">
+
+                <span class="modalidade">
+                    Futebol
+                </span>
+
+                <h2>Copa Regional de Futebol</h2>
+
+                <div class="detalhes">
+
+                    <span>
+                        <i class="material-icons">event</i>
+                        05/08/2026
+                    </span>
+
+                    <span>
+                        <i class="material-icons">schedule</i>
+                        09:00
+                    </span>
+
+                    <span>
+                        <i class="material-icons">location_on</i>
+                        Arena Municipal
+                    </span>
+
+                </div>
+
+                <p class="descricao">
+                    Competição regional envolvendo equipes locais e convidados de cidades vizinhas.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<button
+    id="botaoAdicionar"
+    onclick="window.location.href='adicionarEventos.html'"
+>Adicionar novo evento</button>
+
+</body>
+</html>
