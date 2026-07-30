@@ -14,18 +14,27 @@
 }
 
 body{
-    background:#0f172a;
     min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
     padding:40px 20px;
+    background-color: rgb(51, 51, 51, 0.5);
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.5),
+            rgba(0, 0, 0, 0.5)
+        );
+        background-image: url('https://imagens.ebc.com.br/0TpQVLdGlOpWsG6c4-MmgJpR73o=/1170x700/smart/https://agenciabrasil.ebc.com.br/sites/default/files/thumbnails/image/2024/07/30/2024-07-30t190408z_793891324_up1ek7u1gytdk_rtrmadp_3_olympics-2024-artisticgymnastics_0.jpg?itok=ktVpvArN');
+        background-size: cover;
+
+    
 }
 
 .container{
     width:100%;
     max-width:700px;
-    background:#111827;
+    background:#111827d1;
     border-radius:20px;
     padding:35px;
     box-shadow:0 15px 40px rgba(0,0,0,.35);
@@ -49,8 +58,8 @@ input[type="text"],
 input[type="email"],
 input[type="password"]{
     width:100%;
-    background:#1e293b;
-    border:1px solid #334155;
+    background:#1e293be8;
+    border:1px solid #334155ec;
     color:white;
     padding:14px;
     border-radius:12px;
@@ -93,6 +102,14 @@ button:hover{
 
 .senha-container input{
     padding-right:50px;
+}
+
+.mensagem-erro{
+    display: none;
+    color: #d32f2f;
+    font-size: 14px;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .olho{
@@ -157,11 +174,11 @@ button:hover{
     </span>
 </div>
       
+    <p id="mensagem-erro" class="mensagem-erro"></p>
 
-        <button type="submit">
+        <button type="submit" class="cadastrar">
             Criar Conta
         </button>
-
     </form>
 
     <div class="login-link">
@@ -171,34 +188,6 @@ button:hover{
 
 </div>
 
-<script>
-
-const senha = document.getElementById('senha');
-const toggleSenha = document.getElementById('toggleSenha');
-
-toggleSenha.addEventListener('click', () => {
-
-    if(senha.type === 'password'){
-        senha.type = 'text';
-        toggleSenha.textContent = 'visibility';
-    } else {
-        senha.type = 'password';
-        toggleSenha.textContent = 'visibility_off';
-    }
-});
-
-document.getElementById('cadastro-form')
-.addEventListener('submit', function(e){
-
-    e.preventDefault();
-
-    const dados = {
-        nome: document.getElementById('nome').value,
-        email: document.getElementById('email').value,
-        senha: document.getElementById('senha').value
-    };
-    console.log(dados);
-});
-</script>
+<script type="module" src="cadastro.js"></script>
 </body>
 </html>
