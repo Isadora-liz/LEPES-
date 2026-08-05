@@ -32,12 +32,16 @@ export default function Locais({ id, nome, descricao, endereco, imagem }: Locais
 
 const styles = StyleSheet.create({
   card: {
-    marginBottom: 20,
-    borderRadius: 35,
-    marginHorizontal: 10,
-    overflow: 'hidden', // Mantém a imagem dentro do border radius arredondado
+  marginBottom: 10,
+  borderRadius: 10,
+  overflow: 'hidden',
   },
-  titulo: {
+  imagem: {
+  height: 100,
+  width: "50%"
+
+},
+ titulo: {
     fontWeight: 'bold',
   },
   conteudo: {

@@ -130,7 +130,7 @@ export default function Locais() {
 
           style={styles.busca}
 
-          placeholder="Buscar eventos, endereços..."
+          placeholder="Buscar locais, endereços..."
 
           value={busca}
 
