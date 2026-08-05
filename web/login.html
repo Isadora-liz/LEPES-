@@ -6,10 +6,10 @@
     <title>lepes</title>
     <style>
 body {
-    height: 100vh; 
-    width: 100vw; 
+    height: 100vh;
+    width: 100vw;
     display: flex;
-    background-color: rgb(51, 51, 51, 0.5); 
+    background-color: rgb(51, 51, 51, 0.5);
     background:
         linear-gradient(
             rgba(0, 0, 0, 0.5),
@@ -19,9 +19,10 @@ body {
         background-size: cover;
 }
 
+
 body::before {
     content: "";
-    position: fixed; 
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -30,27 +31,31 @@ body::before {
     z-index: -1;
 }
 
+
 .navbar {
     width: 100%;
     height: 20px;
     position: fixed;
     top: 0;
     left: 0;
-    background-color:rgba(0, 0, 0, 1); 
+    background-color:rgba(0, 0, 0, 1);
     z-index: 1000;
     display: flex;
     align-items: center;
     padding: 10px 10px;
 }
 
+
 .nav-links {
     list-style: none;
     display: flex;
 }
 
+
 .nav-links li {
     margin-left: 25px;
 }
+
 
 .nav-links a {
     color: white;
@@ -59,21 +64,25 @@ body::before {
     border-radius: 4px;
 }
 
+
 .nav-links a:hover {
     background-color: #32a893;
 }
 
+
 .container {
-    display: flex; 
+    display: flex;
     height: 100vh;
     width: 100%;
 }
 
+
 .metade {
-    flex: 1; 
+    flex: 1;
     padding: 20px;
     box-sizing: border-box;
 }
+
 
 h1 {
     color: #ffffff;
@@ -83,6 +92,7 @@ h1 {
     font-size: 150px;
 }
 
+
 p {
     color: #ffffff;
     margin-left: 50px;
@@ -91,6 +101,7 @@ p {
     font-size: 30px;
 }
 
+
 p2 {
     color: #ffffff;
     margin-left: 50px;
@@ -98,12 +109,14 @@ p2 {
     font-size: 20px;
 }
 
+
 .direita {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
+
 
 .login-card {
     padding: 40px;
@@ -114,6 +127,7 @@ p2 {
     gap: 12px;
 }
 
+
 .logo {
     font-family: 'Segoe Script', cursive;
     color: white;
@@ -122,8 +136,9 @@ p2 {
     margin-bottom: 10px;
 }
 
+
 .input {
-    width: 320px; 
+    width: 320px;
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #363636;
@@ -132,9 +147,11 @@ p2 {
     font-size: 14px;
 }
 
+
 .input::placeholder {
     color: #000000;
 }
+
 
 .entrar {
     background-color: #1877f2;
@@ -144,8 +161,9 @@ p2 {
     color: white;
     font-weight: bold;
     text-decoration: none;
-    width: 320px; 
+    width: 320px;
 }
+
 
 .separator {
     display: flex;
@@ -154,14 +172,16 @@ p2 {
     color: #ffffff;
     font-size: 12px;
     margin: 10px 0;
-    width: 320px; 
+    width: 320px;
 }
+
 
 .separator .line {
     height: 1px;
     flex: 1;
     background-color: #1877f2;
 }
+
 
 .google-login {
     color: #ffffff;
@@ -173,25 +193,33 @@ p2 {
     justify-content: center;
 }
 
+
 .google-icon {
     width: 20px;
 }
+
 
 .cadastro-box {
     font-size: 18px;
     border-radius: 10px;
 }
 
+
 .cadastro-box a {
     color: #0095f6;
     text-decoration: none;
 }
 
+
 #cadastrar-texto{
     color: #ffffff;
     font-size: 18px;
 
+
 }
+
+
+
 
 
 
@@ -202,8 +230,9 @@ p2 {
         <ul class="nav-links">
             <li><a href="sobre.html">Sobre</a></li>
             <li><a href="contato.html">Contato</a></li>
-        </ul> 
+        </ul>
     </nav>
+
 
     <div class="container">
         <div class="metade esquerda">
@@ -212,12 +241,14 @@ p2 {
             <p2>Bem-vindo ao módulo administrativo do LEPES</p2>
         </div>
 
+
 <div class="metade direita">
     <div class="login-card">
         <input id="user" class="input" type="text" autocomplete="username" placeholder="email"/>
         <input id="senha" class="input" type="password" placeholder="Senha"/>
         <span id="mensagem-erro" style="color: red; display: none; font-size: 14px; margin-top: 5px;"></span>
         <a href="explorar.html" class="entrar">Entrar</a>
+
 
         <div class="separator">
             <div class="line"></div>
@@ -226,13 +257,16 @@ p2 {
         </div>
     </div>
 
+
     <div class="cadastro-box">
         <p id="cadastrar-texto">Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
     </div>
 </div>
     </div>
 
+
 <script type="module" src="./login.js"></script>
+
 
 </body>
 </html>

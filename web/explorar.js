@@ -2,8 +2,9 @@ import { db } from "./firebase.js";
 
 import {
     collection,
-    getDocs
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+    getDocs,
+    doc
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 let filtroSelecionado = null;
 
@@ -194,7 +195,17 @@ async function carregarExplorar() {
     </div>
 `;
             container.appendChild(div);
+
+            const botaoEditar =
+                div.querySelector(".botao-editar");
+
+            botaoEditar.addEventListener("click", () => {
+
+                window.location.href =
+                    `editarLocal.html?id=${doc.id}`;
+            });
         });
+
 
         aplicaFiltro();
 

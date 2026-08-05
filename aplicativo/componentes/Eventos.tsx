@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import { StyleSheet } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 
-interface LocaisProps {
+interface EventosProps {
   id: string | number;
   nome: string;
   descricao: string;
@@ -10,21 +10,18 @@ interface LocaisProps {
   imagem: string;
 }
 
-export default function Locais({ id, nome, descricao, endereco, imagem }: LocaisProps) {
+export default function EventoCard({ id, nome, descricao, endereco, imagem }: EventosProps) {
   return (
     <Card
-      onPress={() => router.push(`/detalhesCards/DetalhesLocais?id=${id}`)}
+      onPress={() => router.push(`/detalhesCards/DetalhesEventos?id=${id}`)}
       style={styles.card}
     >
       <Card.Cover source={{ uri: imagem }} />
-      <Card.Title title={nome} />
+      <Card.Title title={nome} titleStyle={styles.titulo} />
       
-      <Card.Content>
-        <Text>{descricao}</Text>
-      </Card.Content>
-
-      <Card.Content>
-        <Text>{endereco}</Text>
+      <Card.Content style={styles.conteudo}>
+        <Text style={styles.descricao}>{descricao}</Text>
+        <Text style={styles.endereco}>{endereco}</Text>
       </Card.Content>
     </Card>
   );

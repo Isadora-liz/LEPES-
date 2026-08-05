@@ -9,13 +9,13 @@ import { getFirestore } from "firebase/firestore";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBV3CbmauARJN8h7SUPDtm21cDU8Ua8SXs",
-  authDomain: "lepes-teste.firebaseapp.com",
-  projectId: "lepes-teste",
-  storageBucket: "lepes-teste.firebasestorage.app",
-  messagingSenderId: "613109882589",
-  appId: "1:613109882589:web:84e19871bfdcb447418534",
-  measurementId: "G-0K800GEWV2"
+  apiKey: "AIzaSyAQHHNMr8qbBLIeEdMPhtosjgI6JxNhR3g",
+  authDomain: "teste-lepesadmin.firebaseapp.com",
+  projectId: "teste-lepesadmin",
+  storageBucket: "teste-lepesadmin.firebasestorage.app",
+  messagingSenderId: "976198499922",
+  appId: "1:976198499922:web:b51bfa9e86faf2c28fa98b",
+  measurementId: "G-NKH9RS2ZBL"
 };
 
 // Initialize Firebase
@@ -24,3 +24,4 @@ export const db = getFirestore(app);
 export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 })
+

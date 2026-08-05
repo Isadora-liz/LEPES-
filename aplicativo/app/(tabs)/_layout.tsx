@@ -28,7 +28,7 @@ export default function TabLayout() {
         options={{
           headerShown: false,
           title: 'Explorar',
-          tabBarIcon: ( { color, size} ) => (
+          tabBarIcon: ( { color, size }: { color: string; size: number } ) => (
             <Feather name="map-pin" size={size} color={color} />
           )
         }} 
@@ -38,7 +38,7 @@ export default function TabLayout() {
         options={{
           headerShown: false,
           title: 'Eventos',
-          tabBarIcon: ( { color, size} ) => (
+          tabBarIcon: ( { color, size }: { color: string; size: number } ) => (
             <Feather name="calendar" size={size} color={color} />
           )
         }} 

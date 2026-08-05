@@ -2,22 +2,23 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Espaços</title>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Eventos</title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <style>
 
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}  
-
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+body{
+     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f5f5f5;
     padding-bottom: 80px;
 
@@ -27,12 +28,11 @@ body {
             rgba(0, 0, 0, 0.5),
             rgba(0, 0, 0, 0.5)
         ),
-        url('https://img.olympics.com/images/image/private/t_s_16_9_g_auto/t_s_w2440/f_auto/primary/tihomsolxa4uqxwvermu');
+        url('https://img.olympics.com/images/image/private/t_social_share_thumb/f_auto/primary/auafcdczaz9xfuv5qxuo');
 
 
     background-size: cover;
 }
-
 
 .header {
     padding: 16px 100px;
@@ -160,37 +160,59 @@ body {
     padding: 20px;
 }
 
-
-.cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 24px;
+.container{
+    max-width:1100px;
+    margin:30px auto;
+    padding:0 20px;
 }
 
+.busca{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    margin-bottom:25px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
 
-.card {
-    background: #fff;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
+.lista-eventos{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.evento{
+    position:relative;
+    background:#0f172a;
+    border:1px solid #334155;
+    border-radius:18px;
+    overflow:hidden;
+    display:flex;
+    box-shadow:0 4px 12px rgba(0,0,0,.1);
+    transition:.2s;
+}
+
+.evento:hover{
+    transform:translateY(-3px);
+}
+
+.imagem-evento{
     position: relative;
+    width: 280px;
+    flex-shrink: 0;
 }
 
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+.imagem-evento img{
+    width:100%;
+    height:200px;
+    object-fit:cover;
+    display:block;
 }
 
-
-.botao-editar {
-    position: absolute;
-    top: 12px;
-    right: 12px;
+.botao-editar{
+    position:absolute;
+    top:12px;
+    right:70px;
     width: 40px;
     height: 40px;
     border: none;
@@ -215,76 +237,122 @@ body {
     font-size: 22px;
 }
 
-
-.card-image {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    display: block;
-}
-
-
-.card-content {
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-
-.card-titulo {
-    font-size: 20px;
-    font-weight: 600;
-    color: #222;
-    line-height: 1.3;
-}
-
-
-.card-endereco {
-    font-size: 14px;
-    color: #666;
-    line-height: 1.5;
-}
-
-
-.card-descricao {
-    font-size: 14px;
-    color: #777;
-    line-height: 1.6;
-}
-
-
-        /* Responsividade */
-@media (max-width: 968px) {
-.cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-
-@media (max-width: 600px) {
-.cards-grid {
-    grid-template-columns: 1fr;
-   }
-           
-.card-image {
-    height: 200px;
-    }
-}
-
-
-#botao-AdicionarLocal {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #1877f2;
-    color: white;
+.botao-remover{
+    position:absolute;
+    top:12px;
+    right:12px;
+    width: 40px;
+    height: 40px;
     border: none;
-    border-radius: 30px;
-    padding: 15px 20px;
-    font-size: 16px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    transition: 0.2s;
+}
+
+
+.botao-remover:hover {
+    transform: scale(1.1);
+}
+
+
+.botao-remover .material-icons {
+    color: #552727;
+    font-size: 22px;
+}
+
+.info{
+    padding:20px;
+    flex:1;
+}
+
+.modalidade{
+    display:inline-block;
+    background:#e0ecff;
+    color:#2563eb;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:13px;
+    margin-bottom:10px;
+}
+
+.info h2{
+    margin-bottom:10px;
+    color:white;
+}
+
+.detalhes{
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+    margin-bottom:12px;
+    color:white;
+}
+
+.detalhes span{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.endereco span{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    margin-bottom:12px;
+    color:white;
+}
+
+.descricao{
+    color:white;
+    line-height:1.5;
+}
+
+.botao-evento{
+    display:inline-block;
+    margin-top:15px;
+    padding:10px 18px;
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    border-radius:10px;
+}
+
+.botao-evento:hover{
+    background:#1d4ed8;
+}
+
+#botaoAdicionar{
+    position:fixed;
+
+    bottom:25px;
+    right:25px;
+
+    border:none;
+    border-radius:30px;
+
+    background:#2563eb;
+    color:white;
+
+    padding:15px 25px;
+
+    cursor:pointer;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+
+    font-size:15px;
+    font-weight:600;
+
+    transition:.2s;
+}
+
+#botaoAdicionar:hover{
+    background:#1d4ed8;
+    transform:translateY(-2px);
 }
 
 
@@ -318,6 +386,7 @@ body {
 }
 
 
+
 #icone-mapa {
     display: flex;
     flex-direction: column;
@@ -326,7 +395,7 @@ body {
     color: #ffffff;
     font-family: Arial, sans-serif;
     font-size: 14px;
-    padding: 0 50px;
+    padding: 0 40px;
 }
 
 
@@ -334,7 +403,7 @@ body {
     /*content: 'map'; */
     font-family: 'Material Icons';
     font-size: 25px;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 
@@ -347,7 +416,7 @@ body {
   font-family: Arial, sans-serif;
   font-size: 14px;
   padding: 0 10px;
-  margin-left: 70%;
+  margin-left: 73%;
   position: transform;
 }
 
@@ -368,7 +437,7 @@ body {
     color: #ffffff;
     font-family: Arial, sans-serif;
     font-size: 14px;
-    padding: 0 40px;
+    padding: 0 10px;
 }
 
 
@@ -387,7 +456,7 @@ body {
     color: #ffffff;
     font-family: Arial, sans-serif;
     font-size: 14px;
-    padding: 0 5px;
+    padding: 0 10px;
 }
 
 
@@ -398,33 +467,29 @@ body {
   margin-bottom: 4px;
 }
 
-
-
-
 </style>
 </head>
-<body>
 
+<body>
 
 <div class="botao-menu">
     <p style="margin-left: 20px; margin-top: 0px; font-weight: 600; ">LEPES</p>
-    <a href="explorar.html" class="active" id="icone-explorar">Explorar</a>
-    <a href="eventos.html" class="" id="icone-eventos">Eventos</a>
+    <a href="explorar.html" class="" id="icone-explorar">Explorar</a>
+    <a href="eventos.html" class="active" id="icone-eventos">Eventos</a>
 </div>
 
 
 <header class="header">
-       <div class="titulo">Espaços</div>
+       <div class="titulo">Eventos Esportivos</div>
             <div class="linha"></div>
         <div class="busca-container">
         <input
             id="busca-container"
             type="text"
             class="search-input"
-            placeholder="Buscar lugares, endereços..."
+            placeholder="Buscar eventos..."
         >
         </div>
-        // fazer isso ser automático
     <div class="bot-modalidades-container">
         <button id="seta-esq">◀</button>
         <div id="filtros-modalidades">
@@ -447,20 +512,20 @@ body {
 
 </header>
 
+<div class="container">
+    <div id="sem-eventos">Nenhum evento encontrado.</div>
+    <div id="lista-eventos" class="lista-eventos"></div>
 
- 
-<div class="explore-container">
-    <div class="cards-grid" id="cards-container"></div>
 </div>
 
 
-<button id="botao-AdicionarLocal" onclick="window.location.href='adicionarLocal.html'">
-    Adicionar Local
-</button>
 
+<button
+    id="botaoAdicionar"
+    onclick="window.location.href='adicionarEventos.html'"
+>Adicionar novo evento</button>
 
-<script type="module" src="./explorar.js"></script>
-
+<script type="module" src="./eventos.js"></script>
 
 </body>
 </html>
