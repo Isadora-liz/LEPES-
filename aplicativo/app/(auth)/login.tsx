@@ -67,7 +67,7 @@ export default function Login() {
         <Text style={styles.textoBotaoGoogle}>Entrar com o Google</Text>
       </TouchableOpacity>
       <Link href="./cadastro" >
-            <Text style={{color: '#ffffff', width: '100%'}}>cadastre-se</Text>
+            <Text style={{color: '#ffffff', width: '100%', includeFontPadding: false }}>cadastre-se</Text>
       </Link>
 
       </View>
