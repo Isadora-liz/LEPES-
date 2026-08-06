@@ -21,8 +21,10 @@ import {
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import LocaisCard from '../../componentes/Locais';
-import { db } from '../../FirebaseConfig';
+import { auth, db } from '../../FirebaseConfig';
 import FotoPerfil from '@/componentes/FotoPerfil';
+import { doc } from 'firebase/firestore';
+import { getDoc } from 'firebase/firestore';
 
 
 
@@ -31,10 +33,30 @@ export default function Locais() {
 
   const [locais, setLocais] = useState<any[]>([]);
   const [busca, setBusca] = useState("");
-   const [abaAtiva, setAbaAtiva] = useState("lista");
+  const [abaAtiva, setAbaAtiva] = useState("lista");
+  const [usuario, setUsuario] = useState<any>(null);
 
+  async function buscarUsuarioLogado() {
 
+    const user = auth.currentUser;
 
+    if (!user) return;
+
+    const usuarioRef = doc(db, "usuarios", user.uid);
+
+    const usuarioSnap = await getDoc(usuarioRef);
+
+    if (usuarioSnap.exists()) {
+      setUsuario(usuarioSnap.data());
+    }
+
+  }
+
+  useEffect(() => {
+
+    buscarUsuarioLogado();
+
+  }, []);
 
   useEffect(() => {
 
@@ -136,9 +158,7 @@ export default function Locais() {
           </Text>
         </TouchableOpacity>
 
-        <FotoPerfil navigation={undefined}>
-          
-        </FotoPerfil>
+        <FotoPerfil imagem={usuario?.imagem ?? ""} />
       </View>
 
       {abaAtiva === "lista" && (
@@ -248,18 +268,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2, 
     borderBottomColor: '#8d8d8d' ,
     backgroundColor: '#202020' ,
-    width: '100%',
-    includeFontPadding: false,
   },
 
 abaTexto:{
   color:"#aaa",
   fontSize:18,
-  includeFontPadding: false,
   textAlign:"center",
   marginVertical: 20,
   marginLeft: 40,
-  paddingVertical: 14,
+  paddingVertical: 10,
   borderBottomWidth: 1,
   marginBottom: -1,
   borderColor:'#202020',
@@ -270,9 +287,15 @@ abaSelecionada:{
   color:"#00bcd4",
   borderBottomWidth: 2,
   borderColor:"#00bcd4",
-  includeFontPadding: false,
 },
 
+linha: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#3A3A3A',
+  },
 
 
 mapaContainer:{
@@ -333,3 +356,5 @@ mapaContainer:{
     includeFontPadding: false,
   }
 });
+
+
