@@ -6,7 +6,7 @@ import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import { SafeAreaView } from "react-native-safe-area-context";
 import { db } from '../../FirebaseConfig';
 
-import Abas from '../../componentes/AbasLocais';
+import Abas from '../../componentes/AbasDetalhesLocais';
 
 
 
@@ -123,7 +123,8 @@ const styles = StyleSheet.create({
     color: '#9AA0A6', 
     marginLeft: 8 
   },
-  abas: { flexDirection: 'row', 
+  abas: { 
+    flexDirection: 'row', 
     borderBottomWidth: 1, 
     borderBottomColor: '#2A2A2A' 
   },

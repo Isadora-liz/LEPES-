@@ -15,12 +15,14 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import LocaisCard from '../../componentes/Locais';
 import { db } from '../../FirebaseConfig';
+import FotoPerfil from '@/componentes/FotoPerfil';
 
 
 
@@ -29,6 +31,7 @@ export default function Locais() {
 
   const [locais, setLocais] = useState<any[]>([]);
   const [busca, setBusca] = useState("");
+   const [abaAtiva, setAbaAtiva] = useState("lista");
 
 
 
@@ -89,7 +92,8 @@ export default function Locais() {
       item.endereco?.toLowerCase().includes(texto)
 
     );
-
+ 
+    
 
   });
 
@@ -98,33 +102,47 @@ export default function Locais() {
 
   return (
 
-
-    <ImageBackground
-
-      source={require('../../assets/images/fundo_volei.jpg')}
-
-      style={styles.imageBackground}
-
-      resizeMode="cover"
-
-      imageStyle={{
-        opacity:0.6
-      }}
+      <SafeAreaView style={styles.conteudos} edges={["top"]}>
+        <ImageBackground
+            source={require('../../assets/images/fundo_volei.jpg')}
+            style={styles.imageBackground}
+            resizeMode="cover"
+            imageStyle={{
+                 opacity:0.6
+            }}
 
     >
+      <View style={styles.abas}>
+        <TouchableOpacity onPress={() => setAbaAtiva("lista")}>
 
+          <Text
+            style={[
+              styles.abaTexto,
+              abaAtiva === "lista" && styles.abaSelecionada,
+            ]}
+          >
+            Lista
+          </Text>
+        </TouchableOpacity>
 
+        <TouchableOpacity onPress={() => setAbaAtiva("mapa")}>
+          <Text
+            style={[
+              styles.abaTexto,
+              abaAtiva === "mapa" && styles.abaSelecionada
+            ]}
+          >
+            Mapa
+          </Text>
+        </TouchableOpacity>
 
-      <SafeAreaView style={styles.conteudos}>
+        <FotoPerfil navigation={undefined}>
+          
+        </FotoPerfil>
+      </View>
 
-
-
-        <Text style={styles.titulo}>
-          Espaços
-        </Text>
-
-
-
+      {abaAtiva === "lista" && (
+      <View style={styles.containerLista}>
 
         <TextInput
 
@@ -199,10 +217,17 @@ export default function Locais() {
                   showsVerticalScrollIndicator={false}
         
                 />
-
+      </View>
+      )} 
+       {abaAtiva === "mapa" && (
+        <View >
+        <Text style={styles.titulo}>
+          Mapa
+        </Text>
+        </View>
+      )}  
+       </ImageBackground>
       </SafeAreaView>
-    </ImageBackground>
-
 
   );
 
@@ -215,12 +240,56 @@ const styles = StyleSheet.create({
   imageBackground:{
     flex:1,
     width:"100%",
+    margin: 0,
   },
 
+  abas: { 
+    flexDirection: 'row', 
+    borderBottomWidth: 2, 
+    borderBottomColor: '#8d8d8d' ,
+    backgroundColor: '#202020' ,
+    width: '100%',
+    includeFontPadding: false,
+  },
+
+abaTexto:{
+  color:"#aaa",
+  fontSize:18,
+  includeFontPadding: false,
+  textAlign:"center",
+  marginVertical: 20,
+  marginLeft: 40,
+  paddingVertical: 14,
+  borderBottomWidth: 1,
+  marginBottom: -1,
+  borderColor:'#202020',
+},
+
+
+abaSelecionada:{
+  color:"#00bcd4",
+  borderBottomWidth: 2,
+  borderColor:"#00bcd4",
+  includeFontPadding: false,
+},
+
+
+
+mapaContainer:{
+  flex:1,
+  justifyContent:"center",
+  alignItems:"center",
+},
+
   conteudos:{
-    flex:1,
-    width:"100%",
-    padding:20,
+    flex: 1, 
+    paddingLeft: 0,
+    paddingRight: 0,
+    margin: 0,
+  },
+
+  containerLista:{
+    margin:20,
   },
 
   titulo:{

@@ -22,10 +22,13 @@ export default function FotoPerfil({ navigation, foto }: FotoPerfilProps) {
 
 const styles = StyleSheet.create({
     avatar: {
-        width: 42,
-        height: 42,
-        borderRadius: 21,
+        width: 45,
+        height: 45,
+        borderRadius: 26,
         borderWidth: 2,
-        borderColor: "#7C3AED",
+        borderColor: "#00bcd4",
+        marginLeft: "68%",
+        marginBottom: 10,
+        marginTop: 10,
     },
 });

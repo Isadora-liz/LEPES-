@@ -16,74 +16,70 @@ export default function EventoCard({ id, nome, descricao, endereco, imagem, }: E
   const [notificacaoAtiva, setNotificacaoAtiva] = useState(false);
   const [interesse, setInteresse] = useState(false);
 
-  async function AtivarNotificação(e: any) {
+  return (
+    <Card
+      style={styles.card}
+      onPress={() => router.push(`/detalhesCards/DetalhesEventos?id=${id}`)}
+    >
 
- return (
-  <Card
-    style={styles.card}
-    onPress={() => router.push(`/detalhesCards/DetalhesEventos?id=${id}`)}
-  >
+      <Card.Content style={styles.linha}>
 
-    <Card.Content style={styles.linha}>
+        <TouchableOpacity
+          style={[
+            styles.botaoNotificacao,
+            notificacaoAtiva
+              ? styles.botaoNotificacaoAtivo
+              : styles.botaoNotificacaoInativo,
+          ]}
+          activeOpacity={0.7}
+          hitSlop={{ top: 40, bottom: 40, left: 40, right: 40 }}
+          onPress={(e) => {
+            e.stopPropagation();
+            setNotificacaoAtiva(!notificacaoAtiva);
+          }}
+        >
+          <MaterialCommunityIcons
+            name={notificacaoAtiva ? "bell" : "bell-off-outline"}
+            size={20}
+            color={notificacaoAtiva ? "#FFFFFF" : "#6B7280"}
+          />
+        </TouchableOpacity>
+
+        <Image
+          source={{ uri: imagem }}
+          style={styles.imagem}
+        />
+
+        <View style={styles.info}>
+          <Text style={styles.titulo}>{nome}</Text>
+
+          <Text style={styles.descricao} numberOfLines={2}>
+            {descricao}
+          </Text>
+
+          <Text style={styles.endereco}>📍 {endereco}</Text>
+        </View>
+
+      </Card.Content>
 
       <TouchableOpacity
-  style={[
-    styles.botaoNotificacao,
-    notificacaoAtiva
-      ? styles.botaoNotificacaoAtivo
-      : styles.botaoNotificacaoInativo,
-  ]}
-  activeOpacity={0.7}
-  hitSlop={{ top: 40, bottom: 40, left: 40, right: 40 }}
-  onPress={(e) => {
-    e.stopPropagation();
-    setNotificacaoAtiva(!notificacaoAtiva);
-  }}
->
-  <MaterialCommunityIcons
-    name={notificacaoAtiva ? "bell" : "bell-off-outline"}
-    size={20}
-    color={notificacaoAtiva ? "#FFFFFF" : "#6B7280"}
-  />
-</TouchableOpacity>
-      <Image
-        source={{ uri: imagem }}
-        style={styles.imagem}
-      />
-
-      <View style={styles.info}>
-        <Text style={styles.titulo}>
-          {nome}
+        style={[
+          styles.botaoInteresse,
+          interesse && styles.botaoInteresseAtivo,
+        ]}
+        activeOpacity={0.85}
+        onPress={(e) => {
+          e.stopPropagation();
+          setInteresse(!interesse);
+        }}
+      >
+        <Text style={styles.textoBotaoInteresse}>
+          {interesse ? "Interesse marcado" : "Marcar interesse"}
         </Text>
-
-        <Text style={styles.descricao} numberOfLines={2}>
-          {descricao}
-        </Text>
-
-        <Text style={styles.endereco}>
-          📍 {endereco}
-        </Text>
-      </View>
-
-    </Card.Content>
-
-  <TouchableOpacity
-  style={[
-    styles.botaoInteresse,
-    interesse && styles.botaoInteresseAtivo,
-  ]}
-  activeOpacity={0.85}
-  onPress={(e) => {
-    e.stopPropagation();
-    setInteresse(!interesse);
-  }}
->
-  <Text style={styles.textoBotaoInteresse}>
-    {interesse ? "Interesse marcado" : "Marcar interesse"}
-  </Text>
-</TouchableOpacity>
-</Card>
-)};
+      </TouchableOpacity>
+    </Card>
+  );
+}
 
 
 
@@ -94,6 +90,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     minHeight: 170,
+
   },
 
   linha: {
@@ -103,10 +100,11 @@ const styles = StyleSheet.create({
   },
 
   imagem: {
-    width: 120,
-    height: 120,
+    width: 140,
+    height: 140,
     borderRadius: 14,
     marginRight: 16,
+    margin: 0,
   },
 
   info: {

@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   marginBottom: 10,
   borderRadius: 10,
   overflow: 'hidden',
+
   },
   imagem: {
   height: 100,
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   conteudo: {
-    gap: 6, // Espaçamento limpo entre descrição e endereço
+    gap: 6,
   },
   descricao: {
     color: '#444',
