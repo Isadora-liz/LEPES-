@@ -144,17 +144,44 @@ export default function Locais() {
       {abaAtiva === "lista" && (
       <View style={styles.containerLista}>
 
-        <TextInput
+        <FlatList
+  data={locaisFiltrados}
+  keyExtractor={(item) => item.id}
+  renderItem={({ item }) => <LocaisCard {...item} />}
+  showsVerticalScrollIndicator={false}
+  ListHeaderComponent={
+    <>
+      <TextInput
+        style={styles.busca}
+        placeholder="Buscar locais, endereços..."
+        value={busca}
+        onChangeText={setBusca}
+      />
 
-          style={styles.busca}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.filtros}
+      >
+        <TouchableOpacity style={styles.botaoFiltro}>
+          <Text style={styles.textoFiltro}>Vôlei</Text>
+        </TouchableOpacity>
 
-          placeholder="Buscar locais, endereços..."
+        <TouchableOpacity style={styles.botaoFiltro}>
+          <Text style={styles.textoFiltro}>Futebol</Text>
+        </TouchableOpacity>
 
-          value={busca}
+        <TouchableOpacity style={styles.botaoFiltro}>
+          <Text style={styles.textoFiltro}>Basquete</Text>
+        </TouchableOpacity>
 
-          onChangeText={setBusca}
-
-        />
+        <TouchableOpacity style={styles.botaoFiltro}>
+          <Text style={styles.textoFiltro}>Skate</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </>
+  }
+/>
 
 
 
