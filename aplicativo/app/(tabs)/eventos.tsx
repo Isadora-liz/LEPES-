@@ -23,14 +23,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import EventoCard from "../../componentes/Eventos";
 import { db } from "../../FirebaseConfig";
 import { Feather } from "@expo/vector-icons";
-import { documentSnapshotFromJSON } from "firebase/firestore";
 
 
 export default function Eventos() {
   const [eventos, setEventos] = useState<any[]>([]);
   const [busca, setBusca] = useState("");
-
-  // Guarda todas as modalidades selecionadas
   const [
     modalidadesSelecionadas,
     setModalidadesSelecionadas,
@@ -44,9 +41,9 @@ export default function Eventos() {
           collection(db, "eventos")
         );
 
-        const lista = snapshot.docs.map((documentos) => ({
-          id: documentos.id,
-          ...documentos.data(),
+        const lista = snapshot.docs.map((doc: { id: any; data: () => any; }) => ({
+          id: doc.id,
+          ...doc.data(),
         }));
 
         setEventos(lista);
@@ -58,8 +55,6 @@ export default function Eventos() {
     buscarEventos();
   }, []);
 
-
-  // Seleciona ou desmarca uma modalidade
   function alternarModalidade(modalidade: string) {
     setModalidadesSelecionadas((modalidadesAnteriores) => {
       const estaSelecionada =
@@ -83,14 +78,6 @@ export default function Eventos() {
       item.nome?.toLowerCase().includes(texto) ||
       item.endereco?.toLowerCase().includes(texto);
 
-    /*
-      Nenhuma modalidade selecionada:
-      mostra todos os eventos.
-
-      Uma ou mais selecionadas:
-      mostra os eventos que correspondem a pelo menos
-      uma das modalidades selecionadas.
-    */
     const correspondeModalidade =
       modalidadesSelecionadas.length === 0 ||
       modalidadesSelecionadas.includes(item.modalidade);
@@ -100,27 +87,16 @@ export default function Eventos() {
 
 
   return (
-    <ImageBackground
-      source={require("../../assets/images/fundo_volei.jpg")}
-      style={styles.imageBackground}
-      resizeMode="cover"
-      imageStyle={{
-        opacity: 0.6,
-      }}
-    >
-      <SafeAreaView style={styles.conteudos}>
-        <FlatList
-          data={eventosFiltrados}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => (
-            <EventoCard {...item} />
-          )}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: 1,
-          }}
-          ListHeaderComponent={
-            <>
+      <SafeAreaView style={styles.conteudos} edges={["top"]}>
+        <ImageBackground
+              source={require("../../assets/images/fundo_volei.jpg")}
+              style={styles.imageBackground}
+              resizeMode="cover"
+              imageStyle={{
+                  opacity: 0.6,
+              }}
+        >
+        
               <Text style={styles.titulo}>
                 Eventos
               </Text>
@@ -221,12 +197,45 @@ export default function Eventos() {
                     🏐 Vôlei
                   </Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[
+                    styles.botaoFiltro,
+                    modalidadesSelecionadas.includes(
+                      "Vôlei"
+                    ) && styles.botaoFiltroAtivo,
+                  ]}
+                  onPress={() =>
+                    alternarModalidade("Vôlei")
+                  }
+                >
+                  <Text
+                    style={[
+                      styles.textoFiltro,
+                      modalidadesSelecionadas.includes(
+                        "Vôlei"
+                      ) && styles.textoFiltroAtivo,
+                    ]}
+                  >
+                    🏐 Vôlei
+                  </Text>
+                </TouchableOpacity>
               </ScrollView>
-            </>
-          }
+              <FlatList
+                  data={eventosFiltrados}
+                  keyExtractor={(item) => String(item.id)}
+                  renderItem={({ item }) => (
+                   <EventoCard {...item} />
+                  )}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{
+                       paddingBottom: 1,
+                  }}
+          
         />
+        </ImageBackground>
       </SafeAreaView>
-    </ImageBackground>
+    
   );
 }
 
@@ -235,23 +244,7 @@ const styles = StyleSheet.create({
   imageBackground: {
     flex: 1,
     width: "100%",
-  },
-
-  header: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 15,
-    paddingBottom: 10,
-  },
-
-  avatar: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    borderWidth: 2,
-    borderColor: "#7C3AED",
+    margin: 0
   },
 
   conteudos: {
@@ -270,7 +263,6 @@ const styles = StyleSheet.create({
   },
 
  containerBusca: {
-  width: "100%",
   height: 52,
   flexDirection: "row",
   alignItems: "center",
@@ -280,16 +272,15 @@ const styles = StyleSheet.create({
   marginBottom: 18,
   borderWidth: 1,
   borderColor: "rgba(62, 197, 215, 0.35)",
-
   shadowColor: "#000",
   shadowOffset: {
-    width: 0,
-    height: 3,
-  },
+      width: 0,
+      height: 3,
+    },
   shadowOpacity: 0.1,
   shadowRadius: 8,
-
   elevation: 3,
+  
 },
 
 busca: {

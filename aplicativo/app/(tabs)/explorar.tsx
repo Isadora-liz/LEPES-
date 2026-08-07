@@ -164,19 +164,14 @@ export default function Locais() {
       {abaAtiva === "lista" && (
       <View style={styles.containerLista}>
 
-        <FlatList
-  data={locaisFiltrados}
-  keyExtractor={(item) => item.id}
-  renderItem={({ item }) => <LocaisCard {...item} />}
-  showsVerticalScrollIndicator={false}
-  ListHeaderComponent={
-    <>
       <TextInput
         style={styles.busca}
         placeholder="Buscar locais, endereços..."
         value={busca}
         onChangeText={setBusca}
       />
+
+{/*deixar isso automatico, pegando as modalidades do banco*/}
 
       <ScrollView
         horizontal
@@ -198,7 +193,19 @@ export default function Locais() {
         <TouchableOpacity style={styles.botaoFiltro}>
           <Text style={styles.textoFiltro}>Skate</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.botaoFiltro}>
+          <Text style={styles.textoFiltro}>Skate</Text>
+        </TouchableOpacity>
+
       </ScrollView>
+
+       <FlatList
+            data={locaisFiltrados}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => <LocaisCard {...item} />}
+            showsVerticalScrollIndicator={false}
+            ListHeaderComponent={
+      <>
     </>
   }
 />
@@ -208,62 +215,6 @@ export default function Locais() {
 
  {/*DEIXAR ISSO AUTOMATICO, PEGAR OS ESPORTES DO FIREBASE E COLOCAR AQUI*/}
           
-          <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.filtros}
-          >
- 
-          <TouchableOpacity style={styles.botaoFiltro} >
-
-            <Text style={styles.textoFiltro}>
-              Vôlei
-            </Text>
-
-          </TouchableOpacity>
-
-
-
-          <TouchableOpacity style={styles.botaoFiltro} >
-
-            <Text style={styles.textoFiltro} >
-              Futebol
-            </Text>
-
-          </TouchableOpacity>
-
-
-
-
-          <TouchableOpacity style={styles.botaoFiltro}>
-
-            <Text style={styles.textoFiltro}>
-              Basquete
-            </Text>
-
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.botaoFiltro}>
-
-            <Text style={styles.textoFiltro}>
-              Basquete
-            </Text>
-
-          </TouchableOpacity>
-
-
-        </ScrollView>
-
-      
-
-        <FlatList
-                  data={locaisFiltrados}
-                  keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => <LocaisCard {...item} />}
-        
-                  showsVerticalScrollIndicator={false}
-        
-                />
       </View>
       )} 
        {abaAtiva === "mapa" && (
@@ -352,7 +303,7 @@ mapaContainer:{
   busca:{
     backgroundColor:"#8d8d8d",
     color:"#fff",
-    borderRadius:40,
+    borderRadius:18,
     padding:12,
     fontSize:16,
     marginBottom:15,

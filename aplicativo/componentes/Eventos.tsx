@@ -87,10 +87,10 @@ export default function EventoCard({ id, nome, descricao, endereco, imagem, }: E
 const styles = StyleSheet.create({
   card: {
     marginBottom: 10,
-   
     borderRadius: 10,
     overflow: 'hidden',
     minHeight: 170,
+    margin:20,
 
   },
 
