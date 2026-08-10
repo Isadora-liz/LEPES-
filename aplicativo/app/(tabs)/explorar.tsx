@@ -135,31 +135,56 @@ export default function Locais() {
 
     >
       <View style={styles.abas}>
-        <TouchableOpacity onPress={() => setAbaAtiva("lista")}>
+          <View style={styles.containerAbas}>
 
-          <Text
-            style={[
-              styles.abaTexto,
-              abaAtiva === "lista" && styles.abaSelecionada,
-            ]}
-          >
-            Lista
-          </Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.botaoAba}
+              onPress={() => setAbaAtiva("lista")}
+              activeOpacity={0.7}
+            >
 
-        <TouchableOpacity onPress={() => setAbaAtiva("mapa")}>
-          <Text
-            style={[
-              styles.abaTexto,
-              abaAtiva === "mapa" && styles.abaSelecionada
-            ]}
-          >
-            Mapa
-          </Text>
-        </TouchableOpacity>
+              <Text
+                style={[
+                  styles.abaTexto,
+                  abaAtiva === "lista" &&
+                  styles.abaSelecionada,
+                ]}
+              >
+                Lista
+              </Text>
 
-        <FotoPerfil imagem={usuario?.imagem ?? ""} />
-      </View>
+            </TouchableOpacity>
+
+
+            <TouchableOpacity
+              style={styles.botaoAba}
+              onPress={() => setAbaAtiva("mapa")}
+              activeOpacity={0.7}
+            >
+
+              <Text
+                style={[
+                  styles.abaTexto,
+                  abaAtiva === "mapa" &&
+                  styles.abaSelecionada,
+                ]}
+              >
+                Mapa
+              </Text>
+
+            </TouchableOpacity>
+
+          </View>
+
+          <View style={styles.perfil}>
+
+            <FotoPerfil
+              imagem={usuario?.imagem ?? ""}
+            />
+
+          </View>
+
+        </View>
 
       {abaAtiva === "lista" && (
       <View style={styles.containerLista}>
@@ -241,30 +266,44 @@ const styles = StyleSheet.create({
     margin: 0,
   },
 
-  abas: { 
-    flexDirection: 'row', 
-    borderBottomWidth: 2, 
-    borderBottomColor: '#8d8d8d' ,
-    backgroundColor: '#202020' ,
-  },
-
-abaTexto:{
-  color:"#aaa",
-  fontSize:18,
-  textAlign:"center",
-  marginVertical: 20,
-  marginLeft: 40,
-  paddingVertical: 10,
+ abas: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: '#202020',
   borderBottomWidth: 1,
-  marginBottom: -1,
-  borderColor:'#202020',
+  borderBottomColor: '#3A3A3A',
+  paddingHorizontal: 16,
 },
 
+containerAbas: {
+  flex: 1,
+  flexDirection: 'row',
+},
 
-abaSelecionada:{
-  color:"#00bcd4",
+botaoAba: {
+  flex: 1,
+  alignItems: 'center',
+},
+
+abaTexto: {
+  color: '#aaa',
+  fontSize: 17,
+  fontWeight: '500',
+  paddingVertical: 20,
+  textAlign: 'center',
   borderBottomWidth: 2,
-  borderColor:"#00bcd4",
+  borderBottomColor: 'transparent',
+},
+
+abaSelecionada: {
+  color: '#00bcd4',
+  borderBottomColor: '#00bcd4',
+},
+
+perfil: {
+  marginLeft: 12,
+  alignItems: 'center',
+  justifyContent: 'center',
 },
 
 linha: {
