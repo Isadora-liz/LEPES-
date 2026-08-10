@@ -23,6 +23,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import EventoCard from "../../componentes/Eventos";
 import { db } from "../../FirebaseConfig";
 import { Feather } from "@expo/vector-icons";
+import FotoPerfil from "@/componentes/FotoPerfil";
 
 
 export default function Eventos() {
@@ -32,7 +33,7 @@ export default function Eventos() {
     modalidadesSelecionadas,
     setModalidadesSelecionadas,
   ] = useState<string[]>([]);
-
+  const usuario = { imagem: "" };
 
   useEffect(() => {
     async function buscarEventos() {
@@ -96,10 +97,13 @@ export default function Eventos() {
                   opacity: 0.6,
               }}
         >
-        
+          <View style={styles.topo}>
               <Text style={styles.titulo}>
                 Eventos
               </Text>
+              <FotoPerfil imagem={usuario?.imagem ?? ""} />
+          </View>
+              
 
             <View style={styles.containerBusca}>
   <Feather
@@ -254,6 +258,13 @@ const styles = StyleSheet.create({
   paddingTop: 0,
   paddingBottom: -30,
 },
+  topo:{
+   flexDirection: "row",
+   marginLeft: 25,
+   marginRight: "8%",
+   alignItems: "center",
+   justifyContent: "space-between"
+  },
 
   titulo: {
     fontSize: 32,
