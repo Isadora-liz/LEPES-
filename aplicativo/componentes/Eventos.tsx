@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     minHeight: 170,
-    margin:20,
+    margin: 20
 
   },
 
