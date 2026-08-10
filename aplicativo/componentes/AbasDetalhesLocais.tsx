@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle, Share, Linking} from 'react-native';
 import { db } from '../FirebaseConfig';
 import { doc } from 'firebase/firestore';
 import { useLocalSearchParams } from 'expo-router';
@@ -31,28 +31,59 @@ export default function Abas({ style }: AbasProps) {
     buscarLocal();
   }, [id]);
 
+  const compartilharLocal = async () => {
+  try {
+    await Share.share({
+      message:
+        "Confira esse local esportivo no LEPES: " + local?.nome,
+    });
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+  const abrirRotas = async () => {
+    const destino = `${local.nome}, ${local.endereco}`;
+
+    const url =`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destino)}`; 
+
+    await Linking.openURL(url);
+  };
+
   const [abaAtiva, setAbaAtiva] = useState('Visão geral');
   const renderConteudo = () => {
     switch (abaAtiva) {
+
       case 'Visão geral':
         return (
         <View>
           <View style={styles.botoes}>
-            <TouchableOpacity style={styles.cartao}>
+            <TouchableOpacity style={styles.cartao}
+              onPress={abrirRotas}
+            >
               <Ionicons name="send" size={24} color="#3EC5D7" />
               <Text style={styles.cartaoTexto}>Rotas</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.cartao}>
+            <TouchableOpacity style={styles.cartao}
+               onPress={compartilharLocal}
+            >
               <Ionicons name="share-social" size={24} color="#3EC5D7" />
               <Text style={styles.cartaoTexto}>Compartilhar</Text>
             </TouchableOpacity>
           </View>
           <View>
-            <Ionicons name="location" size={24} color="#3EC5D7" />
-            <Text style={{color: '#fff'}}>Endereço</Text>
-            <Text style={{color: '#fff'}}>{local?.endereco}</Text>
-            <Text style={{color: '#fff'}}>Horário de funcionamento</Text>
-            <Text style={{color: '#fff'}}>{local?.horarioFuncionamento}</Text>
+            <View style={styles.enderecoRow}>
+                <Ionicons name="location-outline" size={30} color="#3EC5D7" />
+                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 20}}>Endereço</Text>
+            </View>
+            <Text style={{color: '#9d9c9c', fontWeight: "black", marginLeft: 30}}>{local?.endereco}</Text>
+            <View style={styles.funcionamentoRow}>
+                <Ionicons name='time-outline' size={30} color='#3EC5D7'></Ionicons>
+                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 20}}>Horário de funcionamento</Text>
+            </View>
+            <Text style={{color: '#9d9c9c', marginLeft: 30}}>{local?.horarioFuncionamento}</Text>
+
           </View>
         </View> 
 
@@ -128,6 +159,15 @@ const styles = StyleSheet.create ({
     borderBottomWidth: 2, 
     borderBottomColor: '#3EC5D7' ,
     includeFontPadding: false,
+  },
+  enderecoRow:{
+    flexDirection: 'row'
+  },
+
+  funcionamentoRow:{
+    flexDirection: 'row',
+    marginTop: 30
+
   },
   botoes: { 
     flexDirection: 'row', 

@@ -50,7 +50,7 @@ export default function Detalhes() {
 
         <View style={styles.informacoes}>
           <Text style={styles.titulo}>{local.nome}</Text>
-          <Text style={styles.subtitulo}>{local.endereco}</Text>
+          <Text style={styles.subtitulo}>{local.descricao}</Text>
           <View style={styles.avaliacoes}> {/* descobrir como pegar a nota no nosso banco */}
             <Ionicons name="star" size={20} color="#FFC107" />
             <Text style={styles.nota}>{local.nota}</Text>
