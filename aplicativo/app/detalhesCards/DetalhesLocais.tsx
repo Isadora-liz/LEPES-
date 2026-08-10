@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { db } from '../../FirebaseConfig';
 
 import Abas from '../../componentes/AbasDetalhesLocais';
+import { router } from 'expo-router';
 
 
 
@@ -40,10 +41,10 @@ export default function Detalhes() {
       <ScrollView style={styles.container}>
         <View style={styles.foto}>
           <Image source={{ uri: local.imagem }} style={styles.foto} />
-          <TouchableOpacity style={[styles.botao]}>
+          <TouchableOpacity style={[styles.botao]} onPress={() => router.push("/explorar")}>
             <Ionicons name="arrow-back" size={22} color="#000" />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.botao]}>
+          <TouchableOpacity style={[styles.botaoFav]}>
             <Ionicons name="heart" size={22} color="#E53935"  />
           </TouchableOpacity>
         </View>
@@ -94,6 +95,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff', 
     alignItems: 'center', 
     justifyContent: 'center',
+    marginLeft: "4%" 
+  },
+  botaoFav: {
+    position: 'absolute', 
+    width: 44, 
+    height: 44, 
+    borderRadius: 22,
+    backgroundColor: '#fff', 
+    alignItems: 'center', 
+    justifyContent: 'center',
+    marginLeft: "86%" 
   },
   informacoes: { 
     padding: 20 
