@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/build/Ionicons';
 import { useLocalSearchParams, router } from 'expo-router';
-import { doc, getDoc, updateDoc, arrayUnion, arrayRemove, collection } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, arrayUnion, arrayRemove, collection, getDocs } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import {
@@ -15,12 +15,23 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { auth, db } from '../../FirebaseConfig';
 import Abas from '../../componentes/AbasDetalhesLocais';
-import { getDocs } from 'firebase/firestore';
+
+import {
+  buscarAvaliacoesDoLocal,
+  calcularMedia,
+  totalAvaliacoes,
+} from '../../funcoes/avaliacoes';
+
+import {
+  buscarLocalPorId,
+} from '../../funcoes/localBusca';
 
 interface LocalData {
-  imagem: string;
+  imagem?: string;
   nome: string;
-  descricao: string;
+  descricao?: string;
+  endereco: string;
+  horarioFuncionamento?: string;
   favoritos?: string[];
 }
 
@@ -35,120 +46,167 @@ export default function Detalhes() {
   const [favoritado, setFavoritado] = useState(false);
   const [mediaAvaliacoes, setMediaAvaliacoes] = useState(0);
   const [quantidadeAvaliacoes, setQuantidadeAvaliacoes] = useState(0);
+  const [carregando, setCarregando,] = useState(true);
+
+  async function carregarLocal(){
+    if (
+      typeof id !== "string"
+    ) {
+      return;
+    }
+    try {
+      const dados = await buscarLocalPorId(id);
+
+      if (dados) {
+        setLocal(dados);
+      }
+    } catch (error) {
+      console.error ('erro ao carregar local:', error);
+    }
+  }
+
+  async function carregarAvaliacoes(){
+    if (
+      typeof id !== 'string'
+    ) {
+      return;
+    }
+    try{
+      const notas = await buscarAvaliacoesDoLocal(id);
+      const media = calcularMedia(notas);
+      const quantidade = totalAvaliacoes(notas);
+      setMediaAvaliacoes(media);
+      setQuantidadeAvaliacoes(quantidade);
+  } catch (error) {
+    console.error('erro ao carregar avaliações:', error);
+  }
+}
+
+  async function carregarFavorito(){
+    const usuario  = auth.currentUser;
+
+    if (!usuario){
+      setFavoritado(false);
+
+      return;
+    }
+
+    try {
+      const usuarioRef = doc(
+        db,
+        'usuarios',
+        usuario.uid
+      );
+      const usuarioSnap = await getDoc(usuarioRef);
+
+      if(!usuarioSnap.exists()
+      ){
+       setFavoritado(false);
+
+       return;
+      }
+      const dadosUsuario=usuarioSnap.data();
+      const favoritos: string[] = dadosUsuario.favoritos || [];
+
+      if (
+        typeof id === 'string'
+      ){
+        setFavoritado(favoritos.includes(id));
+      }
+    } catch (error) {
+      console.log('erro ao verificar favorito', error);
+    }
+  }
 
   useEffect(() => {
     console.log('Entrou no useEffect');
 
-  async function buscarLocal() {
-  if (typeof id !== 'string') return;
+      async function carregarDados() {
+        if (
+          typeof id !== 'string'
+        ) {
+          return;
+        }
+        try {
+          setCarregando(true);
+        
+          await Promise.all([
+          carregarLocal(),
+          carregarAvaliacoes(),
+          carregarFavorito(),
+        ]);
 
-  try {
+        } catch (error) {
 
-    const docRef = doc(db, 'espaco', id);
-    const docSnap = await getDoc(docRef);
+        console.error(
+          'Erro ao carregar dados:',
+          error
+        );
 
-    if (docSnap.exists()) {
-      const dados = docSnap.data() as LocalData;
+        } finally {
+            setCarregando(false);
+          }
+        }
 
-      setLocal(dados);
-      const auth = getAuth();
-      const usuario = auth.currentUser;
+    carregarDados();
 
-      if (usuario) {
-        const favoritos = dados.favoritos || [];
-        setFavoritado(favoritos.includes(usuario.uid));
-      }
-
-      const avaliacoesRef = collection(
-        db,
-        'espaco',
-        id,
-        'avaliacoes'
-      );
-
-      const avaliacoesSnap = await getDocs(avaliacoesRef);
-
-      const quantidade = avaliacoesSnap.size;
-
-      setQuantidadeAvaliacoes(quantidade);
-      if (quantidade === 0) {
-        setMediaAvaliacoes(0);
-        return;
-      }
-
-      let somaNotas = 0;
-
-      avaliacoesSnap.forEach((avaliacao: { data: () => any; }) => {
-        const dadosAvaliacao = avaliacao.data();
-
-        somaNotas += Number(dadosAvaliacao.nota) || 0;
-      });
-
-      const media = somaNotas / quantidade;
-
-      setMediaAvaliacoes(media);
-    }
-  } catch (error) {
-    console.error('Erro ao buscar local:', error);
-  }
-}
-    buscarLocal();
   }, [id]);
 
-  async function favoritar() {
-  if (typeof id !== 'string') {
-    return;
-  }
-
-  try {
-    const usuario = auth.currentUser;
-
-    if (!usuario) {
-      console.log(" Usuário não está logado");
+  async function favoritar(){
+    if (
+      typeof id !== 'string'
+    ){
       return;
     }
 
+    try{
+      const usuario = auth.currentUser;
 
-    const usuarioRef = doc(
-      db,
-      "usuarios",
-      usuario.uid
-    );
+      if (!usuario) {
+        console.log ('usuario nao está logado');
 
-    console.log(
-      "Caminho procurado:",
-      `usuarios/${usuario.uid}`
-    );
+        return;
+      }
+      
+      const usuarioRef = doc (
+        db,
+        'usuarios',
+        usuario.uid
+      );
 
-    const usuarioSnap = await getDoc(usuarioRef);
+      const usuarioSnap = await getDoc(usuarioRef);
 
-    if (!usuarioSnap.exists()) {
-      return;
+      if (!usuarioSnap.exists()){
+        console.log('usuario nao encontrado');
+
+        return; 
+      }
+
+      if (favoritado){
+        await updateDoc(usuarioRef,
+          {
+            favoritos: arrayRemove(id),
+          }
+        );
+
+        setFavoritado(false);
+      }
+      else {
+        await updateDoc(usuarioRef,
+          {
+            favoritos:
+              arrayUnion(id),
+          }
+        );
+        setFavoritado(true);
+      }
+
+    } catch (error) {
+      console.error('erro ao favoritar', error);
     }
-
-    console.log(
-      usuarioSnap.data()
-    );
-
-    if (favoritado) {
-      await updateDoc(usuarioRef, {
-        favoritos: arrayRemove(id),
-      });
-
-      setFavoritado(false);
-    } else {
-      await updateDoc(usuarioRef, {
-        favoritos: arrayUnion(id),
-      });
-
-      setFavoritado(true);
-    }
-
-  } catch (error) {
-    console.log("erro ao favoritar", error);
   }
-}
-  if (!local) {
+
+  if (carregando){
     return (
       <SafeAreaView style={styles.container}>
         <Text style={{ color: '#fff' }}>Carregando...</Text>
@@ -156,11 +214,19 @@ export default function Detalhes() {
     );
   }
 
+  if (!local) {
   return (
+    <SafeAreaView style={styles.container}>
+        <Text style={{ color: '#fff' }}>local nao encontrado</Text>
+      </SafeAreaView>
+  )}
+
+  return(
+
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View>
-          <Image source={{ uri: local.imagem }} style={styles.foto} />
+          <Image source={{ uri: local?.imagem }} style={styles.foto} />
           
           <TouchableOpacity
             style={styles.botao}
@@ -182,10 +248,10 @@ export default function Detalhes() {
         </View>
 
         <View style={styles.informacoes}>
-          <Text style={styles.titulo}>{local.nome}</Text>
+          <Text style={styles.titulo}>{local?.nome}</Text>
 
           <Text style={styles.subtitulo}>
-            {local.descricao}
+            {local?.descricao}
           </Text>
 
           <View style={styles.avaliacoes}>
@@ -198,7 +264,7 @@ export default function Detalhes() {
             />
 
             <Text style={styles.nota}>
-              {mediaAvaliacoes.toFixed(1)}
+              {mediaAvaliacoes.toFixed(1).replace('.', ',')}
             </Text>
 
             <Text style={styles.avaliacoesTexto}>
@@ -287,6 +353,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 16,
+    width:"100%",
+    includeFontPadding: false,
+
   },
 
   semAvaliacoes: {
@@ -305,6 +374,9 @@ const styles = StyleSheet.create({
   avaliacoesTexto: {
     color: '#9AA0A6',
     marginLeft: 8,
+    includeFontPadding: false,
+    width: "100%"
+
   },
 
   abas: {
