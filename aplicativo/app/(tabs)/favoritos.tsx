@@ -110,7 +110,7 @@ export default function Favoritos() {
 
      <SafeAreaView style={styles.conteudos} edges={["top"]}>
         <ImageBackground
-            source={require('../../assets/images/fundo_volei.jpg')}
+            source={require('../../assets/images/fundo_hele.jpeg')}
             style={styles.imageBackground}
             resizeMode="cover"
             imageStyle={{

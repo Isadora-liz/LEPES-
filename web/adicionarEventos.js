@@ -17,7 +17,6 @@ import {
 
 const storage = getStorage(app);
 
-
 document.addEventListener("DOMContentLoaded", () => {
 
 
@@ -45,8 +44,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const nome = document.getElementById("nome").value.trim();
             const endereco = document.getElementById("endereco").value.trim();
             const descricao = document.getElementById("descricao").value.trim();
-            const data = document.getElementById("data").value;
-            const horario = document.getElementById("horario").value;
+            const dataInicio = document.getElementById("dataInicio").value;
+            const dataFim = document.getElementById("dataFim").value;
+            const horarioInicio = document.getElementById("horarioInicio").value;
+            const horarioFim = document.getElementById("horarioFim").value;
             /*const imagens = inputImagens.files;*/
             const modalidades = obterCheckboxesSelecionados("modalidades[]");
             const acessibilidade = obterCheckboxesSelecionados("acessibilidade[]");
@@ -55,8 +56,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (
                 !nome ||
                 !endereco ||
-                !data ||
-                !horario ||
+                !dataInicio ||
+                !dataFim ||
+                !horarioInicio ||
+                !horarioFim ||
                 modalidades.length === 0
             ) {
 
@@ -72,13 +75,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            const dataHoraEvento = Timestamp.fromDate(
-                new Date(`${data}T${horario}`)
+            const inicio = Timestamp.fromDate(
+                new Date(`${dataInicio}T00:00:00`)
             );
 
-
-
-            console.log("Data do evento:", dataHoraEvento);
+            const fim = Timestamp.fromDate(
+                new Date(`${dataFim}T00:00:00`)
+            );
 
 
             /*const urlsImagens = await enviarImagens(imagens);
@@ -105,8 +108,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 acessibilidade,
 
 
-                data: dataHoraEvento,
+                dataInicio: inicio,
 
+                dataFim: fim,
+
+                horarioInicio,
+
+                horarioFim,
 
                 /*imagens: urlsImagens,*/
 

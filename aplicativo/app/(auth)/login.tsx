@@ -29,7 +29,7 @@ export default function Login() {
   
     <View style={styles.container}>
       <ImageBackground
-            source={require('../../assets/images/caricatura_volei (2).png')}
+            source={require('../../assets/images/fundo_danilo.jpeg')}
             style={styles.imageBackground}
             resizeMode='cover'
             imageStyle={{ opacity: 0.3}}

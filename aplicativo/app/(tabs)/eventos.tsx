@@ -195,7 +195,7 @@ export default function Eventos() {
 
       <ImageBackground
         source={require(
-          "../../assets/images/fundo_volei.jpg"
+          "../../assets/images/fundo_danilo.jpeg"
         )}
         style={styles.imageBackground}
         resizeMode="cover"

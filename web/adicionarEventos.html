@@ -158,13 +158,6 @@ select:focus{
     box-shadow:0 0 0 4px rgba(59,130,246,.15);
 }
 
-.acessibilidade{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:12px;
-}
-
-
 .item{
     background:#1e293b;
     border:1px solid #334155;
@@ -320,19 +313,25 @@ input[type="time"]:focus{
                     placeholder="Ex: Rua das Flores, 123 - Centro">
             </div>
 
-            <div class="linha-dupla">
-
                 <div>
-                    <label for="data">Data do Evento</label>
-                    <input type="date" id="data">
+                    <label for="dataInicio">Data de início do evento</label>
+                    <input type="date" id="dataInicio">
                 </div>
 
                 <div>
-                    <label for="horario">Horário</label>
-                    <input type="time" id="horario">
+                    <label for="dataFim">Data de fim do evento</label>
+                    <input type="date" id="dataFim">
                 </div>
 
-            </div>
+                <div>
+                    <label for="horarioInicio">Horário de início do evento</label>
+                    <input type="time" id="horarioInicio">
+                </div>
+
+                <div>
+                    <label for="horarioFim">Horário de fim do evento</label>
+                    <input type="time" id="horarioFim">
+                </div>
 
             <div class="form-group">
 
@@ -393,41 +392,6 @@ input[type="time"]:focus{
                 <textarea
                     id="descricao"
                     placeholder="Descreva brevemente o evento esportivo..."></textarea>
-
-            </div>
-
-            <div class="form-group">
-
-                <label>Acessibilidade</label>
-
-                <div class="acessibilidade-grid">
-
-                    <input type="checkbox" id="rampa" name="acessibilidade[]" value="Rampa_Acesso">
-                    <label for="rampa" class="acessibilidade-card">
-                        Rampa de Acesso
-                    </label>
-
-                    <input type="checkbox" id="banheiro" name="acessibilidade[]" value="Banheiro_Adaptado">
-                    <label for="banheiro" class="acessibilidade-card">
-                        Banheiro Adaptado
-                    </label>
-
-                    <input type="checkbox" id="suporte" name="acessibilidade[]" value="Suporte_Cadeirante">
-                    <label for="suporte" class="acessibilidade-card">
-                        Suporte para Cadeirante
-                    </label>
-
-                    <input type="checkbox" id="vagas" name="acessibilidade[]" value="Vagas_Reservadas">
-                    <label for="vagas" class="acessibilidade-card">
-                        Vagas Reservadas
-                    </label>
-
-                    <input type="checkbox" id="piso" name="acessibilidade[]" value="Piso_Tatil">
-                    <label for="piso" class="acessibilidade-card">
-                        Piso Tátil
-                    </label>
-
-                </div>
 
             </div>
 

@@ -55,8 +55,10 @@ export default function Abas({ style }: AbasProps) {
   const renderConteudo = () => {
     switch (abaAtiva) {
 
+      
       case 'Visão geral':
         return (
+          
         <View>
           <View style={styles.botoes}>
             <TouchableOpacity style={styles.cartao}
@@ -72,7 +74,8 @@ export default function Abas({ style }: AbasProps) {
               <Text style={styles.cartaoTexto}>Compartilhar</Text>
             </TouchableOpacity>
           </View>
-          <View>
+
+          <View style={{marginTop: 30, marginBottom: 30, marginLeft: 10}}>
             <View style={styles.enderecoRow}>
                 <Ionicons name="location-outline" size={30} color="#3EC5D7" />
                 <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 20}}>Endereço</Text>
@@ -83,19 +86,13 @@ export default function Abas({ style }: AbasProps) {
                 <Ionicons name="calendar-outline" size={30} color="#3EC5D7" />
                 <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 20}}>Data de Início</Text>
             </View>
-            <Text style={{color: '#9d9c9c', marginLeft: 30}}>{evento?.dataInicio}</Text>
-
-            <View style={styles.dataRow}>
-                <Ionicons name="calendar-outline" size={30} color="#3EC5D7" />
-                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 20}}>Data de Fim</Text>
-            </View>
-            <Text style={{color: '#9d9c9c', marginLeft: 30}}>{evento?.dataFim}</Text>
+            <Text style={{color: '#9d9c9c', marginLeft: 30}}>{evento?.dataInicio?.toDate().toLocaleDateString("pt-BR")} </Text>
 
             <View style={styles.horarioRow}>
                 <Ionicons name="time-outline" size={30} color="#3EC5D7" />
-                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 20}}>Horário</Text>
+                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 20}}>Horário diário estimado</Text>
             </View>
-            <Text style={{color: '#9d9c9c', marginLeft: 30}}>{evento?.horario}</Text>
+            <Text style={{color: '#9d9c9c', marginLeft: 30}}> Das {evento?.horarioInicio} às {evento?.horarioFim}</Text>
 
           </View>
           <View style={styles.rodape}>
