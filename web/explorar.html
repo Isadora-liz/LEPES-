@@ -27,7 +27,7 @@ body {
             rgba(0, 0, 0, 0.5),
             rgba(0, 0, 0, 0.5)
         ),
-        url('https://img.olympics.com/images/image/private/t_s_16_9_g_auto/t_s_w2440/f_auto/primary/tihomsolxa4uqxwvermu');
+        url('https://cdn.pixabay.com/photo/2021/01/19/13/50/volleyball-5931266_1280.jpg');
 
 
     background-size: cover;
@@ -91,70 +91,81 @@ body {
 
 
 
-
-.bot-modalidades-container {
-    display: flex;
-    padding: 0 20px;
-    white-space: nowrap;
-    align-items: center;
-    gap: 10px;
-    justify-content: transform;
-}
-
-
 #filtros-modalidades {
     padding: 16px 0;
     overflow-x: auto;
     scrollbar-width: none;
 }
 
+.bot-modalidades-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 15px;
+}
+
+#seta-esq,
+#seta-dir {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#seta-esq {
+    margin-right: 5px;
+}
+
+#seta-dir {
+    margin-left: 5px;
+}
 
 
+/* Área onde ficam os botões */
+#filtros-modalidades {
+    display: flex;
+    align-items: center;
 
-.bot-modalidade::-webkit-scrollbar {
+    gap: 12px;
+
+    flex: 1;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scroll-behavior: smooth;
+
+    /* tira a barra de rolagem */
+    scrollbar-width: none;
+}
+
+#filtros-modalidades::-webkit-scrollbar {
     display: none;
 }
 
 
+/* Botões criados pelo JavaScript */
 .bot-modalidade {
-    padding: 10px 20px;
-    border: 1px solid #ddd;
-    background-color: #fff;
+    margin-top: 10px;
+    flex-shrink: 0;
+
+    padding: 10px 18px;
+
+    border: none;
     border-radius: 20px;
+
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    color: #666;
-    transition: all 0.3s ease;
+
     white-space: nowrap;
 }
-
-
-.bot-modalidade:hover {
-    background-color: #f5f5f5;
-}
-
-
-.bot-modalidade.ativo {
-    background: #0055ff;
-    color: white;
-    border-color: #0033aa;
-}
-
-
-#seta-esq,
-#seta-dir {
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    background-color: white;
-    cursor: pointer;
-}
-
 
 .explore-container {
     max-width: 1200px;
@@ -320,26 +331,6 @@ body {
 }
 
 
-#icone-mapa {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none;
-    color: #ffffff;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    padding: 0 50px;
-}
-
-
-#icone-mapa::before {
-    /*content: 'map'; */
-    font-family: 'Material Icons';
-    font-size: 25px;
-    margin-bottom: 8px;
-}
-
-
 #icone-explorar {
   display: flex;
   flex-direction: column;
@@ -400,6 +391,24 @@ body {
   margin-bottom: 4px;
 }
 
+#icone-sair {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #fd2020;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    padding: 0 5px;
+}
+
+
+#icone-sair::before {
+  font-family: 'Material Icons';
+  font-size: 25px;
+  margin-bottom: 4px;
+}
+
 
 
 
@@ -412,6 +421,7 @@ body {
     <p style="margin-left: 20px; margin-top: 0px; font-weight: 600; ">LEPES</p>
     <a href="explorar.html" class="active" id="icone-explorar">Explorar</a>
     <a href="eventos.html" class="" id="icone-eventos">Eventos</a>
+    <a href="login.html" class="" id="icone-sair">Sair</a>
 </div>
 
 
@@ -426,22 +436,11 @@ body {
             placeholder="Buscar lugares, endereços..."
         >
         </div>
-        // fazer isso ser automático
+       
     <div class="bot-modalidades-container">
         <button id="seta-esq">◀</button>
-        <div id="filtros-modalidades">
-            <button class="bot-modalidade" data-id="1">Vôlei</button>
-            <button class="bot-modalidade" data-id="2">Futebol</button>
-            <button class="bot-modalidade" data-id="3">Tênis de Mesa</button>
-            <button class="bot-modalidade" data-id="4">Basquete</button>
-            <button class="bot-modalidade" data-id="5">Skate</button>
-            <button class="bot-modalidade" data-id="6">Bocha</button>
-            <button class="bot-modalidade" data-id="7">Tênis de Praia</button>
-            <button class="bot-modalidade" data-id="8">Futevôlei</button>
-            <button class="bot-modalidade" data-id="9">Tênis</button>
-            <button class="bot-modalidade" data-id="10">Vôlei de Praia</button>
-            <button class="bot-modalidade" data-id="11">Peteca</button>
-            <button class="bot-modalidade" data-id="12">Pádel</button>
+        <div id="filtros-modalidades"/>
+
         </div>
         <button id="seta-dir">▶</button>
     </div>

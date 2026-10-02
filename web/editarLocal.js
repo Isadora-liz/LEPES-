@@ -16,33 +16,38 @@ if (docSnap.exists()) {
 
     const espaco = docSnap.data();
 
-    document.getElementById("nome").value = espaco.nome;
-    document.getElementById("endereco").value = espaco.endereco;
-    document.getElementById("descricao").value = espaco.descricao;
+    document.getElementById("nome").value = espaco.nome || "";
+    document.getElementById("endereco").value = espaco.endereco || "";
+    document.getElementById("descricao").value = espaco.descricao || "";
+    document.getElementById("horarioFuncionamento").value = espaco.horarioFuncionamento || "";
 
-    espaco.modalidades.forEach((modalidade) => {
+    if (espaco.modalidades) {
+        espaco.modalidades.forEach((modalidade) => {
 
-        const checkbox = document.querySelector(
-            `input[value="${modalidade}"]`
-        );
+            const checkbox = document.querySelector(
+                `input[value="${modalidade}"]`
+            );
 
-        if (checkbox) {
-            checkbox.checked = true;
-        }
+            if (checkbox) {
+                checkbox.checked = true;
+            }
 
-    });
+        });
+    }
 
-    espaco.acessibilidade.forEach((acessibilidade) => {
+    if (espaco.acessibilidade) {
+        espaco.acessibilidade.forEach((acessibilidade) => {
 
-        const checkbox = document.querySelector(
-            `input[value="${acessibilidade}"]`
-        );
+            const checkbox = document.querySelector(
+                `input[value="${acessibilidade}"]`
+            );
 
-        if (checkbox) {
-            checkbox.checked = true;
-        }
+            if (checkbox) {
+                checkbox.checked = true;
+            }
 
-    });
+        });
+    }
 
 } else {
 
@@ -57,26 +62,36 @@ document.getElementById("form-local").addEventListener("submit", async (e) => {
     const nome = document.getElementById("nome").value;
     const endereco = document.getElementById("endereco").value;
     const descricao = document.getElementById("descricao").value;
-    const modalidades = [];
-    const acessibilidade = [];
+    const horarioFuncionamento = document.getElementById("horario de funcionamento").value;
 
-    document
-        .querySelectorAll('input[name="modalidades[]"]:checked')
-        .forEach((checkbox) => {
-            modalidades.push(checkbox.value);
-        });
+    const modalidades = espaco.modalidades || [];
 
-    document
-        .querySelectorAll('input[name="acessibilidade[]"]:checked')
-        .forEach((checkbox) => {
-            acessibilidade.push(checkbox.value);
-        });
+document.querySelectorAll('input[name="modalidades[]"]').forEach((checkbox) => {
+
+    if (modalidades.includes(checkbox.value)) {
+        checkbox.checked = true;
+    }
+
+});
+
+
+// Acessibilidade
+const acessibilidade = espaco.acessibilidade || [];
+
+document.querySelectorAll('input[name="acessibilidade[]"]').forEach((checkbox) => {
+
+    if (acessibilidade.includes(checkbox.value)) {
+        checkbox.checked = true;
+    }
+
+});
 
     await updateDoc(doc(db, "espaco", id), {
 
         nome,
         endereco,
         descricao,
+        horarioFuncionamento,
         modalidades,
         acessibilidade
 

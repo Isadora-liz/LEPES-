@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const nome = document.getElementById("nome").value.trim();
             const endereco = document.getElementById("endereco").value.trim();
             const descricao = document.getElementById("descricao").value.trim();
+            const horarioFuncionamento = document.getElementById("horarioFuncionamento").value.trim();
             const imagens = inputImagens.files;
             const modalidades = obterCheckboxesSelecionados("modalidades[]");
             const acessibilidade = obterCheckboxesSelecionados("acessibilidade[]");
@@ -55,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if(
                 !nome ||
                 !endereco ||
+                !horarioFuncionamento ||
                 modalidades.length === 0
             ){
 
@@ -96,6 +98,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     endereco,
 
                     descricao,
+
+                    horarioFuncionamento,
 
                     modalidades,
 

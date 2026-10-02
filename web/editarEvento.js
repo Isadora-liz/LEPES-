@@ -16,17 +16,14 @@ if (docSnap.exists()) {
 
     const evento = docSnap.data();
 
-    const dataEvento = evento.data.toDate();
-
     document.getElementById("nome").value = evento.nome;
     document.getElementById("endereco").value = evento.endereco;
     document.getElementById("descricao").value = evento.descricao;
+    document.getElementById("dataInicio").value =  evento.dataInicio.toDate().toISOString().split("T")[0];
+    document.getElementById("dataFim").value =  evento.dataFim.toDate().toISOString().split("T")[0];
+    document.getElementById("horarioInicio").value = evento.horarioInicio;
+    document.getElementById("horarioFim").value = evento.horarioFim;
 
-    document.getElementById("data").value =
-        dataEvento.toISOString().split("T")[0];
-
-    document.getElementById("horario").value =
-        dataEvento.toTimeString().slice(0, 5);
 
     evento.modalidades.forEach((modalidade) => {
 
@@ -40,18 +37,6 @@ if (docSnap.exists()) {
 
      });
 
-    evento.acessibilidade.forEach((acessibilidade) => {
-
-        const checkbox = document.querySelector(
-            `input[value="${acessibilidade}"]`
-        );
-
-        if (checkbox) {
-            checkbox.checked = true;
-        }
-
-    });
-
 } else {
 
     alert("Evento não encontrado.");
@@ -64,33 +49,33 @@ document.getElementById("form-evento").addEventListener("submit", async (e) => {
 
     const nome = document.getElementById("nome").value;
     const endereco = document.getElementById("endereco").value;
+    const dataInicio = document.getElementById("dataInicio").value;
+    const dataFim = document.getElementById("dataFim").value;
+    const horarioInicio = document.getElementById("horarioInicio").value;
+    const horarioFim = document.getElementById("horarioFim").value;
     const descricao = document.getElementById("descricao").value;
-    const data = document.getElementById("data").value;
-    const horario = document.getElementById("horario").value;
-    const dataHora = new Date(`${data}T${horario}:00`);
-    const modalidades = [];
-    const acessibilidade = [];
+    
+    const modalidades = evento.modalidades || [];
 
-    document
-        .querySelectorAll('input[name="acessibilidade[]"]:checked')
-        .forEach((checkbox) => {
-            acessibilidade.push(checkbox.value);
-        });
+document.querySelectorAll('input[name="modalidades[]"]').forEach((checkbox) => {
 
-    document
-        .querySelectorAll('input[name="modalidades[]"]:checked')
-        .forEach((checkbox) => {
-            modalidades.push(checkbox.value);
-        });
+    if (modalidades.includes(checkbox.value)) {
+        checkbox.checked = true;
+    }
+
+});
 
     await updateDoc(doc(db, "eventos", id), {
 
         nome,
         endereco,
         descricao,
-        data: dataHora,
+        dataInicio,
+        horarioFim,
+        horarioInicio,
+        dataFim,
         modalidades,
-        acessibilidade
+        imagem
 
     });
 
