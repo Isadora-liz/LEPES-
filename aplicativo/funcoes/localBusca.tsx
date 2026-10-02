@@ -16,7 +16,10 @@ export interface LocalData {
   horarioFuncionamento?: string;
   imagem?: string;
   descricao?: string;
+  acessibilidade?: string[];
 }
+
+import * as Location from "expo-location";
 
 export async function buscarLocalPorId(
   id: string
@@ -68,18 +71,39 @@ export async function abrirRotasLocal(
   local: LocalData
 ) {
   try {
+    const { status } =
+      await Location.requestForegroundPermissionsAsync();
+
+    if (status !== "granted") {
+      throw new Error(
+        "Permissão de localização não concedida."
+      );
+    }
+
+    const localizacao =
+      await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High,
+      });
+
+    const latitudeAtual =
+      localizacao.coords.latitude;
+
+    const longitudeAtual =
+      localizacao.coords.longitude;
+
     const destino =
       `${local.nome}, ${local.endereco}`;
 
     const url =
-      `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-        destino
-      )}`;
+      `https://www.google.com/maps/dir/?api=1` +
+      `&origin=${latitudeAtual},${longitudeAtual}` +
+      `&destination=${encodeURIComponent(destino)}`;
 
     await Linking.openURL(url);
+
   } catch (error) {
     console.error(
-      'Erro ao abrir rota:',
+      "Erro ao abrir rota:",
       error
     );
 

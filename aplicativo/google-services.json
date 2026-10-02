@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "976198499922",
+    "project_id": "teste-lepesadmin",
+    "storage_bucket": "teste-lepesadmin.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976198499922:android:547fcfe805bcc1948fa98b",
+        "android_client_info": {
+          "package_name": "com.hwlena.lepes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "976198499922-7p5m2rr6nqjk809o5pitah27pnksco5k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hwlena.lepes",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "976198499922-mqsv6ethb5pllv2d4aj9svusj5r0u7gj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hwlena.lepes",
+            "certificate_hash": "b7284ac2e44745de9e6b115f059650ef5018be05"
+          }
+        },
+        {
+          "client_id": "976198499922-6vtsnd8no5ubi85tmdcgfep8utg1sab7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy7zIu0GcHJnWYLtA1AxckB9M8QzVypZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "976198499922-6vtsnd8no5ubi85tmdcgfep8utg1sab7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

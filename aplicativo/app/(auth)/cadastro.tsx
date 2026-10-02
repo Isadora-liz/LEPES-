@@ -1,14 +1,26 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TextInput as RNTextInput, TouchableOpacity, View } from 'react-native';
-import { auth, db } from '../../FirebaseConfig';
-import type { JSX } from 'react';
+import React, { useState } from "react";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput as RNTextInput,
+  TouchableOpacity,
+  View,
+  ImageBackground,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from "react-native";
+import { auth, db } from "../../FirebaseConfig";
+import type { JSX } from "react";
+import { router } from "expo-router";
 
 export default function Cadastro(): JSX.Element {
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
 
   const Cadastrar = async () => {
     if (!nome.trim() || !email.trim() || !senha.trim()) {
@@ -17,120 +29,161 @@ export default function Cadastro(): JSX.Element {
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        senha
+      );
 
       await setDoc(doc(db, "usuarios", userCredential.user.uid), {
         nome: nome,
         email: email,
-        createdAt: new Date()
+        createdAt: new Date(),
       });
 
       console.log("Usuário cadastrado com sucesso!");
+
       const user = auth.currentUser;
+
       if (user) {
-        //router.replace('/perfil'); 
+        router.replace("/(tabs)/explorar");
       } else {
         setTimeout(() => {
-          // router.replace('/perfil');
+          router.replace("/login");
         }, 500);
       }
     } catch (e) {
       console.error("Erro ao adicionar o documento: ", e);
       alert("Erro ao cadastrar.");
     }
-};
+  };
 
   return (
-    <View style={styles.containerPrincipal}>
-      <View style={styles.containerLogo}>
-        <Image
-        //  source={require('../assets/logo.jpg')}
-         // style={styles.logo}
-         // resizeMode="contain"
-        />
-      </View>
+    <View style={styles.container}>
+      <ImageBackground
+        source={require("../../assets/images/fundo_isa.jpeg")}
+        style={styles.imageBackground}
+        resizeMode="cover"
+        imageStyle={{ opacity: 0.4 }}
+      />
 
-      <View style={styles.containerCadastro}>
-        <Text style={styles.titulo}>Cadastrar-se</Text>
+      <KeyboardAvoidingView
+        style={styles.keyboardView}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.conteudos}>
+            <Image
+              source={require("../../assets/images/logo_LEPES.png")}
+              style={styles.logo}
+              resizeMode="contain"
+            />
 
-        <RNTextInput
-          style={styles.input}
-          placeholder="Nome completo"
-          value={nome}
-          onChangeText={setNome}
-        />
+            <Text style={styles.titulo}>Cadastre-se!</Text>
 
-        <RNTextInput
-          style={styles.input}
-          placeholder="E-mail"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-        />
+            <RNTextInput
+              style={styles.input}
+              placeholder="Nome completo"
+              value={nome}
+              onChangeText={setNome}
+            />
 
-        <RNTextInput
-          style={styles.input}
-          placeholder="Senha"
-          value={senha}
-          onChangeText={setSenha}
-          secureTextEntry
-        />
+            <RNTextInput
+              style={styles.input}
+              placeholder="E-mail"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
 
-        <TouchableOpacity style={styles.botao} onPress={Cadastrar}>
-          <Text style={styles.textoBotao}>Cadastrar</Text>
-        </TouchableOpacity>
-      </View>
+            <RNTextInput
+              style={styles.input}
+              placeholder="Senha"
+              value={senha}
+              onChangeText={setSenha}
+              secureTextEntry
+            />
+
+            <TouchableOpacity style={styles.botao} onPress={Cadastrar}>
+              <Text style={styles.textoBotao}>Cadastrar</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  containerPrincipal: {
+  container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#90b3e6',
   },
-  containerLogo: {
-    alignItems: 'center',
-    marginTop: 60,
-    marginBottom: 20,
+
+  imageBackground: {
+    ...StyleSheet.absoluteFill,
   },
-  containerCadastro: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 60,
-    marginBottom: 20,
+
+  keyboardView: {
+    flex: 1,
+    width: "100%",
   },
+
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 30,
+  },
+
+  conteudos: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    width: "90%",
+    maxWidth: 500,
+  },
+
   logo: {
-    width: 250,
-    height: 250,
-    marginBottom: 10,
-  },
-  titulo: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    width: 200,
+    height: 200,
     marginBottom: 20,
   },
-  input: {
-    width: '80%',
-    padding: 12,
-    borderRadius: 60,
-    borderWidth: 1,
-    borderColor: '#001263',
-    marginBottom: 15,
-    backgroundColor: '#e0f2ffff',
+
+  titulo: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "#ffffff",
   },
+
+  input: {
+    width: "100%",
+    padding: 12,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 25,
+    marginBottom: 15,
+    backgroundColor: "#fff",
+  },
+
   botao: {
-    width: '80%',
-    backgroundColor: '#001263',
+    backgroundColor: "#119fb8",
     paddingVertical: 12,
     paddingHorizontal: 30,
-    borderRadius: 60,
+    borderRadius: 25,
+    width: "100%",
   },
+
   textoBotao: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     fontSize: 16,
-    textAlign: 'center',
+    alignSelf: "center",
   },
 });

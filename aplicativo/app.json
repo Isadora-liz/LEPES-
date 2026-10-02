@@ -4,38 +4,66 @@
     "slug": "lepes",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "backgroundColor": "#119fb8",
     "scheme": "lepes",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/images/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+
     "ios": {
       "supportsTablet": true
     },
+
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.hwlena.lepes",
+      "googleServicesFile": "./google-services.json"
     },
+
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
+
     "plugins": [
       "expo-router",
       "expo-asset",
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-font",
+      "expo-notifications",
+      "@react-native-google-signin/google-signin",
+
+      [
+        "react-native-maps",
+        {
+          "iosGoogleMapsApiKey": "process.env.YOUR_GOOGLE_MAPS_API_KEY"
+        }
+      ],
+
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#119fb8",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200
+        }
+      ],
+
+      "expo-status-bar"
     ],
+
     "experiments": {
       "typedRoutes": true
+    },
+
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "0bc727bb-ac6f-4caf-ae0a-e6ecb39cca55"
+      }
     }
   }
 }

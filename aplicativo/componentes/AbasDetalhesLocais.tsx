@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
@@ -30,6 +30,7 @@ import {
   compartilharLocal,
   LocalData,
 } from '../funcoes/localBusca';
+import { router } from 'expo-router';
 
 interface AbasProps {
   style?: StyleProp<ViewStyle>;
@@ -41,11 +42,11 @@ export default function Abas({ style }: AbasProps) {
   const [local, setLocal] = useState<LocalData | null>(null);
   const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>([]);
   const [abaAtiva, setAbaAtiva] = useState('Visão geral');
-
   const [mostrarAvaliacao, setMostrarAvaliacao] = useState(false);
   const [notaSelecionada, setNotaSelecionada] = useState(0);
   const [horariosSelecionados, setHorariosSelecionados] = useState<string[]>([]);
   const [enviandoAvaliacao, setEnviandoAvaliacao] = useState(false);
+  const acessibilidades = local?.acessibilidade || [];
 
   useEffect(() => {
     async function carregarDados() {
@@ -93,10 +94,14 @@ export default function Abas({ style }: AbasProps) {
 
     if (!usuario) {
       Alert.alert(
-        'Faça login',
-        'Você precisa estar conectado para avaliar este local.'
-      );
-      return;
+          'Para avaliar um local, você precisa estar logado.',
+          'Clique em OK para ir para a tela de login.',
+          [
+            { text: 'Cancelar' },
+            { text: 'OK', onPress: () => router.push('/login') }
+          ],
+        );
+        return;
     }
 
     if (notaSelecionada === 0) {
@@ -183,7 +188,7 @@ export default function Abas({ style }: AbasProps) {
   }
 
   function renderizarBarras() {
-    return [5, 4, 3, 2, 1].map((nota) => {
+    return [5, 4, 3, 2, 1].map((nota, index) => {
       const percentual = calcularPercentual(avaliacoes, nota);
 
       return (
@@ -206,7 +211,7 @@ export default function Abas({ style }: AbasProps) {
   function renderizarHorariosSelecao() {
     return (
       <View style={styles.listaHorarios}>
-        {HORARIOS_FREQUENCIA.map((horario) => {
+        {HORARIOS_FREQUENCIA.map((horario, index) => {
           const selecionado = horariosSelecionados.includes(horario);
 
           return (
@@ -241,7 +246,7 @@ export default function Abas({ style }: AbasProps) {
   function obterDadosHorarios() {
     const totalAvaliacoesComHorario = avaliacoes.length;
 
-    return HORARIOS_FREQUENCIA.map((horario) => {
+    return HORARIOS_FREQUENCIA.map((horario, index) => {
       let quantidade = 0;
 
       for (const avaliacao of avaliacoes) {
@@ -285,7 +290,7 @@ export default function Abas({ style }: AbasProps) {
           <Text style={styles.tituloGrafico}>Horários de pico</Text>
         </View>
 
-        {dadosHorarios.map((item) => (
+        {dadosHorarios.map((item, index) => (
           <View key={item.horario} style={styles.linhaHorarioPico}>
             <Text style={styles.textoHora}>{item.horario}</Text>
 
@@ -303,6 +308,57 @@ export default function Abas({ style }: AbasProps) {
             <Text style={styles.textoNivel}>{item.nivel}</Text>
           </View>
         ))}
+      </View>
+    );
+  }
+
+  function renderizarAcessibilidade() {
+    const iconesAcessibilidade: Record<string, any> = {
+      cadeirante: 'accessible',
+      estacionamento: 'local-parking',
+      banheiro: 'wc',
+      elevador: 'elevator',
+      deficienciaVisual: 'blind',
+      caoGuia: 'pets',
+      deficienciaAuditiva: 'hearing',
+      TEA: 'psychology',
+    };
+
+    const nomeAcessibilidade: Record<string, any> = {
+      cadeirante: 'Assistencia para cadeirantes',
+      estacionamento: 'Estacionamento acessível',
+      banheiro: 'Banheiro adaptado',
+      elevador: 'Elevador',
+      deficienciaVisual: 'Assistencia para deficientes visual',
+      caoGuia: 'Permissão para cão-guia ',
+      deficienciaAuditiva: 'Assistencia para deficientes auditivos',
+      TEA: 'Atendimento personalizado para TEA',
+    };
+
+    return (
+      <View style={styles.conteudoAcessibilidade}>
+        <Text style={styles.textoAcessibilidade}>
+          Recursos de acessibilidade do local:
+        </Text>
+        
+        <View style={styles.iconesAcessibilidade}>
+          {acessibilidades.map((acessibilidade, index) => {
+            const nomeIcone = iconesAcessibilidade[acessibilidade] ?? 'help-outline';
+            const nomeRecursoAcessibilidade = nomeAcessibilidade[acessibilidade] ?? 'Recurso de acessibilidade desconhecido';
+
+            return (
+              <View style={styles.cardAcessibilidade}>
+              <><MaterialIcons
+                key={acessibilidade}
+                name={nomeIcone}
+                size={54}
+                color="#4DD0C8" /><Text style={styles.textoIcone}>
+                  {nomeRecursoAcessibilidade}
+                </Text></>
+               </View>
+            );
+          })}
+        </View>
       </View>
     );
   }
@@ -486,13 +542,9 @@ export default function Abas({ style }: AbasProps) {
       return renderizarAvaliacoes();
     }
 
-    return (
-      <View style={styles.conteudoAcessibilidade}>
-        <Text style={styles.textoAcessibilidade}>
-          Conteúdo de Acessibilidade
-        </Text>
-      </View>
-    );
+    if (abaAtiva === 'Acessibilidade') {
+      return renderizarAcessibilidade();
+    }
   }
 
   return (
@@ -891,7 +943,38 @@ textoNivel: {
     padding: 20,
   },
 
+  iconesAcessibilidade: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    marginTop: 15,
+  },
+  textoIcone: {
+    color: '#a0a0a0',
+    fontSize: 14,
+    textAlign: 'center',
+    marginTop: 8,
+    width: '100%',
+  },
+
+  cardAcessibilidade: {
+    backgroundColor: '#262626',
+    borderRadius: 16,
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    marginHorizontal: 5,
+    marginBottom: 20,
+    width: 200,
+    height: 150,
+  },
+
   textoAcessibilidade: {
     color: '#FFFFFF',
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 8,
+    width: '100%',
   },
 });

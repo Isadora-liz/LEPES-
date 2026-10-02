@@ -24,7 +24,7 @@ export default function Locais({ id, nome, descricao, endereco, imagem }: Locais
       </Card.Content>
 
       <Card.Content>
-        <Text>{endereco}</Text>
+        <Text> 📍 {endereco}</Text>
       </Card.Content>
     </Card>
   );

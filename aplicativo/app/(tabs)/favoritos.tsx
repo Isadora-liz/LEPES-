@@ -5,7 +5,7 @@ import {
   doc
 } from 'firebase/firestore';
 
-import {
+import React, {
   useEffect,
   useState
 } from 'react';
@@ -24,15 +24,19 @@ import {
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import LocaisCard from '../../componentes/Locais';
+import EventoCard from '../../componentes/Eventos';
 import { auth, db} from '../../FirebaseConfig';
 import FotoPerfil from '@/componentes/FotoPerfil';
+import { onSnapshot } from 'firebase/firestore';
 
 
 
 export default function Favoritos() {
 
   const [locais, setLocais] = useState<any[]>([]);
+  const [eventos, setEventos]  = useState<any[]>([]);
   const [favoritos, setFavoritos] = useState<string[]>([]);
+  const [interesses, setInteresses] = useState<any>({});
   const [abaAtiva, setAbaAtiva] = useState("locais");
   const [usuario, setUsuario] = useState<any>(null);
 
@@ -55,6 +59,7 @@ export default function Favoritos() {
         setUsuario(dadosUsuario);
 
         setFavoritos(dadosUsuario.favoritos || []);
+        setInteresses(dadosUsuario.interesses || []);
       }
 
     } catch (error) {
@@ -65,44 +70,66 @@ export default function Favoritos() {
   }
 
 
-  async function buscarLocais() {
+useEffect(() => {
 
-    try {
-
-      const snapshot = await getDocs(
-        collection(db, "espaco")
-      );
-
-      const lista = snapshot.docs.map((doc: { id: any; data: () => any; }) => ({
-
+  const unsubscribe = onSnapshot(
+    collection(db, "espaco"),
+    (snapshot: { docs: any[]; }) => {
+      
+      const listaLocais = snapshot.docs.map((doc) => ({
         id: doc.id,
-
         ...doc.data()
-
       }));
 
-      setLocais(lista);
 
-    } catch (error) {
+      setLocais(listaLocais);
 
-      console.log("Erro ao buscar locais:", error);
+      return () => unsubscribe();
+      }
+  );
 
-    }
 
-  }
+}, []);
+
+
+
+  useEffect(() => {
+
+  const unsubscribe = onSnapshot(
+    collection(db, "eventos"),
+    (snapshot: { docs: any[]; }) => {
+      
+      const listaEventos = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+
+      setEventos(listaEventos);
+
+      return () => unsubscribe();
+      }
+  );
+
+
+}, []);
+
 
 
   useEffect(() => {
 
     buscarUsuarioLogado();
 
-    buscarLocais();
 
   }, []);
 
 
   const locaisFavoritados = locais.filter((item) =>
     favoritos.includes(item.id)
+  );
+
+  const eventosMarcadoInteresse = eventos.filter((item) =>
+    interesses.interesseMarcado?.includes(item.id)
   );
 
 
@@ -174,12 +201,21 @@ export default function Favoritos() {
       </View>
       )} 
        {abaAtiva === "eventos" && (
-        <View >
-        <Text style={styles.titulo}>
-          Eventos
-        </Text>
-        </View>
-      )}  
+      <View style={styles.containerLista}>
+
+
+      <FlatList
+            data={eventosMarcadoInteresse}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+            <EventoCard  nome={item.nome}
+              imagem={item.imagem}
+              endereco={item.endereco} id={item.id} descricao={item.descricao} />
+            )}
+      />
+          
+      </View>
+      )}
        </ImageBackground>
       </SafeAreaView>
 

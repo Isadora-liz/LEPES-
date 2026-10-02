@@ -44,10 +44,12 @@ export default function Perfil() {
 
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
-  const [foto, setFoto] = useState<string | null>(null);
+  const [imagem, setImagem] = useState<string | null>(null);
 
   const [nomeEditado, setNomeEditado] = useState("");
   const [emailEditado, setEmailEditado] = useState("");
+  const [imagemEditada, setImagemEditada] =
+    useState<string | null>(null);
 
   const [fotoEditada, setFotoEditada] =
     useState<string | null>(null);
@@ -108,11 +110,17 @@ export default function Perfil() {
             const emailRecebido: string =
               dados.email || emailAuth;
 
+            const imagemRecebida: string =
+              dados.imagem  || null;
+
             setNome(nomeRecebido);
             setEmail(emailRecebido);
+            setImagem(imagemRecebida);
 
             setNomeEditado(nomeRecebido);
             setEmailEditado(emailRecebido);
+            setImagemEditada(imagemRecebida);
+
           } else {
             await setDoc(referenciaUsuario, {
               nome: nomeAuth,
@@ -122,9 +130,11 @@ export default function Perfil() {
 
             setNome(nomeAuth);
             setEmail(emailAuth);
+            setImagem(imagem);
 
             setNomeEditado(nomeAuth);
             setEmailEditado(emailAuth);
+            setImagemEditada(imagem);
           }
         } catch (erro: any) {
           console.log(
@@ -155,18 +165,18 @@ export default function Perfil() {
   function abrirEdicao() {
     setNomeEditado(nome);
     setEmailEditado(email);
-    setFotoEditada(foto);
+    setImagemEditada(imagem);
     setEditandoPerfil(true);
   }
 
   function cancelarEdicao() {
     setNomeEditado(nome);
     setEmailEditado(email);
-    setFotoEditada(foto);
+    setImagemEditada(imagem);
     setEditandoPerfil(false);
   }
 
-  async function selecionarFoto() {
+  async function selecionarImagem() {
     try {
       const permissao =
         await ImagePicker
@@ -262,10 +272,6 @@ export default function Perfil() {
         uid
       );
 
-      /*
-        Somente nome e e-mail são salvos
-        no Firestore. A foto fica na memória.
-      */
       await setDoc(
         referenciaUsuario,
         {
@@ -280,7 +286,7 @@ export default function Perfil() {
 
       setNome(nomeEditado.trim());
       setEmail(emailEditado.trim());
-      setFoto(fotoEditada);
+      setImagem(imagemEditada);
 
       setEditandoPerfil(false);
 
@@ -527,17 +533,17 @@ export default function Perfil() {
             <View style={styles.areaFotoEditar}>
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={selecionarFoto}
+                onPress={selecionarImagem}
               >
                 <View
                   style={
                     styles.fotoEditarContainer
                   }
                 >
-                  {fotoEditada ? (
+                  {imagemEditada ? (
                     <Image
                       source={{
-                        uri: fotoEditada,
+                        uri: imagemEditada,
                       }}
                       style={styles.imagemPerfil}
                     />
@@ -565,7 +571,7 @@ export default function Perfil() {
 
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={selecionarFoto}
+                onPress={selecionarImagem}
               >
                 <Text
                   style={styles.textoEditarFoto}
@@ -765,9 +771,9 @@ export default function Perfil() {
           <View
             style={styles.fotoPerfilContainer}
           >
-            {foto ? (
+            {imagem ? (
               <Image
-                source={{ uri: foto }}
+                source={{ uri: imagem }}
                 style={styles.imagemPerfil}
               />
             ) : (

@@ -1,9 +1,10 @@
 import Ionicons from '@expo/vector-icons/build/Ionicons';
-import { useLocalSearchParams, router } from 'expo-router';
+import { useLocalSearchParams, router , Link} from 'expo-router';
 import { doc, getDoc, updateDoc, arrayUnion, arrayRemove, collection, getDocs } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useEffect, useState,  } from 'react';
 import {
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -25,6 +26,7 @@ import {
 import {
   buscarLocalPorId,
 } from '../../funcoes/localBusca';
+
 
 interface LocalData {
   imagem?: string;
@@ -163,8 +165,14 @@ export default function Detalhes() {
       const usuario = auth.currentUser;
 
       if (!usuario) {
-        console.log ('usuario nao está logado');
-
+        Alert.alert(
+          'Para favoritar um local, você precisa estar logado.',
+          'Clique em OK para ir para a tela de login.',
+          [
+            { text: 'Cancelar' },
+            { text: 'OK', onPress: () => router.push('/login') }
+          ],
+        );
         return;
       }
       
@@ -362,6 +370,7 @@ const styles = StyleSheet.create({
   color: '#9AA0A6',
   fontSize: 15,
   marginLeft: 8,
+  width: "100%",
 },
 
   nota: {
