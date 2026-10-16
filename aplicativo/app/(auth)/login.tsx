@@ -98,32 +98,23 @@ export default function Login() {
 };
 
   const Logar = async () => {
-
     if (!email || !senha) {
-      console.warn(
-        "Por favor, preencha todos os campos."
-      );
+      console.warn("Por favor, preencha todos os campos.");
       return;
     }
-
     try {
-
       const userCredential =
         await signInWithEmailAndPassword(
           auth,
           email.trim(),
           senha.trim()
         );
-
       console.log(
         "Usuário logado com sucesso:",
         userCredential.user.email
       );
-
       router.push('/explorar');
-
     } catch (e) {
-
       console.error(
         "Email ou senha incorretos.",
         e

@@ -23,6 +23,7 @@ import { StatusBar } from "expo-status-bar";
 import * as ImagePicker from "expo-image-picker";
 
 import { auth, db } from "../../FirebaseConfig";
+import { supabase } from "../../SupabaseConfig";
 
 import {
   doc,
@@ -192,8 +193,7 @@ export default function Perfil() {
 
       const resultado =
         await ImagePicker.launchImageLibraryAsync({
-          mediaTypes:
-            ImagePicker.MediaTypeOptions.Images,
+          mediaTypes: ["images"],
           allowsEditing: true,
           aspect: [1, 1],
           quality: 0.8,
@@ -246,75 +246,109 @@ export default function Perfil() {
     return true;
   }
 
-  async function salvarAlteracoes() {
-    if (!validarDados()) {
-      return;
-    }
-
-    const usuario: any = auth.currentUser;
-
-    if (!usuario) {
-      Alert.alert(
-        "Sessão encerrada",
-        "Entre novamente para editar seu perfil."
-      );
-      return;
-    }
-
-    try {
-      setSalvando(true);
-
-      const uid: any = usuario.uid;
-
-      const referenciaUsuario = doc(
-        db,
-        "usuarios",
-        uid
-      );
-
-      await setDoc(
-        referenciaUsuario,
-        {
-          nome: nomeEditado.trim(),
-          email: emailEditado.trim(),
-          atualizadoEm: serverTimestamp(),
-        },
-        {
-          merge: true,
-        }
-      );
-
-      setNome(nomeEditado.trim());
-      setEmail(emailEditado.trim());
-      setImagem(imagemEditada);
-
-      setEditandoPerfil(false);
-
-      Alert.alert(
-        "Perfil atualizado",
-        "As alterações foram salvas com sucesso."
-      );
-    } catch (erro: any) {
-      console.log(
-        "Erro ao salvar perfil:",
-        erro
-      );
-
-      if (erro.code === "permission-denied") {
-        Alert.alert(
-          "Acesso negado",
-          "As regras do Firestore não permitiram salvar o perfil."
-        );
-      } else {
-        Alert.alert(
-          "Erro",
-          "Não foi possível salvar as alterações."
-        );
-      }
-    } finally {
-      setSalvando(false);
-    }
+  
+async function salvarAlteracoes() {
+  if (!validarDados()) {
+    return;
   }
+
+  const usuario = auth.currentUser;
+
+  if (!usuario) {
+    Alert.alert(
+      "Sessão encerrada",
+      "Entre novamente para editar seu perfil."
+    );
+    return;
+  }
+
+  try {
+    setSalvando(true);
+
+    const uid = usuario.uid;
+    let urlImagem = imagemEditada;
+
+    // Se uma nova foto foi selecionada, envia ao Supabase
+    if (fotoEditada) {
+      const resposta = await fetch(fotoEditada);
+      const arquivo = await resposta.arrayBuffer();
+
+      const extensao =
+        fotoEditada.split(".").pop()?.split("?")[0]
+          ?.toLowerCase() || "jpg";
+
+      const tipoImagem =
+        extensao === "png"
+          ? "image/png"
+          : extensao === "webp"
+          ? "image/webp"
+          : extensao === "heic"
+          ? "image/heic"
+          : "image/jpeg";
+
+      const caminho =
+        `usuarios/${uid}/${Date.now()}.${extensao}`;
+
+      const { error: erroUpload } =
+        await supabase.storage
+          .from("imagens-lepes")
+          .upload(caminho, arquivo, {
+            contentType: tipoImagem,
+            upsert: false,
+          });
+
+      if (erroUpload) {
+        throw erroUpload;
+      }
+
+      const { data } = supabase.storage
+        .from("imagens-lepes")
+        .getPublicUrl(caminho);
+
+      urlImagem = data.publicUrl;
+    }
+
+    // Salva os dados e a URL da foto no Firestore
+    const referenciaUsuario = doc(
+      db,
+      "usuarios",
+      uid
+    );
+
+    await setDoc(
+      referenciaUsuario,
+      {
+        nome: nomeEditado.trim(),
+        email: emailEditado.trim(),
+        imagem: urlImagem || "",
+        atualizadoEm: serverTimestamp(),
+      },
+      { merge: true }
+    );
+
+    setNome(nomeEditado.trim());
+    setEmail(emailEditado.trim());
+    setImagem(urlImagem);
+    setImagemEditada(urlImagem);
+    setFotoEditada(null);
+    setEditandoPerfil(false);
+
+    Alert.alert(
+      "Perfil atualizado",
+      "As alterações foram salvas com sucesso."
+    );
+  } catch (erro: any) {
+    console.log("Erro ao salvar perfil:", erro);
+
+    Alert.alert(
+      "Erro",
+      erro.message ||
+        "Não foi possível salvar as alterações."
+    );
+  } finally {
+    setSalvando(false);
+  }
+}
 
   function confirmarRedefinicaoSenha() {
     const usuario: any = auth.currentUser;
@@ -540,13 +574,14 @@ export default function Perfil() {
                     styles.fotoEditarContainer
                   }
                 >
-                  {imagemEditada ? (
-                    <Image
-                      source={{
-                        uri: imagemEditada,
-                      }}
-                      style={styles.imagemPerfil}
-                    />
+                  {fotoEditada || imagemEditada ? (
+               <Image
+                  source={{
+                    uri: fotoEditada || imagemEditada || "",
+                  }}
+                  style={styles.imagemPerfil}
+                  />
+
                   ) : (
                     <View style={styles.fotoPadrao}>
                       <Ionicons

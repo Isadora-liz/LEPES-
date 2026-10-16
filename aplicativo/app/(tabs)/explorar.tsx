@@ -323,8 +323,11 @@ useEffect(() => {
                 data={locaisFiltrados}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                  <LocaisCard {...item} />
-                )}
+  <LocaisCard
+    {...item}
+    imagem={item.imagens?.[0] ?? item.imagem ?? ''}
+  />
+)}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.listaConteudo}
                 ListHeaderComponent={

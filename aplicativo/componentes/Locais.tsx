@@ -11,12 +11,19 @@ interface LocaisProps {
 }
 
 export default function Locais({ id, nome, descricao, endereco, imagem }: LocaisProps) {
+  console.log('URL recebida:', imagem);
   return (
     <Card
       onPress={() => router.push(`/detalhesCards/DetalhesLocais?id=${id}`)}
       style={styles.card}
     >
-      <Card.Cover source={{ uri: imagem }} />
+    <Card.Cover
+      source={{ uri: imagem }}
+      onError={(e) =>
+      console.log('Erro ao carregar imagem:', e.nativeEvent)
+    }
+    style={{ height: 200 }}
+    />
       <Card.Title title={nome} />
       
       <Card.Content>
