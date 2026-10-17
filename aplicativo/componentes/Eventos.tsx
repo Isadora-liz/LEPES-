@@ -1,25 +1,282 @@
 import { router } from 'expo-router';
-import { Image, StyleSheet, View, TouchableOpacity} from 'react-native';
+import { Image, StyleSheet, View, TouchableOpacity, Alert, SafeAreaView} from 'react-native';
 import { Card, Text, } from 'react-native-paper';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import{useState} from 'react';
+import{useEffect, useState} from 'react';
+import { auth, db } from '@/FirebaseConfig';
+import { doc } from 'firebase/firestore';
+import { updateDoc } from 'firebase/firestore';
+import { arrayRemove } from 'firebase/firestore';
+import { arrayUnion } from 'firebase/firestore';
+import { getDoc } from 'firebase/firestore';
+//import {
+//  pedirPermissaoNotificacao,
+//  pegarTokenNotificacao,
+//} from '@/funcoes/notificacoes';
 
 interface EventosProps {
   id: string | number;
   nome: string;
   descricao: string;
   endereco: string;
-  imagem: string;
+  imagem: string | string[];
 }
 
 export default function EventoCard({ id, nome, descricao, endereco, imagem, }: EventosProps) {
-  const [notificacaoAtiva, setNotificacaoAtiva] = useState(false);
-  const [interesse, setInteresse] = useState(false);
 
+  const primeiraImagem = Array.isArray(imagem)
+    ? imagem.find(
+        (url) => typeof url === 'string' && url.trim() !== ''
+      )
+    : imagem;
+  const [notificacaoAtiva, setNotificacaoAtiva] = useState(false);
+  const [interesseMarcado, setInteresseMarcado] = useState(false);
+   const [carregando, setCarregando,] = useState(true);
+
+    async function carregarnotificaçãoAtiva(){
+      const usuario  = auth.currentUser;
+      
+      if (!usuario){
+        setNotificacaoAtiva(false); 
+
+        return;
+      }
+
+      try {
+        const usuarioRef = doc(
+          db,
+          "usuarios",
+          usuario.uid
+        );
+        const usuarioSnap = await getDoc(usuarioRef);
+
+        if(!usuarioSnap.exists()
+        ){
+         setNotificacaoAtiva(false);
+         return;
+        }
+        
+        const dadosUsuario = usuarioSnap.data();
+const dadosInteresses = dadosUsuario.interesses ?? {};
+
+const notificacoes: string[] =
+  dadosInteresses.notificacaoAtiva ?? [];
+
+const interesses: string[] =
+  dadosInteresses.interesseMarcado ?? [];
+
+        if (
+          typeof id === 'string'
+        ){
+          setNotificacaoAtiva(notificacoes.includes(id));
+        }
+      } catch (error) {
+        console.log('erro ao verificar notificação', error);
+      }
+    }
+
+    async function carregarInteresseMarcado(){
+      const usuario  = auth.currentUser;
+  
+      if (!usuario){
+        setInteresseMarcado(false);
+  
+        return;
+      }
+  
+      try {
+        const usuarioRef = doc(
+          db,
+          'usuarios',
+          usuario.uid
+        );
+        const usuarioSnap = await getDoc(usuarioRef);
+  
+        if(!usuarioSnap.exists()
+        ){
+         setInteresseMarcado(false);
+  
+         return;
+        }
+        const dadosUsuario=usuarioSnap.data();
+        const interesses: string[] = dadosUsuario.interesses.interesseMarcado || [];
+  
+        if (
+          typeof id === 'string'
+        ){
+          setInteresseMarcado(interesses.includes(id));
+        }
+      } catch (error) {
+        console.log('erro ao verificar interesse', error);
+      }
+    }
+  
+    useEffect(() => {
+      console.log('Entrou no useEffect');
+  
+        async function carregarDados() {
+          if (
+            typeof id !== 'string'
+          ) {
+            return;
+          }
+          try {
+            setCarregando(true);
+          
+            await Promise.all([
+
+            carregarnotificaçãoAtiva(),
+            carregarInteresseMarcado(),
+          ]);
+  
+          } catch (error) {
+  
+          console.error(
+            'Erro ao carregar dados:',
+            error
+          );
+  
+          } finally {
+              setCarregando(false);
+            }
+          }
+  
+      carregarDados();
+  
+    }, [id]);
+  
+
+  async function marcarInteresse() {
+      if (
+      typeof id !== 'string'
+    ){
+      return;
+    }
+
+    try{
+      const usuario = auth.currentUser;
+      if (!usuario) {
+        Alert.alert(
+                  'Para marcar interesse, você precisa estar logado.',
+                  'Clique em OK para ir para a tela de login.',
+                  [
+                    { text: 'Cancelar' },
+                    { text: 'OK', onPress: () => router.push('/login') }
+                  ],
+                );
+                return;
+    }
+      const usuarioRef = doc (
+        db,
+        "usuarios",
+        usuario.uid
+      );
+
+
+      if (interesseMarcado){
+        await updateDoc(usuarioRef,
+          {
+            "interesses.interesseMarcado": arrayRemove(id),
+          }
+        );
+
+        setInteresseMarcado(false);
+      }
+      else {
+        await updateDoc(usuarioRef,
+          {
+            "interesses.interesseMarcado": arrayUnion(id),
+          }
+        );
+        setInteresseMarcado(true);
+      }
+    
+    } catch (error) {
+      console.log('Erro ao marcar interesse:', error);
+    }
+    
+      return;
+    }
+
+   async function ativarNotificacao() {
+  if (typeof id !== 'string') {
+    return;
+  }
+
+  try {
+    const usuario = auth.currentUser;
+
+    if (!usuario) {
+      Alert.alert(
+        'Para ativar notificações, você precisa estar logado.',
+        'Clique em OK para ir para a tela de login.',
+        [
+          { text: 'Cancelar' },
+          { text: 'OK', onPress: () => router.push('/login') }
+        ],
+      );
+      return;
+    }
+
+    const usuarioRef = doc(
+      db,
+      "usuarios",
+      usuario.uid
+    );
+
+    if (notificacaoAtiva) {
+      await updateDoc(usuarioRef, {
+        "interesses.notificacaoAtiva": arrayRemove(id),
+      });
+
+      setNotificacaoAtiva(false);
+      return;
+    }
+
+    
+    //const permissao = await pedirPermissaoNotificacao();
+
+    //if (!permissao) {
+     // Alert.alert(
+     //   'Notificações desativadas',
+     //   'Você precisa permitir as notificações para receber avisos sobre este evento.'
+     // );
+     // return;
+    //}
+
+    // Pega o token do aparelho
+    //const token = await pegarTokenNotificacao();
+
+    //if (!token) {
+    //  Alert.alert(
+    //    'Erro',
+    //    'Não foi possível configurar as notificações neste aparelho.'
+    //  );
+    //  return;
+    //}
+
+    // Salva o token do aparelho
+    //await updateDoc(usuarioRef, {
+    //  expoPushToken: token,
+    //});
+
+    // Salva o evento como notificação ativa
+    await updateDoc(usuarioRef, {
+      "interesses.notificacaoAtiva": arrayUnion(id),
+    });
+
+    setNotificacaoAtiva(true);
+
+  } catch (error) {
+    console.log('Erro ao ativar notificação:', error);
+  }
+}
+         
   return (
     <Card
-      style={styles.card}
       onPress={() => router.push(`/detalhesCards/DetalhesEventos?id=${id}`)}
+      style={styles.card}
+      
     >
 
       <Card.Content style={styles.linha}>
@@ -33,10 +290,7 @@ export default function EventoCard({ id, nome, descricao, endereco, imagem, }: E
           ]}
           activeOpacity={0.7}
           hitSlop={{ top: 40, bottom: 40, left: 40, right: 40 }}
-          onPress={(e) => {
-            e.stopPropagation();
-            setNotificacaoAtiva(!notificacaoAtiva);
-          }}
+          onPress={ativarNotificacao}
         >
           <MaterialCommunityIcons
             name={notificacaoAtiva ? "bell" : "bell-off-outline"}
@@ -45,10 +299,19 @@ export default function EventoCard({ id, nome, descricao, endereco, imagem, }: E
           />
         </TouchableOpacity>
 
-        <Image
-          source={{ uri: imagem }}
-          style={styles.imagem}
-        />
+        {typeof primeiraImagem === 'string' &&
+              primeiraImagem.trim() !== '' && (
+                <Card.Cover
+                  source={{ uri: primeiraImagem }}
+                  onError={(e) =>
+                    console.log(
+                      'Erro ao carregar imagem:',
+                      e.nativeEvent
+                    )
+                  }
+                  style={styles.imagem}
+                />
+              )}
 
         <View style={styles.info}>
           <Text style={styles.titulo}>{nome}</Text>
@@ -65,16 +328,13 @@ export default function EventoCard({ id, nome, descricao, endereco, imagem, }: E
       <TouchableOpacity
         style={[
           styles.botaoInteresse,
-          interesse && styles.botaoInteresseAtivo,
+          interesseMarcado && styles.botaoInteresseAtivo,
         ]}
         activeOpacity={0.85}
-        onPress={(e) => {
-          e.stopPropagation();
-          setInteresse(!interesse);
-        }}
+        onPress={marcarInteresse}
       >
         <Text style={styles.textoBotaoInteresse}>
-          {interesse ? "Interesse marcado" : "Marcar interesse"}
+          {interesseMarcado ? "Interesse marcado" : "Marcar interesse"}
         </Text>
       </TouchableOpacity>
     </Card>
@@ -83,8 +343,12 @@ export default function EventoCard({ id, nome, descricao, endereco, imagem, }: E
 
 
 
-
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 0,
+  },
   card: {
     marginBottom: 10,
     borderRadius: 10,

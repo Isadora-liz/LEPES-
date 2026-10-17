@@ -11,8 +11,10 @@ import {
   useEffect,
   useState,
 } from "react";
+import type { ComponentType } from "react";
 
 import {
+  Alert,
   FlatList,
   ImageBackground,
   ScrollView,
@@ -28,6 +30,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FotoPerfil from "@/componentes/FotoPerfil";
 import EventoCard from "../../componentes/Eventos";
 import { auth, db } from "../../FirebaseConfig";
+import { useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
+import { updateDoc } from "firebase/firestore";
+import { arrayRemove } from "firebase/firestore";
+import { arrayUnion } from "firebase/firestore";
+//import { pedirPermissaoNotificacao, pegarTokenNotificacao } from "../../funcoes/notificacoes";
+import { onSnapshot } from "firebase/firestore";
+
+// The imported card is currently inferred as returning void. Normalize its
+// type at this usage site so React can treat it as a component.
+const EventoCardComponent = EventoCard as unknown as ComponentType<any>;
 
 
 interface UsuarioData {
@@ -39,16 +52,28 @@ interface UsuarioData {
 
 export default function Eventos() {
 
+  const { id } = useLocalSearchParams();
   const [eventos, setEventos] = useState<any[]>([]);
+  const [interesseMarcado, setInteresseMarcado] = useState(false);
   const [busca, setBusca] = useState("");
+  const [usuario, setUsuario] = useState<UsuarioData | null>(null);
+  const [modalidades, setModalidades] = useState<string[]>([]);
+  const [modalidadesSelecionadas,setModalidadesSelecionadas,] = useState<string[]>([]);
+  const [carregando, setCarregando,] = useState(true);
+  const iconesModalidades: Record<string, string> = {
+  Futsal: "⚽",
+  Basquete: "🏀",
+  Vôlei: "🏐",
+  Skate: "🛹",
+  Bocha: "🎯",
+  Tênis: "🎾",
+  "Tênis de mesa": "🏓",
+  Futevôlei: "⚽",
+  "Tênis de praia": "🎾",
+  "Vôlei de praia": "🏐",
+  "Corrida de rua": "🏃‍♂️",};
 
-  const [usuario, setUsuario] =
-    useState<UsuarioData | null>(null);
-
-  const [
-    modalidadesSelecionadas,
-    setModalidadesSelecionadas,
-  ] = useState<string[]>([]);
+useEffect(() => {
 
   async function buscarUsuarioLogado() {
 
@@ -89,41 +114,45 @@ export default function Eventos() {
 
   }
 
-  async function buscarEventos() {
+   buscarUsuarioLogado();
 
-    try {
-
-      const snapshot = await getDocs(
-        collection(db, "eventos")
-      );
-
-      const lista = snapshot.docs.map(
-        (documento: { id: any; data: () => any; }) => ({
-          id: documento.id,
-          ...documento.data(),
-        })
-      );
-
-      setEventos(lista);
-
-    } catch (error) {
-
-      console.log(
-        "Erro ao buscar eventos:",
-        error
-      );
-
-    }
-
-  }
-
+   }, []);
 
   useEffect(() => {
 
-    buscarUsuarioLogado();
-    buscarEventos();
+
+      const unsubscribe = onSnapshot(
+    collection(db, "eventos"),
+    (snapshot: { docs: any[]; }) => {
+
+      const lista = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      setEventos(lista);
+
+      const todasModalidades = lista.flatMap(
+        (eventos: any) => eventos.modalidades || []
+      );
+
+      const modalidadesUnicas: string[] = [
+        ...new Set(todasModalidades)
+      ].filter(
+        (modalidade): modalidade is string =>
+          typeof modalidade === "string"
+      );
+
+      setModalidades(modalidadesUnicas);
+    }
+  );
+
+
+    return () => unsubscribe();
+
 
   }, []);
+
 
   function alternarModalidade(
     modalidade: string
@@ -156,27 +185,28 @@ export default function Eventos() {
 
   }
 
+  function removerAcentos(texto: string) {
+  return texto
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
   const eventosFiltrados =
     eventos.filter((item) => {
 
-      const texto =
-        busca.trim().toLowerCase();
+      const texto = removerAcentos(busca);
 
-      const correspondeBusca =
-        item.nome
-          ?.toLowerCase()
-          .includes(texto)
-        ||
-        item.endereco
-          ?.toLowerCase()
-          .includes(texto);
+  const correspondeBusca =
+    removerAcentos(item.nome || "").includes(texto) ||
+    removerAcentos(item.endereco || "").includes(texto);
 
-      const correspondeModalidade =
-        modalidadesSelecionadas.length === 0
-        ||
-        modalidadesSelecionadas.includes(
-          item.modalidade
-        );
+
+     const correspondeModalidade =
+          modalidadesSelecionadas.length === 0 ||
+          modalidadesSelecionadas.every((modalidade) =>
+            item.modalidades?.includes(modalidade)
+          );
 
       return (
         correspondeBusca &&
@@ -185,28 +215,18 @@ export default function Eventos() {
 
     });
 
+  
+return(
 
-  return (
+    <SafeAreaView style={styles.conteudos} edges={["top"]}>
 
-    <SafeAreaView
-      style={styles.conteudos}
-      edges={["top"]}
-    >
-
-      <ImageBackground
-        source={require(
-          "../../assets/images/fundo_volei.jpg"
-        )}
+      <ImageBackground source={require( "../../assets/images/fundo_danilo.jpeg" )}
         style={styles.imageBackground}
         resizeMode="cover"
-        imageStyle={{
-          opacity: 0.6,
-        }}
+        imageStyle={{opacity: 0.6,}}
       >
 
-        <View style={styles.container}>
-
-          <View style={styles.topo}>
+        <View style={styles.topo}>
 
             <Text style={styles.titulo}>
               Eventos
@@ -220,7 +240,8 @@ export default function Eventos() {
 
             </View>
 
-          </View>
+           </View>
+          <View style={styles.container}>
 
           <View style={styles.containerBusca}>
 
@@ -248,128 +269,34 @@ export default function Eventos() {
               style={styles.scrollFiltros}
               contentContainerStyle={styles.filtros}
             >
-
+              {modalidades.map((modalidade) => (
               <TouchableOpacity
-                style={[
-                  styles.botaoFiltro,
-
-                  modalidadesSelecionadas.includes(
-                    "Futebol"
-                  ) &&
-                  styles.botaoFiltroAtivo,
-                ]}
-                onPress={() =>
-                  alternarModalidade("Futebol")
-                }
-                activeOpacity={0.7}
+                key={modalidade}
+                style={[styles.botaoFiltro,
+                modalidadesSelecionadas.includes(modalidade) &&
+                styles.botaoFiltroAtivo,
+               ]}
+              onPress={() => alternarModalidade(modalidade)}
+              activeOpacity={0.7}
               >
+              {iconesModalidades[modalidade] && (
+                <Text style={styles.iconeFiltro}>
+                    {iconesModalidades[modalidade]}
+                </Text>
+              )}
 
                 <Text
-                  style={[
-                    styles.textoFiltro,
-
-                    modalidadesSelecionadas.includes(
-                      "Futebol"
-                    ) &&
-                    styles.textoFiltroAtivo,
-                  ]}
-                >
-                  ⚽ Futebol
-                </Text>
-
-              </TouchableOpacity>
-
-
-              <TouchableOpacity
                 style={[
-                  styles.botaoFiltro,
-
-                  modalidadesSelecionadas.includes(
-                    "Basquete"
-                  ) &&
-                  styles.botaoFiltroAtivo,
+                  styles.textoFiltro,
+                  {minWidth: modalidade.length * 10,},
+                  modalidadesSelecionadas.includes(modalidade) &&
+                  styles.textoFiltroAtivo,
                 ]}
-                onPress={() =>
-                  alternarModalidade("Basquete")
-                }
-                activeOpacity={0.7}
-              >
-
-                <Text
-                  style={[
-                    styles.textoFiltro,
-
-                    modalidadesSelecionadas.includes(
-                      "Basquete"
-                    ) &&
-                    styles.textoFiltroAtivo,
-                  ]}
                 >
-                  🏀 Basquete
+                    {modalidade}
                 </Text>
-
               </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.botaoFiltro,
-
-                  modalidadesSelecionadas.includes(
-                    "Vôlei"
-                  ) &&
-                  styles.botaoFiltroAtivo,
-                ]}
-                onPress={() =>
-                  alternarModalidade("Vôlei")
-                }
-                activeOpacity={0.7}
-              >
-
-                <Text
-                  style={[
-                    styles.textoFiltro,
-
-                    modalidadesSelecionadas.includes(
-                      "Vôlei"
-                    ) &&
-                    styles.textoFiltroAtivo,
-                  ]}
-                >
-                  🏐 Vôlei
-                </Text>
-
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.botaoFiltro,
-
-                  modalidadesSelecionadas.includes(
-                    "Skate"
-                  ) &&
-                  styles.botaoFiltroAtivo,
-                ]}
-                onPress={() =>
-                  alternarModalidade("Skate")
-                }
-                activeOpacity={0.7}
-              >
-
-                <Text
-                  style={[
-                    styles.textoFiltro,
-
-                    modalidadesSelecionadas.includes(
-                      "Skate"
-                    ) &&
-                    styles.textoFiltroAtivo,
-                  ]}
-                >
-                  🛹 Skate
-                </Text>
-
-              </TouchableOpacity>
-
+             ))}
             </ScrollView>
 
           </View>
@@ -382,7 +309,7 @@ export default function Eventos() {
             }
             renderItem={({ item }) => (
 
-              <EventoCard
+              <EventoCardComponent
                 {...item}
               />
 
@@ -428,27 +355,24 @@ const styles = StyleSheet.create({
 
   topo: {
     width: "100%",
-
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    marginBottom: 20,
+    backgroundColor: '#202020',
+    paddingHorizontal: 16,
 
-    minHeight: 70,
 
-    marginBottom: 8,
   },
 
 
   titulo: {
     fontSize: 32,
     lineHeight: 38,
-
     fontWeight: "bold",
     color: "#fff",
-
     margin: 0,
     padding: 0,
-
     includeFontPadding: false,
   },
 
@@ -456,41 +380,27 @@ const styles = StyleSheet.create({
   perfil: {
     alignItems: "center",
     justifyContent: "center",
-
     margin: 0,
     padding: 0,
   },
 
   containerBusca: {
     height: 52,
-
     flexDirection: "row",
     alignItems: "center",
-
-    backgroundColor:
-      "rgba(255, 255, 255, 0.94)",
-
+    backgroundColor:"rgba(255, 255, 255, 0.94)",
     borderRadius: 18,
-
     paddingHorizontal: 16,
-
     marginBottom: 10,
-
     borderWidth: 1,
-
-    borderColor:
-      "rgba(62, 197, 215, 0.35)",
-
+    borderColor: "rgba(62, 197, 215, 0.35)",
     shadowColor: "#000",
-
     shadowOffset: {
       width: 0,
       height: 3,
     },
-
     shadowOpacity: 0.1,
     shadowRadius: 8,
-
     elevation: 3,
   },
 
@@ -510,9 +420,7 @@ const styles = StyleSheet.create({
 
   containerFiltros: {
     height: 54,
-
     marginBottom: 8,
-
     justifyContent: "center",
   },
 
@@ -525,62 +433,63 @@ const styles = StyleSheet.create({
   filtros: {
     flexDirection: "row",
     alignItems: "center",
-
     paddingVertical: 5,
     paddingRight: 10,
   },
 
 
   botaoFiltro: {
-    height: 42,
+  height: 42,
+  backgroundColor: "#fff",
+  paddingHorizontal: 18,
+  borderRadius: 21,
+  marginRight: 10,
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+  borderWidth: 1,
+  borderColor: "transparent",
+  flexShrink: 0,
+  alignSelf: "flex-start",
+},
 
-    backgroundColor: "#fff",
+conteudoFiltro: {
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+},
 
-    paddingHorizontal: 18,
+iconeFiltro: {
+  fontSize: 16,
+  marginRight: 6,
+},
 
-    borderRadius: 21,
+textoFiltro: {
+  fontSize: 15,
+  lineHeight: 20,
+  color: "#222",
+  flexShrink: 0
+},
 
-    marginRight: 10,
+botaoFiltroAtivo: {
+  backgroundColor: "#3EC5D7",
+  borderColor: "#3EC5D7",
+},
 
-    justifyContent: "center",
-    alignItems: "center",
-
-    borderWidth: 1,
-    borderColor: "transparent",
-  },
-
-
-  textoFiltro: {
-    fontSize: 15,
-
-    lineHeight: 20,
-
-    color: "#222",
-
-    textAlign: "center",
-
-    includeFontPadding: false,
-  },
-
-
-  botaoFiltroAtivo: {
-    backgroundColor: "#3EC5D7",
-    borderColor: "#3EC5D7",
-  },
-
-
-  textoFiltroAtivo: {
-    color: "#fff",
-    fontWeight: "700",
-  },
+textoFiltroAtivo: {
+  color: "#fff",
+  fontWeight: "700",
+},
 
   lista: {
     flex: 1,
   },
 
-
   listaEventos: {
-    paddingBottom: 20,
+  paddingBottom: 60,
+  margin:-20,
+  marginTop: -10,
   },
+
 
 });

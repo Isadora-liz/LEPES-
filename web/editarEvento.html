@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Adicionar Evento Esportivo</title>
+<title>Editar Evento Esportivo</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -16,10 +16,14 @@
     font-family:'Poppins', sans-serif;
 }
 
-body{
-    background:#0f172a;
+body{background: linear-gradient(
+            rgba(0, 0, 0, 0.9),
+            rgba(0, 0, 0, 0.9)
+        );
+    background-image: url('https://cdn.pixabay.com/photo/2017/10/29/22/32/volleyball-fans-2900981_1280.jpg');
+    background-size: 100% 100%;
+    background-position: center;
     min-height:100vh;
-    padding:40px 20px;
     color:white;
 }
 
@@ -40,6 +44,12 @@ body{
     margin-bottom:10px;
 }
 
+.linha {
+    width: 100%;
+    margin: 3px auto 20px;
+    border-bottom: 1px solid #ddd;
+}
+
 .topo p{
     color:#94a3b8;
     font-size:16px;
@@ -48,7 +58,7 @@ body{
 .card{
     width: 1000px;
     padding: 25px;
-    background:#111827;
+    background:#111827f3;
     border:1px solid #1e293b;
     border-radius:20px;
     overflow:hidden;
@@ -286,6 +296,39 @@ input[type="time"]:focus{
     border-color:#3b82f6;
     box-shadow:0 0 0 3px rgba(59,130,246,.15);
 }
+#preview-imagem-atual,
+#preview-nova-imagem {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.miniatura-container {
+    position: relative;
+    display: inline-block;
+}
+
+.miniatura-imagem {
+    width: 120px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.remover-imagem {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 50%;
+    background: #d32f2f;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
 
 </style>
 </head>
@@ -295,10 +338,15 @@ input[type="time"]:focus{
 
     <div id="mensagem-sucesso" class="mensagem-sucesso"></div>
 
+    <div class="topo">
+        <h1>Editar evento esportivo</h1>
+            <div class="linha"></div>
+    </div>
+
     <div class="card">
 
         <div class="card-header">
-            <h1>Adicionar evento esportivo</h1>
+            <h1>Editar evento esportivo</h1>
             <p>Preencha os dados abaixo. Todos os campos são obrigatórios.</p>
         </div>
 
@@ -323,13 +371,23 @@ input[type="time"]:focus{
             <div class="linha-dupla">
 
                 <div>
-                    <label for="data">Data do Evento</label>
-                    <input type="date" id="data">
+                    <label for="dataInicio">Data de início do evento</label>
+                    <input type="date" id="dataInicio">
                 </div>
 
                 <div>
-                    <label for="horario">Horário</label>
-                    <input type="time" id="horario">
+                    <label for="dataFim">Data de fim do evento</label>
+                    <input type="date" id="dataFim">
+                </div>
+
+                <div>
+                    <label for="horarioInicio">Horário de início do evento</label>
+                    <input type="time" id="horarioInicio">
+                </div>
+
+                <div>
+                    <label for="horarioFim">Horário de fim do evento</label>
+                    <input type="time" id="horarioFim">
                 </div>
 
             </div>
@@ -340,51 +398,85 @@ input[type="time"]:focus{
 
                 <div class="modalidades-grid">
 
-                    <input type="checkbox" id="voleibol" name="modalidades[]" value="voleibol">
-                    <label for="voleibol" class="modalidade-card">Voleibol</label>
+                    <input type="checkbox" id="Vôlei" name="modalidades[]" value="Vôlei">
+          <label for="Vôlei" class="modalidade-card">
+            Vôlei
+          </label>
 
-                    <input type="checkbox" id="volei_praia" name="modalidades[]" value="volei_praia">
-                    <label for="volei_praia" class="modalidade-card">Vôlei de Praia</label>
+          <input type="checkbox" id="Vôlei de praia" name="modalidades[]" value="Vôlei de praia">
+          <label for="Vôlei de praia" class="modalidade-card">
+            Vôlei de praia
+          </label>
 
-                    <input type="checkbox" id="basquete" name="modalidades[]" value="basquete">
-                    <label for="basquete" class="modalidade-card">Basquete</label>
+          <input type="checkbox" id="Ciclismo" name="modalidades[]" value="Ciclismo">
+          <label for="Ciclismo" class="modalidade-card">
+            Ciclismo
+          </label>
 
-                    <input type="checkbox" id="bocha" name="modalidades[]" value="bocha">
-                    <label for="bocha" class="modalidade-card">Bocha</label>
+          <input type="checkbox" id="Basquete" name="modalidades[]" value="Basquete">
+          <label for="Basquete" class="modalidade-card">
+            Basquete
+          </label>
 
-                    <input type="checkbox" id="futsal" name="modalidades[]" value="futsal">
-                    <label for="futsal" class="modalidade-card">Futsal</label>
+          <input type="checkbox" id="Handebol" name="modalidades[]" value="Handebol">
+          <label for="Handebol" class="modalidade-card">
+            Handebol
+          </label>
 
-                    <input type="checkbox" id="tenis_mesa" name="modalidades[]" value="tenis_mesa">
-                    <label for="tenis_mesa" class="modalidade-card">Tênis de Mesa</label>
+          <input type="checkbox" id="Futsal" name="modalidades[]" value="Futsal">
+          <label for="Futsal" class="modalidade-card">
+            Futsal
+          </label>
 
-                    <input type="checkbox" id="natacao" name="modalidades[]" value="natacao">
-                    <label for="natacao" class="modalidade-card">Natação</label>
+          <input type="checkbox" id="Tênis de mesa" name="modalidades[]" value="Tênis de mesa">
+          <label for="Tênis de mesa" class="modalidade-card">
+            Tênis de mesa
+          </label>  
 
-                    <input type="checkbox" id="artes_marciais" name="modalidades[]" value="artes_marciais">
-                    <label for="artes_marciais" class="modalidade-card">Artes Marciais</label>
+          <input type="checkbox" id="Natação" name="modalidades[]" value="Natação">
+          <label for="Natação" class="modalidade-card">
+              Natação
+          </label>
 
-                    <input type="checkbox" id="futebol_campo" name="modalidades[]" value="futebol_campo">
-                    <label for="futebol_campo" class="modalidade-card">Futebol de Campo</label>
+          <input type="checkbox" id="Artes marciais" name="modalidades[]" value="Artes marciais">
+          <label for="Artes marciais" class="modalidade-card">
+               Artes marciais
+          </label>
 
-                    <input type="checkbox" id="skateboarding" name="modalidades[]" value="skateboarding">
-                    <label for="skateboarding" class="modalidade-card">Skateboarding</label>
+          <input type="checkbox" id="Futebol de campo" name="modalidades[]" value="Futebol de campo">
+          <label for="Futebol de campo" class="modalidade-card">
+                Futebol de campo
+          </label>
 
-                    <input type="checkbox" id="futebol_areia" name="modalidades[]" value="futebol_areia">
-                    <label for="futebol_areia" class="modalidade-card">Futebol de Areia</label>
+          <input type="checkbox" id="Skateboarding" name="modalidades[]" value="Skateboarding"      >
+          <label for="Skateboarding" class="modalidade-card">
+                   Skateboarding
+          </label>
+          <input type="checkbox" id="Futebol de areia" name="modalidades[]" value="Futebol de areia">
+          <label for="Futebol de areia" class="modalidade-card">
+                   Futebol de areia
+          </label>
+          <input type="checkbox" id="Beach tennis" name="modalidades[]" value="Beach tennis">
+          <label for="Beach tennis" class="modalidade-card">
+                   Beach tennis
+          </label>
+          <input type="checkbox" id="Futevôlei" name="modalidades[]" value="Futevôlei">
+          <label for="Futevôlei" class="modalidade-card">
+                   Futevôlei
+          </label>
+          <input type="checkbox" id="Futebol de mesa" name="modalidades[]" value="Futebol de mesa">
+          <label for="Futebol de mesa" class="modalidade-card">
+                   Futebol de mesa
+          </label>
+          <input type="checkbox" id="Corrida de rua" name="modalidades[]" value="Corrida de rua">
+          <label for="Corrida de rua" class="modalidade-card">
+                   Corrida de rua
+          </label>
 
-                    <input type="checkbox" id="beach_tennis" name="modalidades[]" value="beach_tennis">
-                    <label for="beach_tennis" class="modalidade-card">Beach Tennis</label>
-
-                    <input type="checkbox" id="futevolei" name="modalidades[]" value="futevolei">
-                    <label for="futevolei" class="modalidade-card">Futevôlei</label>
-
-                    <input type="checkbox" id="futemesa" name="modalidades[]" value="futemesa">
-                    <label for="futemesa" class="modalidade-card">Futebol de Mesa</label>
 
                 </div>
 
-            </div>
+            
 
             <div class="form-group">
 
@@ -394,75 +486,32 @@ input[type="time"]:focus{
                     id="descricao"
                     placeholder="Descreva brevemente o evento esportivo..."></textarea>
 
-            </div>
-
-            <div class="form-group">
-
-                <label>Acessibilidade</label>
-
-                <div class="acessibilidade-grid">
-
-                    <input type="checkbox" id="rampa" name="acessibilidade[]" value="Rampa_Acesso">
-                    <label for="rampa" class="acessibilidade-card">
-                        Rampa de Acesso
-                    </label>
-
-                    <input type="checkbox" id="banheiro" name="acessibilidade[]" value="Banheiro_Adaptado">
-                    <label for="banheiro" class="acessibilidade-card">
-                        Banheiro Adaptado
-                    </label>
-
-                    <input type="checkbox" id="suporte" name="acessibilidade[]" value="Suporte_Cadeirante">
-                    <label for="suporte" class="acessibilidade-card">
-                        Suporte para Cadeirante
-                    </label>
-
-                    <input type="checkbox" id="vagas" name="acessibilidade[]" value="Vagas_Reservadas">
-                    <label for="vagas" class="acessibilidade-card">
-                        Vagas Reservadas
-                    </label>
-
-                    <input type="checkbox" id="piso" name="acessibilidade[]" value="Piso_Tatil">
-                    <label for="piso" class="acessibilidade-card">
-                        Piso Tátil
-                    </label>
-
-                </div>
-
-            </div>
-
-            <div class="form-group">
-
-                <label class="upload">
-
-                    📷
-
-                    <h3>Selecionar imagens do evento esportivo</h3>
-
-                    <p>Arraste arquivos ou clique para enviar.</p>
-
-                    <input
-                        type="file"
-                        id="imagens"
-                        name="imagens"
-                        multiple
-                        accept="image/*">
-
-                </label>
-
-                <div id="mensagem-imagem" class="mensagem-sucesso"></div>
-
-            </div>
-
-            <button class="btn" type="submit">
-                Editar evento
-            </button>
-
-        </form>
+             </div>
+        <label class="upload">
+        
+         📷
+         <h3>Selecionar Imagens do espaço esportivo</h3>
+         <p>Arraste arquivos ou clique para enviar</p>
+        
+              <input
+                type="file"
+                id="imagens"
+                multiple
+                accept="image/*"
+            >
+            <div id="preview-imagem-atual"></div>
+<div id="preview-nova-imagem"></div>
+        </label>
+        
+<div id="mensagem-imagem" class="mensagem-sucesso">
+</div>
 
     </div>
+    <button class="btn" type="submit">
+    Editar Evento
+    </button>
 
-</div>
+<body>
 
 <script type="module" src="editarEvento.js"></script>
 

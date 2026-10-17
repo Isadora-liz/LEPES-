@@ -7,6 +7,8 @@ import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import { useColorScheme } from '@/components/useColorScheme';
 import Colors from '@/constants/Colors';
 
+
+
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
   color: string;
@@ -20,7 +22,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors[colorScheme === 'dark' ? 'dark' : 'light'].tint,
         headerShown: useClientOnlyValue(false, true),
       }}>
       <Tabs.Screen
@@ -56,6 +58,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="perfil"
         options={{
+          headerShown: false,
           href: null
         }} 
       />

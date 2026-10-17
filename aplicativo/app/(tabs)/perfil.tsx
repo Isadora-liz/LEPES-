@@ -20,11 +20,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-
-
 import * as ImagePicker from "expo-image-picker";
 
 import { auth, db } from "../../FirebaseConfig";
+import { supabase } from "../../SupabaseConfig";
 
 import {
   doc,
@@ -46,10 +45,12 @@ export default function Perfil() {
 
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
-  const [foto, setFoto] = useState<string | null>(null);
+  const [imagem, setImagem] = useState<string | null>(null);
 
   const [nomeEditado, setNomeEditado] = useState("");
   const [emailEditado, setEmailEditado] = useState("");
+  const [imagemEditada, setImagemEditada] =
+    useState<string | null>(null);
 
   const [fotoEditada, setFotoEditada] =
     useState<string | null>(null);
@@ -110,11 +111,17 @@ export default function Perfil() {
             const emailRecebido: string =
               dados.email || emailAuth;
 
+            const imagemRecebida: string =
+              dados.imagem  || null;
+
             setNome(nomeRecebido);
             setEmail(emailRecebido);
+            setImagem(imagemRecebida);
 
             setNomeEditado(nomeRecebido);
             setEmailEditado(emailRecebido);
+            setImagemEditada(imagemRecebida);
+
           } else {
             await setDoc(referenciaUsuario, {
               nome: nomeAuth,
@@ -124,9 +131,11 @@ export default function Perfil() {
 
             setNome(nomeAuth);
             setEmail(emailAuth);
+            setImagem(imagem);
 
             setNomeEditado(nomeAuth);
             setEmailEditado(emailAuth);
+            setImagemEditada(imagem);
           }
         } catch (erro: any) {
           console.log(
@@ -157,18 +166,18 @@ export default function Perfil() {
   function abrirEdicao() {
     setNomeEditado(nome);
     setEmailEditado(email);
-    setFotoEditada(foto);
+    setImagemEditada(imagem);
     setEditandoPerfil(true);
   }
 
   function cancelarEdicao() {
     setNomeEditado(nome);
     setEmailEditado(email);
-    setFotoEditada(foto);
+    setImagemEditada(imagem);
     setEditandoPerfil(false);
   }
 
-  async function selecionarFoto() {
+  async function selecionarImagem() {
     try {
       const permissao =
         await ImagePicker
@@ -184,8 +193,7 @@ export default function Perfil() {
 
       const resultado =
         await ImagePicker.launchImageLibraryAsync({
-          mediaTypes:
-            ImagePicker.MediaTypeOptions.Images,
+          mediaTypes: ["images"],
           allowsEditing: true,
           aspect: [1, 1],
           quality: 0.8,
@@ -238,75 +246,109 @@ export default function Perfil() {
     return true;
   }
 
-  async function salvarAlteracoes() {
-    if (!validarDados()) {
-      return;
-    }
-
-    const usuario: any = auth.currentUser;
-
-    if (!usuario) {
-      Alert.alert(
-        "Sessão encerrada",
-        "Entre novamente para editar seu perfil."
-      );
-      return;
-    }
-
-    try {
-      setSalvando(true);
-
-      const uid: any = usuario.uid;
-
-      const referenciaUsuario = doc(
-        db,
-        "usuarios",
-        uid
-      );
-
-      await setDoc(
-        referenciaUsuario,
-        {
-          nome: nomeEditado.trim(),
-          email: emailEditado.trim(),
-          atualizadoEm: serverTimestamp(),
-        },
-        {
-          merge: true,
-        }
-      );
-
-      setNome(nomeEditado.trim());
-      setEmail(emailEditado.trim());
-      setFoto(fotoEditada);
-
-      setEditandoPerfil(false);
-
-      Alert.alert(
-        "Perfil atualizado",
-        "As alterações foram salvas com sucesso."
-      );
-    } catch (erro: any) {
-      console.log(
-        "Erro ao salvar perfil:",
-        erro
-      );
-
-      if (erro.code === "permission-denied") {
-        Alert.alert(
-          "Acesso negado",
-          "As regras do Firestore não permitiram salvar o perfil."
-        );
-      } else {
-        Alert.alert(
-          "Erro",
-          "Não foi possível salvar as alterações."
-        );
-      }
-    } finally {
-      setSalvando(false);
-    }
+  
+async function salvarAlteracoes() {
+  if (!validarDados()) {
+    return;
   }
+
+  const usuario = auth.currentUser;
+
+  if (!usuario) {
+    Alert.alert(
+      "Sessão encerrada",
+      "Entre novamente para editar seu perfil."
+    );
+    return;
+  }
+
+  try {
+    setSalvando(true);
+
+    const uid = usuario.uid;
+    let urlImagem = imagemEditada;
+
+    // Se uma nova foto foi selecionada, envia ao Supabase
+    if (fotoEditada) {
+      const resposta = await fetch(fotoEditada);
+      const arquivo = await resposta.arrayBuffer();
+
+      const extensao =
+        fotoEditada.split(".").pop()?.split("?")[0]
+          ?.toLowerCase() || "jpg";
+
+      const tipoImagem =
+        extensao === "png"
+          ? "image/png"
+          : extensao === "webp"
+          ? "image/webp"
+          : extensao === "heic"
+          ? "image/heic"
+          : "image/jpeg";
+
+      const caminho =
+        `usuarios/${uid}/${Date.now()}.${extensao}`;
+
+      const { error: erroUpload } =
+        await supabase.storage
+          .from("imagens-lepes")
+          .upload(caminho, arquivo, {
+            contentType: tipoImagem,
+            upsert: false,
+          });
+
+      if (erroUpload) {
+        throw erroUpload;
+      }
+
+      const { data } = supabase.storage
+        .from("imagens-lepes")
+        .getPublicUrl(caminho);
+
+      urlImagem = data.publicUrl;
+    }
+
+    // Salva os dados e a URL da foto no Firestore
+    const referenciaUsuario = doc(
+      db,
+      "usuarios",
+      uid
+    );
+
+    await setDoc(
+      referenciaUsuario,
+      {
+        nome: nomeEditado.trim(),
+        email: emailEditado.trim(),
+        imagem: urlImagem || "",
+        atualizadoEm: serverTimestamp(),
+      },
+      { merge: true }
+    );
+
+    setNome(nomeEditado.trim());
+    setEmail(emailEditado.trim());
+    setImagem(urlImagem);
+    setImagemEditada(urlImagem);
+    setFotoEditada(null);
+    setEditandoPerfil(false);
+
+    Alert.alert(
+      "Perfil atualizado",
+      "As alterações foram salvas com sucesso."
+    );
+  } catch (erro: any) {
+    console.log("Erro ao salvar perfil:", erro);
+
+    Alert.alert(
+      "Erro",
+      erro.message ||
+        "Não foi possível salvar as alterações."
+    );
+  } finally {
+    setSalvando(false);
+  }
+}
 
   function confirmarRedefinicaoSenha() {
     const usuario: any = auth.currentUser;
@@ -461,6 +503,7 @@ export default function Perfil() {
     }
   }
 
+  // TELA DE CARREGAMENTO
   if (carregando) {
     return (
       <SafeAreaView style={styles.container}>
@@ -480,6 +523,7 @@ export default function Perfil() {
     );
   }
 
+  // TELA DE EDITAR PERFIL
   if (editandoPerfil) {
     return (
       <SafeAreaView style={styles.container}>
@@ -523,20 +567,21 @@ export default function Perfil() {
             <View style={styles.areaFotoEditar}>
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={selecionarFoto}
+                onPress={selecionarImagem}
               >
                 <View
                   style={
                     styles.fotoEditarContainer
                   }
                 >
-                  {fotoEditada ? (
-                    <Image
-                      source={{
-                        uri: fotoEditada,
-                      }}
-                      style={styles.imagemPerfil}
-                    />
+                  {fotoEditada || imagemEditada ? (
+               <Image
+                  source={{
+                    uri: fotoEditada || imagemEditada || "",
+                  }}
+                  style={styles.imagemPerfil}
+                  />
+
                   ) : (
                     <View style={styles.fotoPadrao}>
                       <Ionicons
@@ -561,7 +606,7 @@ export default function Perfil() {
 
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={selecionarFoto}
+                onPress={selecionarImagem}
               >
                 <Text
                   style={styles.textoEditarFoto}
@@ -734,6 +779,7 @@ export default function Perfil() {
     );
   }
 
+  // TELA PRINCIPAL DO PERFIL
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
@@ -760,9 +806,9 @@ export default function Perfil() {
           <View
             style={styles.fotoPerfilContainer}
           >
-            {foto ? (
+            {imagem ? (
               <Image
-                source={{ uri: foto }}
+                source={{ uri: imagem }}
                 style={styles.imagemPerfil}
               />
             ) : (

@@ -1,3 +1,4 @@
+
 import { router } from 'expo-router';
 import { StyleSheet } from 'react-native';
 import { Card, Text } from 'react-native-paper';
@@ -7,24 +8,55 @@ interface LocaisProps {
   nome: string;
   descricao: string;
   endereco: string;
-  imagem: string;
+  imagem: string | string[];
 }
 
-export default function Locais({ id, nome, descricao, endereco, imagem }: LocaisProps) {
+export default function Locais({
+  id,
+  nome,
+  descricao,
+  endereco,
+  imagem,
+}: LocaisProps) {
+  // Se imagem for um array, seleciona a primeira URL válida.
+  const primeiraImagem = Array.isArray(imagem)
+    ? imagem.find(
+        (url) => typeof url === 'string' && url.trim() !== ''
+      )
+    : imagem;
+
+  console.log('URL recebida:', imagem);
+  console.log('Primeira imagem:', primeiraImagem);
+
   return (
     <Card
-      onPress={() => router.push(`/detalhesCards/DetalhesLocais?id=${id}`)}
+      onPress={() =>
+        router.push(`/detalhesCards/DetalhesLocais?id=${id}`)
+      }
       style={styles.card}
     >
-      <Card.Cover source={{ uri: imagem }} />
+      {typeof primeiraImagem === 'string' &&
+        primeiraImagem.trim() !== '' && (
+          <Card.Cover
+            source={{ uri: primeiraImagem }}
+            onError={(e) =>
+              console.log(
+                'Erro ao carregar imagem:',
+                e.nativeEvent
+              )
+            }
+            style={styles.imagem}
+          />
+        )}
+
       <Card.Title title={nome} />
-      
+
       <Card.Content>
         <Text>{descricao}</Text>
       </Card.Content>
 
       <Card.Content>
-        <Text>{endereco}</Text>
+        <Text>📍 {endereco}</Text>
       </Card.Content>
     </Card>
   );
@@ -32,17 +64,14 @@ export default function Locais({ id, nome, descricao, endereco, imagem }: Locais
 
 const styles = StyleSheet.create({
   card: {
-  marginBottom: 10,
-  borderRadius: 10,
-  overflow: 'hidden',
-
+    marginBottom: 10,
+    borderRadius: 10,
+    overflow: 'hidden',
   },
   imagem: {
-  height: 100,
-  width: "50%"
-
-},
- titulo: {
+    height: 200,
+  },
+  titulo: {
     fontWeight: 'bold',
   },
   conteudo: {

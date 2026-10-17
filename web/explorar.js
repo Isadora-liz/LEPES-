@@ -2,13 +2,16 @@ import { db } from "./firebase.js";
 
 import {
     collection,
-    getDocs,
-    doc
+    getDocs
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
 
 let filtroSelecionado = null;
 
+
+
 function semAcento(texto) {
+
     if (!texto) return "";
 
     return texto
@@ -16,6 +19,7 @@ function semAcento(texto) {
         .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase();
 }
+
 
 function debounce(fn, wait = 150) {
 
@@ -32,45 +36,46 @@ function debounce(fn, wait = 150) {
     };
 }
 
+
 function aplicaFiltro() {
 
-    const filtros = document.getElementById("filtros-modalidades");
-
-document.getElementById("seta-dir")
-    .addEventListener("click", () => {
-        filtros.scrollLeft += 200;
-    });
-
-document.getElementById("seta-esq")
-    .addEventListener("click", () => {
-        filtros.scrollLeft -= 200;
-    });
-
     const termo = semAcento(
-        document.getElementById("busca-container").value
+        document
+            .getElementById("busca-container")
+            .value
     );
 
-    const cards = document.querySelectorAll(".card");
+
+    const cards =
+        document.querySelectorAll(".card");
+
 
     cards.forEach(card => {
 
         const textoCard =
-            semAcento(card.textContent || "");
+            semAcento(
+                card.textContent || ""
+            );
+
 
         const modalidades =
             JSON.parse(
                 card.dataset.modalidades || "[]"
             );
 
+
         const textoOk =
             termo === "" ||
             textoCard.includes(termo);
 
+
         const modalidadeOk =
             !filtroSelecionado ||
-            modalidades.includes(
-                Number(filtroSelecionado)
+            modalidades.some(modalidade =>
+                semAcento(modalidade) ===
+                semAcento(filtroSelecionado)
             );
+
 
         card.style.display =
             textoOk && modalidadeOk
@@ -78,6 +83,7 @@ document.getElementById("seta-esq")
                 : "none";
     });
 }
+
 
 function configurarBusca() {
 
@@ -89,125 +95,269 @@ function configurarBusca() {
         );
 }
 
+
+
 function configurarFiltros() {
 
     document
         .querySelectorAll(".bot-modalidade")
         .forEach(bot => {
 
-            bot.addEventListener("click", () => {
+            bot.addEventListener(
+                "click",
+                () => {
 
-                const id = bot.dataset.id;
+                    const modalidade =
+                        bot.dataset.modalidade;
 
-                if (filtroSelecionado === id) {
 
-                    filtroSelecionado = null;
+                    // Clicou novamente no filtro
+                    if (
+                        filtroSelecionado === modalidade
+                    ) {
 
-                    bot.classList.remove(
-                        "ativo"
-                    );
+                        filtroSelecionado = null;
 
-                } else {
-
-                    filtroSelecionado = id;
-
-                    document
-                        .querySelectorAll(
-                            ".bot-modalidade"
-                        )
-                        .forEach(b =>
-                            b.classList.remove(
-                                "ativo"
-                            )
+                        bot.classList.remove(
+                            "ativo"
                         );
 
-                    bot.classList.add(
-                        "ativo"
-                    );
+                    } else {
+
+                        filtroSelecionado =
+                            modalidade;
+
+
+                        // Remove ativo dos outros
+                        document
+                            .querySelectorAll(
+                                ".bot-modalidade"
+                            )
+                            .forEach(b =>
+                                b.classList.remove(
+                                    "ativo"
+                                )
+                            );
+
+
+                        bot.classList.add(
+                            "ativo"
+                        );
+                    }
+
+
+                    aplicaFiltro();
                 }
-
-                
-
-                aplicaFiltro();
-            });
+            );
         });
 }
 
-async function carregarExplorar() {
 
-    console.log("Função iniciou");
+// ===============================
+// CRIAR BOTÕES DAS MODALIDADES
+// ===============================
 
+function criarFiltrosModalidades(listaEspacos) {
 
-    const container = document.getElementById("cards-container");
+    const container =
+        document.getElementById(
+            "filtros-modalidades"
+        );
+
 
     container.innerHTML = "";
 
+
+    // Junta todas as modalidades de todos os espaços
+    const todasModalidades =
+        listaEspacos.flatMap(
+            espaco => espaco.modalidades || []
+        );
+
+
+    // Remove modalidades repetidas
+    const modalidadesUnicas =
+        [...new Set(todasModalidades)];
+
+
+    modalidadesUnicas.forEach(
+        modalidade => {
+
+            const botao =
+                document.createElement("button");
+
+
+            botao.classList.add(
+                "bot-modalidade"
+            );
+
+
+            // Guarda o nome da modalidade
+            botao.dataset.modalidade =
+                modalidade;
+
+
+            botao.textContent =
+                modalidade;
+
+
+            container.appendChild(
+                botao
+            );
+        }
+    );
+
+
+    // Agora que os botões existem,
+    // adicionamos os eventos de clique
+    configurarFiltros();
+}
+
+
+// ===============================
+// CARREGAR ESPAÇOS
+// ===============================
+
+async function carregarExplorar() {
+
+    console.log(
+        "Função iniciou"
+    );
+
+
+    const container = document.getElementById( "cards-container");
+
+
+    container.innerHTML = "";
+
+
     try {
 
-        const snapshot = await getDocs(collection(db,"espaco"));
+        const snapshot =
+            await getDocs(
+                collection(db, "espaco")
+            );
 
-         console.log("Quantidade de documentos:", snapshot.size);
+
+        console.log(
+            "Quantidade de documentos:",
+            snapshot.size
+        );
+
+
+        // Guarda os espaços para posteriormente
+        // criar os filtros
+        const listaEspacos = [];
+
 
         snapshot.forEach(doc => {
 
-             console.log("ID:", doc.id);
-            console.log("Dados:", doc.data());
+            console.log(
+                "ID:",
+                doc.id
+            );
 
-            const lugar = doc.data();
+
+            console.log(
+                "Dados:",
+                doc.data()
+            );
+
+
+            const lugar =
+                doc.data();
+
+
+            listaEspacos.push(
+                lugar
+            );
+
 
             const div =
                 document.createElement("div");
 
-            div.classList.add("card");
 
-            div.dataset.id = doc.id;
+            div.classList.add(
+                "card"
+            );
 
+
+            div.dataset.id =
+                doc.id;
+
+
+            // Agora guardamos as modalidades
+            // como nomes, e não como IDs
             div.dataset.modalidades =
                 JSON.stringify(
-                    lugar.modalidades_ids || []
+                    lugar.modalidades || []
                 );
 
+
             div.innerHTML = `
-                 <button class="botao-editar">
-        <span class="material-icons">edit</span>
-    </button>
 
-    <img
-        src="${lugar.imagem}"
-        alt="${lugar.nome}"
-        class="card-image"
-    >
+                <button class="botao-editar">
+                    <span class="material-icons">
+                        edit
+                    </span>
+                </button>
 
-    <div class="card-content">
+                <img
+                    src="${lugar.imagem}"
+                    alt="${lugar.nome}"
+                    class="card-image"
+                >
 
-        <h3 class="card-titulo">
-            ${lugar.nome}
-        </h3>
+                <div class="card-content">
 
-        <p class="card-endereco">
-            ${lugar.endereco}
-        </p>
+                    <h3 class="card-titulo">
+                        ${lugar.nome}
+                    </h3>
 
-        <p class="card-descricao">
-            ${lugar.descricao}
-        </p>
+                    <p class="card-endereco">
+                        ${lugar.endereco}
+                    </p>
 
-    </div>
-`;
-            container.appendChild(div);
+                    <p class="card-descricao">
+                        ${lugar.descricao}
+                    </p>
+
+                </div>
+            `;
+
+
+            container.appendChild(
+                div
+            );
+
 
             const botaoEditar =
-                div.querySelector(".botao-editar");
+                div.querySelector(
+                    ".botao-editar"
+                );
 
-            botaoEditar.addEventListener("click", () => {
 
-                window.location.href =
-                    `editarLocal.html?id=${doc.id}`;
-            });
+            botaoEditar.addEventListener(
+                "click",
+                () => {
+
+                    window.location.href =
+                        `editarLocal.html?id=${doc.id}`;
+
+                }
+            );
         });
 
 
+        // Cria os botões usando as modalidades
+        // que realmente existem nos espaços
+        criarFiltrosModalidades(
+            listaEspacos
+        );
+
+
         aplicaFiltro();
+
 
     } catch (erro) {
 
@@ -218,13 +368,55 @@ async function carregarExplorar() {
     }
 }
 
+
+// ===============================
+// SETAS
+// ===============================
+
+function configurarSetas() {
+
+    const filtros =
+        document.getElementById(
+            "filtros-modalidades"
+        );
+
+
+    document
+        .getElementById("seta-dir")
+        .addEventListener(
+            "click",
+            () => {
+
+                filtros.scrollLeft += 200;
+
+            }
+        );
+
+
+    document
+        .getElementById("seta-esq")
+        .addEventListener(
+            "click",
+            () => {
+
+                filtros.scrollLeft -= 200;
+
+            }
+        );
+}
+
+
+// ===============================
+// INICIALIZAÇÃO
+// ===============================
+
 document.addEventListener(
     "DOMContentLoaded",
     () => {
 
         configurarBusca();
 
-        configurarFiltros();
+        configurarSetas();
 
         carregarExplorar();
     }
