@@ -3,12 +3,15 @@ import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
   Alert,
+  FlatList,
+  Image,
   StyleProp,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
   ViewStyle,
+  useWindowDimensions,
 } from 'react-native';
 
 import { auth } from '../FirebaseConfig';
@@ -334,6 +337,7 @@ export default function Abas({ style }: AbasProps) {
       deficienciaAuditiva: 'Assistencia para deficientes auditivos',
       TEA: 'Atendimento personalizado para TEA',
     };
+    
 
     return (
       <View style={styles.conteudoAcessibilidade}>

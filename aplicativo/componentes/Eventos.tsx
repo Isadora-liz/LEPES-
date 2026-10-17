@@ -19,11 +19,16 @@ interface EventosProps {
   nome: string;
   descricao: string;
   endereco: string;
-  imagem: string;
+  imagem: string | string[];
 }
 
 export default function EventoCard({ id, nome, descricao, endereco, imagem, }: EventosProps) {
 
+  const primeiraImagem = Array.isArray(imagem)
+    ? imagem.find(
+        (url) => typeof url === 'string' && url.trim() !== ''
+      )
+    : imagem;
   const [notificacaoAtiva, setNotificacaoAtiva] = useState(false);
   const [interesseMarcado, setInteresseMarcado] = useState(false);
    const [carregando, setCarregando,] = useState(true);
@@ -50,8 +55,15 @@ export default function EventoCard({ id, nome, descricao, endereco, imagem, }: E
          setNotificacaoAtiva(false);
          return;
         }
-        const dadosUsuario=usuarioSnap.data();
-        const notificacoes: string[] = dadosUsuario.interesses.notificacaoAtiva || [];
+        
+        const dadosUsuario = usuarioSnap.data();
+const dadosInteresses = dadosUsuario.interesses ?? {};
+
+const notificacoes: string[] =
+  dadosInteresses.notificacaoAtiva ?? [];
+
+const interesses: string[] =
+  dadosInteresses.interesseMarcado ?? [];
 
         if (
           typeof id === 'string'
@@ -262,8 +274,9 @@ export default function EventoCard({ id, nome, descricao, endereco, imagem, }: E
          
   return (
     <Card
-      style={styles.card}
       onPress={() => router.push(`/detalhesCards/DetalhesEventos?id=${id}`)}
+      style={styles.card}
+      
     >
 
       <Card.Content style={styles.linha}>
@@ -286,10 +299,19 @@ export default function EventoCard({ id, nome, descricao, endereco, imagem, }: E
           />
         </TouchableOpacity>
 
-        <Image
-          source={{ uri: imagem }}
-          style={styles.imagem}
-        />
+        {typeof primeiraImagem === 'string' &&
+              primeiraImagem.trim() !== '' && (
+                <Card.Cover
+                  source={{ uri: primeiraImagem }}
+                  onError={(e) =>
+                    console.log(
+                      'Erro ao carregar imagem:',
+                      e.nativeEvent
+                    )
+                  }
+                  style={styles.imagem}
+                />
+              )}
 
         <View style={styles.info}>
           <Text style={styles.titulo}>{nome}</Text>

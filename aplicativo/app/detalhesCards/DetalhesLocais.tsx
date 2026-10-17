@@ -1,17 +1,26 @@
 import Ionicons from '@expo/vector-icons/build/Ionicons';
-import { useLocalSearchParams, router , Link} from 'expo-router';
-import { doc, getDoc, updateDoc, arrayUnion, arrayRemove, collection, getDocs } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
-import { useEffect, useState,  } from 'react';
+import { useLocalSearchParams, router } from 'expo-router';
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+
 import {
   Alert,
+  FlatList,
   Image,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from 'react-native';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { auth, db } from '../../FirebaseConfig';
@@ -23,13 +32,10 @@ import {
   totalAvaliacoes,
 } from '../../funcoes/avaliacoes';
 
-import {
-  buscarLocalPorId,
-} from '../../funcoes/localBusca';
-
+import { buscarLocalPorId } from '../../funcoes/localBusca';
 
 interface LocalData {
-  imagem?: string;
+  imagem?: string | string[];
   nome: string;
   descricao?: string;
   endereco: string;
@@ -40,181 +46,161 @@ interface LocalData {
 export default function Detalhes() {
   console.log('Detalhes renderizou');
 
+  // Todos os hooks ficam antes dos retornos condicionais.
+  const { width } = useWindowDimensions();
   const { id } = useLocalSearchParams();
-  console.log("Tipo:", typeof id);
+
+  console.log('Tipo:', typeof id);
   console.log('ID:', id);
 
   const [local, setLocal] = useState<LocalData | null>(null);
   const [favoritado, setFavoritado] = useState(false);
   const [mediaAvaliacoes, setMediaAvaliacoes] = useState(0);
   const [quantidadeAvaliacoes, setQuantidadeAvaliacoes] = useState(0);
-  const [carregando, setCarregando,] = useState(true);
+  const [carregando, setCarregando] = useState(true);
 
-  async function carregarLocal(){
-    if (
-      typeof id !== "string"
-    ) {
+  async function carregarLocal() {
+    if (typeof id !== 'string') {
       return;
     }
+
     try {
       const dados = await buscarLocalPorId(id);
 
       if (dados) {
         setLocal(dados);
+      } else {
+        setLocal(null);
       }
     } catch (error) {
-      console.error ('erro ao carregar local:', error);
+      console.error('Erro ao carregar local:', error);
     }
   }
 
-  async function carregarAvaliacoes(){
-    if (
-      typeof id !== 'string'
-    ) {
-      return;
-    }
-    try{
-      const notas = await buscarAvaliacoesDoLocal(id);
-      const media = calcularMedia(notas);
-      const quantidade = totalAvaliacoes(notas);
-      setMediaAvaliacoes(media);
-      setQuantidadeAvaliacoes(quantidade);
-  } catch (error) {
-    console.error('erro ao carregar avaliações:', error);
-  }
-}
-
-  async function carregarFavorito(){
-    const usuario  = auth.currentUser;
-
-    if (!usuario){
-      setFavoritado(false);
-
+  async function carregarAvaliacoes() {
+    if (typeof id !== 'string') {
       return;
     }
 
     try {
-      const usuarioRef = doc(
-        db,
-        'usuarios',
-        usuario.uid
-      );
+      const notas = await buscarAvaliacoesDoLocal(id);
+      const media = calcularMedia(notas);
+      const quantidade = totalAvaliacoes(notas);
+
+      setMediaAvaliacoes(media);
+      setQuantidadeAvaliacoes(quantidade);
+    } catch (error) {
+      console.error('Erro ao carregar avaliações:', error);
+    }
+  }
+
+  async function carregarFavorito() {
+    const usuario = auth.currentUser;
+
+    if (!usuario) {
+      setFavoritado(false);
+      return;
+    }
+
+    try {
+      const usuarioRef = doc(db, 'usuarios', usuario.uid);
       const usuarioSnap = await getDoc(usuarioRef);
 
-      if(!usuarioSnap.exists()
-      ){
-       setFavoritado(false);
-
-       return;
+      if (!usuarioSnap.exists()) {
+        setFavoritado(false);
+        return;
       }
-      const dadosUsuario=usuarioSnap.data();
+
+      const dadosUsuario = usuarioSnap.data();
       const favoritos: string[] = dadosUsuario.favoritos || [];
 
-      if (
-        typeof id === 'string'
-      ){
+      if (typeof id === 'string') {
         setFavoritado(favoritos.includes(id));
       }
     } catch (error) {
-      console.log('erro ao verificar favorito', error);
+      console.log('Erro ao verificar favorito:', error);
     }
   }
 
   useEffect(() => {
     console.log('Entrou no useEffect');
 
-      async function carregarDados() {
-        if (
-          typeof id !== 'string'
-        ) {
-          return;
-        }
-        try {
-          setCarregando(true);
-        
-          await Promise.all([
+    async function carregarDados() {
+      if (typeof id !== 'string') {
+        setCarregando(false);
+        return;
+      }
+
+      try {
+        setCarregando(true);
+
+        await Promise.all([
           carregarLocal(),
           carregarAvaliacoes(),
           carregarFavorito(),
         ]);
-
-        } catch (error) {
-
-        console.error(
-          'Erro ao carregar dados:',
-          error
-        );
-
-        } finally {
-            setCarregando(false);
-          }
-        }
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+      } finally {
+        setCarregando(false);
+      }
+    }
 
     carregarDados();
-
   }, [id]);
 
-  async function favoritar(){
-    if (
-      typeof id !== 'string'
-    ){
+  async function favoritar() {
+    if (typeof id !== 'string') {
       return;
     }
 
-    try{
+    try {
       const usuario = auth.currentUser;
 
       if (!usuario) {
         Alert.alert(
+          'Login necessário',
           'Para favoritar um local, você precisa estar logado.',
-          'Clique em OK para ir para a tela de login.',
           [
             { text: 'Cancelar' },
-            { text: 'OK', onPress: () => router.push('/login') }
+            {
+              text: 'OK',
+              onPress: () => router.push('/login'),
+            },
           ],
         );
+
         return;
       }
-      
-      const usuarioRef = doc (
-        db,
-        'usuarios',
-        usuario.uid
-      );
 
+      const usuarioRef = doc(db, 'usuarios', usuario.uid);
       const usuarioSnap = await getDoc(usuarioRef);
 
-      if (!usuarioSnap.exists()){
-        console.log('usuario nao encontrado');
-
-        return; 
+      if (!usuarioSnap.exists()) {
+        console.log('Usuário não encontrado');
+        return;
       }
 
-      if (favoritado){
-        await updateDoc(usuarioRef,
-          {
-            favoritos: arrayRemove(id),
-          }
-        );
+      if (favoritado) {
+        await updateDoc(usuarioRef, {
+          favoritos: arrayRemove(id),
+        });
 
         setFavoritado(false);
-      }
-      else {
-        await updateDoc(usuarioRef,
-          {
-            favoritos:
-              arrayUnion(id),
-          }
-        );
+      } else {
+        await updateDoc(usuarioRef, {
+          favoritos: arrayUnion(id),
+        });
+
         setFavoritado(true);
       }
-
     } catch (error) {
-      console.error('erro ao favoritar', error);
+      console.error('Erro ao favoritar:', error);
     }
   }
 
-  if (carregando){
+  // Retornos condicionais depois de todos os hooks.
+  if (carregando) {
     return (
       <SafeAreaView style={styles.container}>
         <Text style={{ color: '#fff' }}>Carregando...</Text>
@@ -223,24 +209,61 @@ export default function Detalhes() {
   }
 
   if (!local) {
-  return (
-    <SafeAreaView style={styles.container}>
-        <Text style={{ color: '#fff' }}>local nao encontrado</Text>
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text style={{ color: '#fff' }}>Local não encontrado</Text>
       </SafeAreaView>
-  )}
+    );
+  }
 
-  return(
+  // Aceita tanto uma URL quanto um array de URLs.
+  const imagensLocal: string[] = (
+  Array.isArray(local.imagem)
+    ? local.imagem
+    : [local.imagem]
+).filter(
+  (imagem): imagem is string =>
+    typeof imagem === 'string' && imagem.trim() !== ''
+);
 
+  return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View>
-          <Image source={{ uri: local?.imagem }} style={styles.foto} />
-          
+          {/* Carrossel horizontal de imagens */}
+          {imagensLocal.length > 0 && (
+            <FlatList
+              data={imagensLocal}
+              horizontal
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item, index) => `${item}-${index}`}
+              renderItem={({ item }) => (
+                <View
+                  style={{
+                    width,
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    source={{ uri: item }}
+                    style={styles.imagemCarrossel}
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
+            />
+          )}
+
           <TouchableOpacity
             style={styles.botao}
             onPress={() => router.push('/explorar')}
           >
-            <Ionicons name="arrow-back" size={24} color="#141414" />
+            <Ionicons
+              name="arrow-back"
+              size={24}
+              color="#141414"
+            />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -256,46 +279,46 @@ export default function Detalhes() {
         </View>
 
         <View style={styles.informacoes}>
-          <Text style={styles.titulo}>{local?.nome}</Text>
+          <Text style={styles.titulo}>{local.nome}</Text>
 
           <Text style={styles.subtitulo}>
-            {local?.descricao}
+            {local.descricao}
           </Text>
 
           <View style={styles.avaliacoes}>
-              {quantidadeAvaliacoes > 0 ? (
+            {quantidadeAvaliacoes > 0 ? (
               <>
-            <Ionicons
-                name="star"
-                size={20}
-                color="#FFC107"
-            />
+                <Ionicons
+                  name="star"
+                  size={20}
+                  color="#FFC107"
+                />
 
-            <Text style={styles.nota}>
-              {mediaAvaliacoes.toFixed(1).replace('.', ',')}
-            </Text>
+                <Text style={styles.nota}>
+                  {mediaAvaliacoes.toFixed(1).replace('.', ',')}
+                </Text>
 
-            <Text style={styles.avaliacoesTexto}>
-              ({quantidadeAvaliacoes}{' '}
-              {quantidadeAvaliacoes === 1
-                ? 'avaliação'
-                : 'avaliações'})
-            </Text>
-            </>
+                <Text style={styles.avaliacoesTexto}>
+                  ({quantidadeAvaliacoes}{' '}
+                  {quantidadeAvaliacoes === 1
+                    ? 'avaliação'
+                    : 'avaliações'})
+                </Text>
+              </>
             ) : (
-            <>
-            <Ionicons
-                name="star-outline"
-                size={20}
-                color="#9AA0A6"
-            />
+              <>
+                <Ionicons
+                  name="star-outline"
+                  size={20}
+                  color="#9AA0A6"
+                />
 
-            <Text style={styles.semAvaliacoes}>
-                Ainda não há avaliações
-            </Text>
-            </>
+                <Text style={styles.semAvaliacoes}>
+                  Ainda não há avaliações
+                </Text>
+              </>
             )}
-        </View>
+          </View>
         </View>
 
         <View style={styles.abas}>
@@ -361,17 +384,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 16,
-    width:"100%",
+    width: '100%',
     includeFontPadding: false,
-
   },
 
   semAvaliacoes: {
-  color: '#9AA0A6',
-  fontSize: 15,
-  marginLeft: 8,
-  width: "100%",
-},
+    color: '#9AA0A6',
+    fontSize: 15,
+    marginLeft: 8,
+    flexShrink: 1,
+  },
 
   nota: {
     color: '#fff',
@@ -384,8 +406,12 @@ const styles = StyleSheet.create({
     color: '#9AA0A6',
     marginLeft: 8,
     includeFontPadding: false,
-    width: "100%"
+  },
 
+  imagemCarrossel: {
+    width: '100%',
+    height: 300,
+    
   },
 
   abas: {
@@ -419,11 +445,5 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
     alignItems: 'center',
     marginHorizontal: 5,
-  },
-
-  cartaoTexto: {
-    color: '#fff',
-    fontWeight: 'bold',
-    marginTop: 10,
   },
 });

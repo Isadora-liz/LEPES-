@@ -27,24 +27,18 @@ export default function Cadastro(): JSX.Element {
       alert("Preencha todos os campos!");
       return;
     }
-
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         senha
       );
-
       await setDoc(doc(db, "usuarios", userCredential.user.uid), {
         nome: nome,
         email: email,
         createdAt: new Date(),
       });
-
-      console.log("Usuário cadastrado com sucesso!");
-
       const user = auth.currentUser;
-
       if (user) {
         router.replace("/(tabs)/explorar");
       } else {

@@ -3,12 +3,15 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import {
+  Alert,
+  FlatList,
   Image,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+   useWindowDimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -16,12 +19,13 @@ import { db } from '../../FirebaseConfig';
 import Abas from '../../componentes/AbasDetalhesEventos';
 
 interface EventoData {
-  imagem: string;
+  imagem?: string | string[];
   nome: string;
   descricao: string;
 }
 
 export default function Detalhes() {
+  const { width } = useWindowDimensions();
   const { id } = useLocalSearchParams();
 
   const [evento, setEvento] = useState<EventoData | null>(null);
@@ -86,15 +90,44 @@ export default function Detalhes() {
     );
   }
 
+   const imagensLocal: string[] = (
+  Array.isArray(evento.imagem)
+    ? evento.imagem
+    : [evento.imagem]
+).filter(
+  (imagem): imagem is string =>
+    typeof imagem === 'string' &&
+    imagem.trim() !== ''
+);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View>
-          <Image
-            source={{ uri: evento.imagem }}
-            style={styles.foto}
-          />
-
+           {imagensLocal.length > 0 && (
+                       <FlatList
+                         data={imagensLocal}
+                         horizontal
+                         pagingEnabled
+                         showsHorizontalScrollIndicator={false}
+                         keyExtractor={(item, index) => `${item}-${index}`}
+                         renderItem={({ item }) => (
+                           <View
+                             style={{
+                               width,
+                               alignItems: 'center',
+                             }}
+                           >
+                             <Image
+                               source={{ uri: item }}
+                               style={styles.imagemCarrossel}
+                               resizeMode="cover"
+                             />
+                           </View>
+                         )}
+                       />
+                     )}
+           
           <TouchableOpacity
             style={styles.botao}
             onPress={() => router.back()}
@@ -174,6 +207,12 @@ const styles = StyleSheet.create({
     color: '#9AA0A6',
     fontSize: 16,
     marginTop: 8,
+  },
+
+  imagemCarrossel: {
+    width: '100%',
+    height: 300,
+    
   },
 
   abas: {
