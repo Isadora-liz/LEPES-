@@ -20,6 +20,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+
+
 import * as ImagePicker from "expo-image-picker";
 
 import { auth, db } from "../../FirebaseConfig";
@@ -262,10 +264,6 @@ export default function Perfil() {
         uid
       );
 
-      /*
-        Somente nome e e-mail são salvos
-        no Firestore. A foto fica na memória.
-      */
       await setDoc(
         referenciaUsuario,
         {
@@ -463,7 +461,6 @@ export default function Perfil() {
     }
   }
 
-  // TELA DE CARREGAMENTO
   if (carregando) {
     return (
       <SafeAreaView style={styles.container}>
@@ -483,7 +480,6 @@ export default function Perfil() {
     );
   }
 
-  // TELA DE EDITAR PERFIL
   if (editandoPerfil) {
     return (
       <SafeAreaView style={styles.container}>
@@ -738,7 +734,6 @@ export default function Perfil() {
     );
   }
 
-  // TELA PRINCIPAL DO PERFIL
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
